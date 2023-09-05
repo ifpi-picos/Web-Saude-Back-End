@@ -1,18 +1,18 @@
--=-=-=-=-PROJETO WEB SAÚDE-=-=-=-=-
+-=-=-=-=-PROJETO WEB SAÚDE-=-=-=-=- <br/>
 
-EQUIPE:
-Francisco Eric Santos - Full-stack
-Yuck Gabriel Nascimento Guedes - Full-stack
+EQUIPE: <br/>
+Francisco Eric Santos - Full-stack  <br/>
+Yuck Gabriel Nascimento Guedes - Full-stack  <br/>
 
-TECNOLOGIAS FRONT-END:
--NextJS(Javascript)
--Bootstrap(CSS)
+TECNOLOGIAS FRONT-END:  <br/>
+-NextJS(Javascript)  <br/>
+-Bootstrap(CSS)  <br/>
 
-TECNOLOGIAS BACK-END:
--NodeJS
--Express JS
--MongoDB
--Mongoose
+TECNOLOGIAS BACK-END:  <br/>
+-NodeJS  <br/>
+-Express JS  <br/>
+-MongoDB  <br/>
+-Mongoose  <br/>
 
 INTRODUÇÃO:
 Ao analisar a cidade de Picos-PI, notou-se alguns problemas sofridos pela população que visita a cidade em busca de saúde. Essas pessoas acabam tendo uma dificuldade de encontrar o local de saúde que deseja, seja ele uma clínica ou hospital, ou até mesmo não possuem conhecimento que existe uma clínica que oferece certa especialidade na cidade. 
