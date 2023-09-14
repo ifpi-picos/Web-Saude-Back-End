@@ -1,6 +1,6 @@
 import IUsuario from '../../models/interfaces/IUsuario';
 
-interface IusuarioService {
+interface IUsuarioService {
   salvarUsuario(
     nome: string,
     email: string,
@@ -19,4 +19,4 @@ interface IusuarioService {
   deletarTodosUsuarios(): Promise<void>;
 }
 
-export default IusuarioService;
+export default IUsuarioService;

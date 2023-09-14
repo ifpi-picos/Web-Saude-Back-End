@@ -4,12 +4,15 @@ import mongoose from 'mongoose';
 import compression from 'compression';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
-import usuariooRouter from './routes/usuario.route';
+import router from './routes';
+import dotenv from 'dotenv';
+
 export class App {
   private express = Express.application;
   private porta: number = 5000;
 
   constructor() {
+    dotenv.config();
     this.express = Express();
     this.listen();
     this.database();
@@ -29,9 +32,12 @@ export class App {
     this.express.use(bodyParser.json());
   }
   private database(): void {
+    const mongoUser = process.env.MONGO_USER;
+    const mongoPassword = process.env.MONGO_PASSWORD;
+    const mongoHost = process.env.MONGO_HOST;
     mongoose
       .connect(
-        `mongodb+srv://ericsantos:OSvKRUKcgyD2nWrc@cluster0.cekjod9.mongodb.net/?retryWrites=true&w=majority`,
+        `mongodb+srv://${mongoUser}:${mongoPassword}${mongoHost}/?retryWrites=true&w=majority`,
         {},
       )
       .then(() => {
@@ -42,6 +48,6 @@ export class App {
       });
   }
   private rotas() {
-    this.express.use('/', usuariooRouter);
+    this.express.use('/', router);
   }
 }

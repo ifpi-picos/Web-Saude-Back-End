@@ -1,4 +1,4 @@
-import Isuporte from '@src/models/interfaces/Isuporte';
+import Isuporte from '@src/models/interfaces/ISuporte';
 interface IsuporteService {
   enviarMsg(menssagem: Isuporte): Promise<Isuporte>;
 }

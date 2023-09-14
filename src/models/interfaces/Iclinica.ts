@@ -1,6 +1,6 @@
 import { Document, Schema } from 'mongoose';
-import Iespecialidade from './Iespecialidades';
-interface Iclinica extends Document {
+import IEspecialidade from './IEspecialidades';
+interface IClinica extends Document {
   nome: string;
   imagem: string;
   horarioSemana: {
@@ -13,7 +13,7 @@ interface Iclinica extends Document {
   };
   longitude: number;
   latitude: number;
-  especialidades: Iespecialidade[];
+  especialidades: IEspecialidade[];
   endereco: Schema.Types.ObjectId;
   instagram: string;
   email: string;
@@ -21,4 +21,4 @@ interface Iclinica extends Document {
   descricao: string;
 }
 
-export default Iclinica;
+export default IClinica;

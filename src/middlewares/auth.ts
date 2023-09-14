@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import AuthService from '@src/services/auth.service';
+import AuthService from '../services/AuthService';
 
 export function authMiddleware(
   req: Request,
@@ -14,9 +14,9 @@ export function authMiddleware(
     next();
   } catch (err: unknown) {
     if (err instanceof Error) {
-      res.status(401).send({ code: 401, error: err.message });
+      res.status(401).json({ code: 401, error: err.message });
     } else {
-      res.status(401).send({ code: 401, error: 'Unknown auth error' });
+      res.status(401).json({ code: 401, error: 'Unknown auth error' });
     }
   }
 }

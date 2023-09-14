@@ -1,7 +1,7 @@
-import { Document, Schema } from 'mongoose';
+import { Document } from 'mongoose';
 
-interface Iespecialidade extends Document {
+interface IEspecialidade extends Document {
   nome: string;
 }
 
-export default Iespecialidade;
+export default IEspecialidade;

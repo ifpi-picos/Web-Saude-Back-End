@@ -1,8 +1,8 @@
 import { Document } from 'mongoose';
 
-interface Isuporte extends Document {
+interface ISuporte extends Document {
   email: string;
   texto: string;
 }
 
-export default Isuporte;
+export default ISuporte;

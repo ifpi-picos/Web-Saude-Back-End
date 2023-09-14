@@ -1,6 +1,8 @@
-import { Response, Request } from 'express';
+import IUsuario from '../../models/interfaces/IUsuario';
 
-export default interface IRepository {
-  listarTodos(req: Request, res: Response): Promise<void>;
-  obterPorId(req: Request, res: Response): Promise<void>;
+interface IUsuarioRepository {
+  listarUsuarios(): Promise<IUsuario[]>;
+  pegarUsuario(id: string): Promise<void>;
+  pegarEmail(email: string): Promise<void>;
 }
+export default IUsuarioRepository;

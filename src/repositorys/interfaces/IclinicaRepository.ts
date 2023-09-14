@@ -1,12 +1,9 @@
-import { Request, Response } from 'express';
+import IClinica from '../../models/interfaces/IClinica';
 
-interface IclinicaRepository {
-  listar(req: Request, res: Response): Promise<Response>;
-  filtrarClinica(req: Request, res: Response): Promise<void>;
-  listarClinicasPorEspecialidade(
-    request: Request,
-    response: Response,
-  ): Promise<void>;
+interface IClinicaRepository {
+  pegarClnicas(): Promise<IClinica[]>;
+  pegarClinica(nome: string): Promise<IClinica | null>;
+  pegarClinicaPelaEspecialidade(nome: string): Promise<IClinica[] | null>;
 }
 
-export default IclinicaRepository;
+export default IClinicaRepository;

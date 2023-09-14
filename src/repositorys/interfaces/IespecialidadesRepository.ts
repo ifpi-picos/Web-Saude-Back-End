@@ -1,7 +1,8 @@
-import { Request, Response } from 'express';
+import IEspecialidade from '../../models/interfaces/IEspecialidades';
 
-interface IespecialidadesRepositories {
-  listarEspecialidades(req: Request, res: Response): Promise<void>;
+interface IEspecialidadesRepositories {
+  pegarEspecialidades(): Promise<IEspecialidade[]>;
+  pegarEspecialidade(nome: string): Promise<IEspecialidade | null>;
 }
 
-export default IespecialidadesRepositories;
+export default IEspecialidadesRepositories;

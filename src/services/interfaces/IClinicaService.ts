@@ -1,10 +1,10 @@
-import Iclinica from '@src/models/interfaces/Iclinica';
+import IClinica from '@src/models/interfaces/IClinica';
 interface IClinicaService {
-  cadastrar(clinicaData: Iclinica): Promise<Iclinica>;
+  cadastrar(clinicaData: IClinica): Promise<IClinica | null>;
   alterarClinica(
     clinicaId: string,
-    clinicaData: Partial<Iclinica>,
-  ): Promise<Iclinica | null>;
+    clinicaData: IClinica,
+  ): Promise<IClinica | null>;
   deletarClinica(clinicaId: string): Promise<void>;
   deletarTodasClinicas(): Promise<void>;
 }

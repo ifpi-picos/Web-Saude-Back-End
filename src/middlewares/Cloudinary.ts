@@ -1,11 +1,10 @@
 // cloudinary.ts
-
 import { v2 as cloudinary } from 'cloudinary';
 
 const cloudinaryConfig = {
-  cloud_name: 'dkpivrhuy',
-  api_key: '267238127544796',
-  api_secret: 'dccInkIDfCFFzT8ZGyB6St6khPk',
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 };
 
 cloudinary.config(cloudinaryConfig);

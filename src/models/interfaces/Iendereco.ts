@@ -1,12 +1,11 @@
-import { Document, Schema } from 'mongoose';
-interface Iendereco extends Document {
+import { Document } from 'mongoose';
+interface IEndereco extends Document {
   cep: string;
   rua: string;
-  numero: Number;
+  numero: number;
   bairro: string;
   cidade: string;
   uf: string;
-  clinica: Schema.Types.ObjectId;
 }
 
-export default Iendereco;
+export default IEndereco;

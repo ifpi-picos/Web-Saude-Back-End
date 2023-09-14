@@ -1,4 +1,4 @@
-import IHospital from '@src/models/interfaces/Ihospital';
+import IHospital from '@src/models/interfaces/IHospital';
 
 interface IHospitalService {
   cadastrar(hospitalData: IHospital): Promise<IHospital>;

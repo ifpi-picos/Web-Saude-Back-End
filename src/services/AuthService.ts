@@ -45,16 +45,16 @@ export default class AuthService {
       const user = await Usuario.findOne({ email });
 
       if (!user) {
-        throw new Error('Usuário não encontrado');
+        throw new Error('Usuário não encontrado!');
       }
 
       const isPasswordValid = await this.comparePasswords(senha, user.senha);
 
       if (!isPasswordValid) {
-        throw new Error('Senha incorreta');
+        throw new Error('Senha incorreta!');
       }
 
-      const token = this.generateToken(user._id.tostring());
+      const token = this.generateToken(user._id);
       return token;
     } catch (error) {
       console.log(error);
