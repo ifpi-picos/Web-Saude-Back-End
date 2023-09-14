@@ -1,12 +1,9 @@
-import { Request, Response } from 'express';
+import IHospital from "@src/models/interfaces/IHospital";
 
 interface IHospitalRepository {
-  listar(req: Request, res: Response): Promise<Response>;
-  filtrarHospital(req: Request, res: Response): Promise<void>;
-  listarHospitaisPorEspecialidade(
-    request: Request,
-    response: Response,
-  ): Promise<void>;
+  pegarHospitais(): Promise<IHospital[]>;
+  pegarHospital(nome: string): Promise<IHospital | null>;
+  pegarHospitalPelaEspecialidade(nome: string): Promise<IHospital[] | null>;
 }
 
 export default IHospitalRepository;

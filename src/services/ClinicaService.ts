@@ -1,24 +1,18 @@
 import { Model } from 'mongoose';
 import IClinicaService from './interfaces/IClinicaService';
-import Iclinica from '../models/interfaces/IClinica';
+import IClinica from '../models/interfaces/IClinica';
 import Clinica from '../models/Clinica';
 import ClinicaRepository from '../repositorys/ClinicaRepository';
 
 class ClinicaService implements IClinicaService {
-  private model: Model<Iclinica>;
+  private model: Model<IClinica>;
 
   constructor() {
     this.model = Clinica;
   }
-  public async cadastrar(clinicaData: Iclinica): Promise<Iclinica | null> {
+  public async novaClinica(clinicaData: IClinica): Promise<IClinica | null> {
     try {
-      const clinicaExistente = await ClinicaRepository.pegarClinica(
-        clinicaData.nome,
-      );
-
-      if (clinicaExistente) {
-        throw new Error('Clínica já Cadastrada!');
-      }
+     
       const novaClinica = this.model.create(clinicaData);
       return novaClinica;
     } catch (error) {
@@ -28,15 +22,10 @@ class ClinicaService implements IClinicaService {
 
   public async alterarClinica(
     clinicaId: string,
-    clinicaData: Iclinica,
-  ): Promise<Iclinica | null> {
+    clinicaData: IClinica,
+  ): Promise<IClinica | null> {
     try {
-      const clinicaExistente = await ClinicaRepository.pegarClinica(
-        clinicaData.nome,
-      );
-      if (clinicaExistente) {
-        throw new Error('Clínica já Cadastrada!');
-      }
+      
       const atualizarClinica = await this.model.findByIdAndUpdate(
         clinicaId,
         clinicaData,

@@ -1,16 +1,16 @@
 import { Model } from 'mongoose';
-import IClinica from '../models/interfaces/IClinica';
-import IClinicaRepository from './interfaces/IClinicaRepository';
-import Clinica from '../models/Clinica';
+import IHospital from '../models/interfaces/IHospital';
+import IHospitalRepository from './interfaces/IHospitalRepositorys';
+import Hospital from '../models/Hospital';
 import EspecialidadesRepository from './EspecialidadesRepository';
 
-class ClinicaRepository implements IClinicaRepository {
-  private model: Model<IClinica>;
+class HospitailRepository implements IHospitalRepository {
+  private model: Model<IHospital>;
 
   constructor() {
-    this.model = Clinica;
+    this.model = Hospital;
   }
-  public async pegarClnicas(): Promise<IClinica[]> {
+  public async pegarHospitais(): Promise<IHospital[]> {
     try {
       return await this.model
         .find()
@@ -18,23 +18,23 @@ class ClinicaRepository implements IClinicaRepository {
         .populate('especialidades');
     } catch (error) {
       console.log(error);
-      throw new Error('Erro ao Listas as Clínicas!' + error);
+      throw new Error('Erro ao Listas os Hospitais!' + error);
     }
   }
-  public async pegarClinica(nome: string): Promise<IClinica | null> {
+  public async pegarHospital(nome: string): Promise<IHospital | null> {
     try {
-      const clinica = await this.model.findOne({ nome: nome });
-      if (!clinica) {
-        throw new Error('Clínica não encontrada!');
+      const hospital = await this.model.findOne({ nome: nome });
+      if (!hospital) {
+        throw new Error('Hospital não encontrada!');
       }
-      return clinica;
+      return hospital;
     } catch (error) {
-      throw new Error('Erro ao Filtrar a Clínica!' + error);
+      throw new Error('Erro ao Filtrar o Hospital!' + error);
     }
   }
-  public async pegarClinicaPelaEspecialidade(
+  public async pegarHospitalPelaEspecialidade(
     nome: string,
-  ): Promise<IClinica[] | null> {
+  ): Promise<IHospital[] | null> {
     try {
       const especialidade = await EspecialidadesRepository.pegarEspecialidade(
         nome,
@@ -53,9 +53,9 @@ class ClinicaRepository implements IClinicaRepository {
       return clinicasFiltradas;
     } catch (error) {
       throw new Error(
-        'Erro ao Filtrar as Clínicas pela Especialidades!' + error,
+        'Erro ao Filtrar os Hospitais pela Especialidades!' + error,
       );
     }
   }
 }
-export default new ClinicaRepository();
+export default new HospitailRepository();

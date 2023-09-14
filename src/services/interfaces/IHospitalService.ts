@@ -1,13 +1,12 @@
-import IHospital from '@src/models/interfaces/IHospital';
-
+import IHospital from "@src/models/interfaces/IHospital";
 interface IHospitalService {
-  cadastrar(hospitalData: IHospital): Promise<IHospital>;
+  novoHospital(hospitalData: IHospital): Promise<IHospital | null>;
   alterarHospital(
     hospitalId: string,
-    clinicaData: Partial<IHospital>,
+    hospitalData: IHospital,
   ): Promise<IHospital | null>;
-  deletarHospital(HospitalId: string): Promise<void>;
-  deletarTodaOsHospitais(): Promise<void>;
+  deletarHospital(hospitalId: string): Promise<void>;
+  deletarTodosHospitais(): Promise<void>;
 }
 
-export default IHospitalService;
+export default IHospitalService

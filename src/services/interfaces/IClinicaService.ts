@@ -1,6 +1,6 @@
 import IClinica from '@src/models/interfaces/IClinica';
 interface IClinicaService {
-  cadastrar(clinicaData: IClinica): Promise<IClinica | null>;
+  novaClinica(clinicaData: IClinica): Promise<IClinica | null>;
   alterarClinica(
     clinicaId: string,
     clinicaData: IClinica,

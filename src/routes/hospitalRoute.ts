@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
-import ClinicaService from '../services/ClinicaService';
-import ClinicaRepository from '../repositorys/ClinicaRepository';
+import HospitalService from '../services/HospitalService';
+import HospitalRepository from '../repositorys/HospitalRepository';
 
 function validaCampoVazio(campo: string, valor: object) {
   if (!valor || valor === undefined || valor === null) {
@@ -8,17 +8,15 @@ function validaCampoVazio(campo: string, valor: object) {
   }
   return '';
 }
-const clinicaRouter = Router();
+const hospitalRouter = Router();
 
-// cadastrar clínica
-clinicaRouter.post(
-  '/admin/nova-clinica',
+// cadastrar hospital
+hospitalRouter.post(
+  '/admin/novo-hospital',
   async (req: Request, res: Response) => {
     try {
       const camposAValidar = [
         'nome',
-        'horarioSemana',
-        'Sabado',
         'longitude',
         'latitude',
         'especialidades',
@@ -45,9 +43,9 @@ clinicaRouter.post(
       } else if (req.body.nome.length < 2) {
         return res.json({ Message: 'Nome muito curto!!' });
       } else {
-        const novaClinica = await ClinicaService.novaClinica({ ...req.body });
+        const novaClinica = await HospitalService.novoHospital({ ...req.body });
         return res.status(201).json({
-          Message: 'Clínica salva com Sucesso!',
+          Message: 'Hospital salvo com Sucesso!',
           data: novaClinica,
         });
       }
@@ -57,16 +55,14 @@ clinicaRouter.post(
   },
 );
 
-// alterar a clínica
-clinicaRouter.put(
-  '/admin/alterar-clinica/:id',
+// alterar o hospital
+hospitalRouter.put(
+  '/admin/alterar-hospital/:id',
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
       const camposAValidar = [
         'nome',
-        'horarioSemana',
-        'Sabado',
         'longitude',
         'latitude',
         'especialidades',
@@ -92,12 +88,12 @@ clinicaRouter.put(
       } else if (req.body.nome.length < 2) {
         return res.json({ Message: 'Nome muito curto!!' });
       } else {
-        const clinicaAtualizada = await ClinicaService.alterarClinica(id, {
+        const hosítalAtualizado = await HospitalService.alterarHospital(id, {
           ...req.body,
         });
         return res.status(201).json({
-          Message: 'Clínica Atualizada com Sucesso!',
-          data: clinicaAtualizada,
+          Message: 'Hospital Atualizada com Sucesso!',
+          data: hosítalAtualizado,
         });
       }
     } catch (error) {
@@ -106,67 +102,67 @@ clinicaRouter.put(
   },
 );
 
-// deletar a clínica
-clinicaRouter.delete(
-  '/admin/deletar-clinica/:id',
+// deletar o hospital
+hospitalRouter.delete(
+  '/admin/deletar-hospital/:id',
   async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      await ClinicaService.deletarClinica(id);
-      return res.status(201).json({ Message: 'Clínica Deletada com Sucesso!' });
+      await HospitalService.deletarHospital(id);
+      return res.status(201).json({ Message: 'Hospital Deletado com Sucesso!' });
     } catch (error) {
       return res.status(500).json(error);
     }
   },
 );
-// deletar todas clínicas
-clinicaRouter.delete('/admin/deletar', async (req: Request, res: Response) => {
+// deletar todos hospitais
+hospitalRouter.delete('/admin/deletar', async (req: Request, res: Response) => {
   try {
-    await ClinicaService.deletarTodasClinicas();
+    await HospitalService.deletarTodosHospitais();
     res
       .status(201)
-      .json({ Message: 'Todas as Clínicas foram Deletadas com Sucesso!' });
+      .json({ Message: 'Todos os Hospitais foram Deletados com Sucesso!' });
   } catch (error) {
     return res.status(500).json(error);
   }
 });
 
-// listar clínicas
-clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
+// listar hospitais
+hospitalRouter.get('/hospitais', async (req: Request, res: Response) => {
   try {
-    const clinicas = await ClinicaRepository.pegarClnicas();
-    return res.status(201).json(clinicas);
+    const hospitais = await HospitalRepository.pegarHospitais();
+    return res.status(201).json(hospitais);
   } catch (error) {
     console.log(error);
     return res.status(500).json(error);
   }
 });
 // filtrar clinica
-clinicaRouter.get('/clinica/:nome', async (req: Request, res: Response) => {
+hospitalRouter.get('/hospital/:nome', async (req: Request, res: Response) => {
   try {
     const { nome } = req.params;
-    const clinica = await ClinicaRepository.pegarClinica(nome);
+    const hospital = await HospitalRepository.pegarHospital(nome);
 
-    return res.status(201).json(clinica);
+    return res.status(201).json(hospital);
   } catch (error) {
     return res.status(500).json(error);
   }
 });
 
-// filtrar clinicas pelas especialidade
-clinicaRouter.get(
-  '/clinica/especialidade/:nome',
+//filtrar hospitais pelas especialidade
+hospitalRouter.get(
+  '/hospital/especialidade/:nome',
   async (req: Request, res: Response) => {
     try {
       const { nome } = req.params;
-      const clinicas = await ClinicaRepository.pegarClinicaPelaEspecialidade(
+      const hospitais = await HospitalRepository.pegarHospitalPelaEspecialidade(
         nome,
       );
 
-      return res.status(201).json(clinicas);
+      return res.status(201).json(hospitais);
     } catch (error) {
       return res.status(500).json(error);
     }
   },
 );
-export default clinicaRouter;
+export default hospitalRouter;
