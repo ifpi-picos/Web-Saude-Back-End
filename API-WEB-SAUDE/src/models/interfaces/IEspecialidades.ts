@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 
 interface IEspecialidade extends Document {
-  nome: string;
+	nome: string;
 }
 
 export default IEspecialidade;

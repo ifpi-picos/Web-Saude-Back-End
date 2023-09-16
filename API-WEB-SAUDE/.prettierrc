@@ -4,17 +4,11 @@
   "trailingComma": "all",
   "semi": true,
   "printWidth": 80,
-  "useTabs": false,
+  "useTabs": true,
   "arrowParens": "avoid",
   "bracketSpacing": true,
-  "jsxBracketSameLine": false,
   "quoteProps": "as-needed",
   "endOfLine": "auto",
-  "htmlWhitespaceSensitivity": "css",
   "proseWrap": "always",
-  "vueIndentScriptAndStyle": true,
-  "quoteTransform": false,
-  "embeddedLanguageFormatting": "auto",
-  "spaceBeforeFunctionParen": true,
-  "insertPragma": false
+  "quoteTransform": false
 }

@@ -11,6 +11,6 @@ router.use('/', usuarioRouter);
 router.use('/', clinicaRouter);
 router.use('/', enderecoRoute);
 router.use('/', especialidadesRouter);
-router.use('/',hospitalRouter);
+router.use('/', hospitalRouter);
 
 export default router;

@@ -4,49 +4,49 @@ import IEndereco from '../models/interfaces/IEndereco';
 import IEnderecoService from './interfaces/IEnderecoService';
 
 class EnderecoService implements IEnderecoService {
-  private model: Model<IEndereco>;
+	private model: Model<IEndereco>;
 
-  constructor() {
-    this.model = Endereco;
-  }
-  public async cadastrarEndereco(
-    enderecoData: IEndereco,
-  ): Promise<IEndereco | null> {
-    try {
-      return await this.model.create(enderecoData);
-    } catch (error) {
-      throw new Endereco('Houve um erro interno ao salvar um novo endereço');
-    }
-  }
+	constructor() {
+		this.model = Endereco;
+	}
+	public async cadastrarEndereco(
+		enderecoData: IEndereco,
+	): Promise<IEndereco | null> {
+		try {
+			return await this.model.create(enderecoData);
+		} catch (error) {
+			throw new Endereco('Erro ao salvar o Endereço!' + error);
+		}
+	}
 
-  public async alterarEndereco(
-    id: string,
-    enderecoData: IEndereco,
-  ): Promise<IEndereco | null> {
-    try {
-      return await Endereco.findByIdAndUpdate(id, enderecoData, {
-        new: true,
-      });
-    } catch (error) {
-      throw new Endereco('Houve um erro interno ao alterar o endereço!!');
-    }
-  }
+	public async alterarEndereco(
+		id: string,
+		enderecoData: IEndereco,
+	): Promise<IEndereco | null> {
+		try {
+			return await Endereco.findByIdAndUpdate(id, enderecoData, {
+				new: true,
+			});
+		} catch (error) {
+			throw new Endereco('Erro ao altrar o Endereço!' + error);
+		}
+	}
 
-  public async deletarEndereco(id: string): Promise<void> {
-    try {
-      await Endereco.findByIdAndDelete(id);
-    } catch (error) {
-      throw new Error('Erro ao deletar o endereço');
-    }
-  }
+	public async deletarEndereco(id: string): Promise<void> {
+		try {
+			await Endereco.findByIdAndDelete(id);
+		} catch (error) {
+			throw new Error('Erro ao deletar o Endereço!' + error);
+		}
+	}
 
-  public async deletarTodosEnderecos(): Promise<void> {
-    try {
-      await Endereco.deleteMany({});
-    } catch (error) {
-      throw new Error('Erro ao deletar todos os endereços');
-    }
-  }
+	public async deletarTodosEnderecos(): Promise<void> {
+		try {
+			await Endereco.deleteMany({});
+		} catch (error) {
+			throw new Error('Erro ao deletar todos os Endereços!' + error);
+		}
+	}
 }
 
 export default new EnderecoService();
