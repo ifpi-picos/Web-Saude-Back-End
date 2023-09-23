@@ -1,6 +1,6 @@
-import Isuporte from '@src/models/interfaces/ISuporte';
-interface IsuporteService {
-	enviarMsg(menssagem: Isuporte): Promise<Isuporte>;
+import ISuporte from '@src/models/interfaces/ISuporte';
+interface ISuporteService {
+	enviarMsg(menssagem: ISuporte): Promise<ISuporte | null>;
 }
 
-export default IsuporteService;
+export default ISuporteService;

@@ -1,5 +1,5 @@
 {
-	"name": "node-typescript-starter",
+	"name": "web-saude-back-end",
 	"version": "1.0.0",
 	"outDir": "dist",
 	"description": "Template de configurações para utilizar o NodeJS em conjunto com o TypeScript",
@@ -8,12 +8,13 @@
 		"src/**/*"
 	],
 	"scripts": {
-		"start": "node dist/server.ts",
+		"start": "node dist/src/server.ts",
 		"start:dev": "ts-node-dev src/server.ts",
 		"lint": "eslint ./src --ext .ts",
 		"lint-fix": "eslint ./src .test --ext .ts --fix",
 		"build": "sucrase ./src -d ./dist --transforms typescript,imports",
-		"format": "prettier --write \"**/*.{html,js,ts,tsx,json,jsx,css}\""
+		"format": "prettier --write \"**/*.{html,js,ts,tsx,json,jsx,css}\"",
+		"test": "jest"
 	},
 	"dependencies": {
 		"@types/bcrypt": "^5.0.0",
@@ -50,6 +51,8 @@
 	},
 	"devDependencies": {
 		"@types/dotenv": "^8.2.0",
-		"@types/helmet": "^4.0.0"
+		"@types/helmet": "^4.0.0",
+		"@types/jest": "^29.5.5",
+		"jest": "^29.7.0"
 	}
 }

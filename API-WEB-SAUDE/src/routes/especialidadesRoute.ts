@@ -13,10 +13,10 @@ especialidadesRouter.post(
 			const camposAValidar = ['nome'];
 
 			const erros: string[] = [];
-			validation.finalizarValidacao(camposAValidar,req,erros)
+			validation.finalizarValidacao(camposAValidar, req, erros);
 
 			const errosFiltrados = erros.filter(erro => erro !== '');
-			
+
 			if (errosFiltrados.length > 0) {
 				return res.json({
 					Message: 'Campos inválidos',

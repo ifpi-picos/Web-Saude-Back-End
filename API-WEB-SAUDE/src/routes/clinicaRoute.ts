@@ -21,8 +21,8 @@ clinicaRouter.post(
 			];
 
 			const erros: string[] = [];
-            
-           validation.finalizarValidacao(camposAValidar,req,erros)
+
+			validation.finalizarValidacao(camposAValidar, req, erros);
 			const errosFiltrados = erros.filter(erro => erro !== '');
 
 			if (errosFiltrados.length > 0) {
@@ -40,8 +40,7 @@ clinicaRouter.post(
 				});
 			}
 		} catch (error) {
-			if (error instanceof Error) 
-				return res.status(500).json(error.message);
+			if (error instanceof Error) return res.status(500).json(error.message);
 		}
 	},
 );
@@ -63,7 +62,7 @@ clinicaRouter.put(
 			];
 			const erros: string[] = [];
 
-			validation.finalizarValidacao(camposAValidar,req,erros)
+			validation.finalizarValidacao(camposAValidar, req, erros);
 
 			const errosFiltrados = erros.filter(erro => erro !== '');
 
@@ -75,7 +74,10 @@ clinicaRouter.put(
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				const clinicaAtualizada = await ClinicaService.alterarClinica(id,req.body);
+				const clinicaAtualizada = await ClinicaService.alterarClinica(
+					id,
+					req.body,
+				);
 				return res.status(201).json({
 					Message: 'Clínica Atualizada com Sucesso!',
 					data: clinicaAtualizada,
@@ -115,7 +117,7 @@ clinicaRouter.delete('/admin/deletar', async (req: Request, res: Response) => {
 // listar clínicas
 clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
 	try {
-		const clinicas = await ClinicaRepository.pegarClnicas();
+		const clinicas = await ClinicaRepository.pegarClinicas();
 		return res.status(201).json(clinicas);
 	} catch (error) {
 		console.log(error);

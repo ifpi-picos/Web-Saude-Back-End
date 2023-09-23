@@ -5,14 +5,14 @@ import validation from '../middlewares/validation';
 const enderecoRoute = Router();
 
 //cadastrar endereço
-enderecoRoute.post('/novo-endereco', async (req: Request, res: Response) => {
+enderecoRoute.post('/admin/novo-endereco', async (req: Request, res: Response) => {
 	try {
 		const camposAValidar = ['cep', 'rua', 'numero', 'bairro', 'cidade', 'uf'];
 
 		const erros: string[] = [];
 
-		validation.finalizarValidacao(camposAValidar,req,erros)
-			const errosFiltrados = erros.filter(erro => erro !== '');
+		validation.finalizarValidacao(camposAValidar, req, erros);
+		const errosFiltrados = erros.filter(erro => erro !== '');
 
 		if (errosFiltrados.length > 0) {
 			return res.json({
@@ -38,8 +38,8 @@ enderecoRoute.put(
 			const camposAValidar = ['cep', 'rua', 'numero', 'bairro', 'cidade', 'uf'];
 
 			const erros: string[] = [];
-			validation.finalizarValidacao(camposAValidar,req,erros)
-			
+			validation.finalizarValidacao(camposAValidar, req, erros);
+
 			const errosFiltrados = erros.filter(erro => erro !== '');
 
 			if (errosFiltrados.length > 0) {
@@ -51,12 +51,10 @@ enderecoRoute.put(
 				const alterarEndereco = await EnderecoService.alterarEndereco(id, {
 					...req.body,
 				});
-				return res
-					.status(201)
-					.json({
-						Message: 'Endereço alterado com sucesso!!',
-						alterarEndereco,
-					});
+				return res.status(201).json({
+					Message: 'Endereço alterado com sucesso!!',
+					alterarEndereco,
+				});
 			}
 		} catch (error) {
 			return res.status(500).json(error);

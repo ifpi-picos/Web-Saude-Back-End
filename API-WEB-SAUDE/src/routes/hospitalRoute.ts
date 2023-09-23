@@ -19,7 +19,7 @@ hospitalRouter.post(
 			];
 
 			const erros: string[] = [];
-			validation.finalizarValidacao(camposAValidar,req,erros)
+			validation.finalizarValidacao(camposAValidar, req, erros);
 
 			const errosFiltrados = erros.filter(erro => erro !== '');
 
@@ -58,7 +58,7 @@ hospitalRouter.put(
 			];
 
 			const erros: string[] = [];
-			validation.finalizarValidacao(camposAValidar,req,erros)
+			validation.finalizarValidacao(camposAValidar, req, erros);
 
 			const errosFiltrados = erros.filter(erro => erro !== '');
 
@@ -70,7 +70,10 @@ hospitalRouter.put(
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				const hosítalAtualizado = await HospitalService.alterarHospital(id,req.body);
+				const hosítalAtualizado = await HospitalService.alterarHospital(
+					id,
+					req.body,
+				);
 				return res.status(201).json({
 					Message: 'Hospital Atualizada com Sucesso!',
 					data: hosítalAtualizado,

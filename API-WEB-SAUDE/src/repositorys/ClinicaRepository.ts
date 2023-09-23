@@ -10,7 +10,7 @@ class ClinicaRepository implements IClinicaRepository {
 	constructor() {
 		this.model = Clinica;
 	}
-	public async pegarClnicas(): Promise<IClinica[]> {
+	public async pegarClinicas(): Promise<IClinica[]> {
 		try {
 			return await this.model
 				.find()
@@ -23,7 +23,7 @@ class ClinicaRepository implements IClinicaRepository {
 	}
 	public async pegarClinica(nome: string): Promise<IClinica | null> {
 		try {
-			return await this.model.findOne({ nome: nome });
+			return await this.model.findOne({ nome: nome }).populate('endereco');
 		} catch (error) {
 			throw new Error('Erro ao Filtrar a Clínica!' + error);
 		}

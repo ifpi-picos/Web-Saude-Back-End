@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
+import ISuporte from "../../models/interfaces/ISuporte";
 
-interface IsuporteRepository {
-	emailsRecebidos(req: Request, res: Response): Promise<void>;
+interface ISuporteRepository {
+	mensagensRecebidoas(): Promise<ISuporte[]>;
 }
 
-export default IsuporteRepository;
+export default ISuporteRepository;

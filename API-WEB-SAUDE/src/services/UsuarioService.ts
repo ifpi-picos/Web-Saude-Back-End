@@ -18,9 +18,11 @@ class UsuarioService implements IUsuarioService {
 	): Promise<IUsuario> {
 		try {
 			const usuarioExistente = await UsuarioRepository.pegarEmail(email);
-			console.log(usuarioExistente);
 			const hashedPassword = await AuthService.hashPassword(senha);
 
+            if(usuarioExistente){
+				throw new Error('Usuário já está Cadstrado!')
+			}
 			const newUser = await Usuario.create({
 				nome,
 				email,
@@ -98,7 +100,7 @@ class UsuarioService implements IUsuarioService {
 		} catch (error) {
 			throw new Error('Erro ao Deletar o Usuário!' + error);
 		}
-	}
+	} 
 
 	public async deletarTodosUsuarios(): Promise<void> {
 		try {
