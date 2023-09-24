@@ -34,6 +34,12 @@ clinicaRouter.post(
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
 				const novaClinica = await ClinicaService.novaClinica(req.body);
+
+				if (novaClinica === null) {
+					return res
+						.status(400)
+						.json({ Message: 'Essa Clínica já está Cadastrada!' });
+				}
 				return res.status(201).json({
 					Message: 'Clínica salva com Sucesso!',
 					data: novaClinica,
@@ -78,6 +84,11 @@ clinicaRouter.put(
 					id,
 					req.body,
 				);
+				if (clinicaAtualizada === null) {
+					return res
+						.status(400)
+						.json({ Message: 'Essa Clínica já está Cadastrada!' });
+				}
 				return res.status(201).json({
 					Message: 'Clínica Atualizada com Sucesso!',
 					data: clinicaAtualizada,

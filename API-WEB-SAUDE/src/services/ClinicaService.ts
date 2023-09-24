@@ -15,8 +15,9 @@ class ClinicaService implements IClinicaService {
 			const clinicaExistente = await ClinicaRepository.pegarClinica(
 				clinicaData.nome,
 			);
+
 			if (clinicaExistente) {
-				throw new Error('Essa Clínica já está Cadastrada!');
+				return null;
 			}
 			const novaClinica = this.model.create(clinicaData);
 			return novaClinica;
@@ -34,7 +35,7 @@ class ClinicaService implements IClinicaService {
 				clinicaData.nome,
 			);
 			if (clinicaExistente) {
-				throw new Error('Essa Clínica já está Cadastrada!');
+				return null;
 			}
 			const atualizarClinica = await this.model.findByIdAndUpdate(
 				clinicaId,

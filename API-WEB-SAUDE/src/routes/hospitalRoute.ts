@@ -31,10 +31,16 @@ hospitalRouter.post(
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				const novaClinica = await HospitalService.novoHospital(req.body);
+				const novoHospital = await HospitalService.novoHospital(req.body);
+
+				if (novoHospital === null) {
+					return res
+						.status(400)
+						.json({ Message: 'Esse Hospital já está Cadastrado!' });
+				}
 				return res.status(201).json({
 					Message: 'Hospital salvo com Sucesso!',
-					data: novaClinica,
+					data: novoHospital,
 				});
 			}
 		} catch (error) {
@@ -74,8 +80,13 @@ hospitalRouter.put(
 					id,
 					req.body,
 				);
+				if (hosítalAtualizado === null) {
+					return res
+						.status(400)
+						.json({ Message: 'Esse Hospital já está Cadastrado!' });
+				}
 				return res.status(201).json({
-					Message: 'Hospital Atualizada com Sucesso!',
+					Message: 'Hospital Atualizado com Sucesso!',
 					data: hosítalAtualizado,
 				});
 			}

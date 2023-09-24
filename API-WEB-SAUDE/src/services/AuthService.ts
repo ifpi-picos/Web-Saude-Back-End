@@ -7,7 +7,6 @@ export interface JwtToken {
 	sub: string;
 }
 export default class AuthService {
-
 	public static async hashPassword(
 		password: string,
 		saltRounds = 10,

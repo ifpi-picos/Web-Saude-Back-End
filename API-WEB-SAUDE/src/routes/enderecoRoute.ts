@@ -5,29 +5,32 @@ import validation from '../middlewares/validation';
 const enderecoRoute = Router();
 
 //cadastrar endereço
-enderecoRoute.post('/admin/novo-endereco', async (req: Request, res: Response) => {
-	try {
-		const camposAValidar = ['cep', 'rua', 'numero', 'bairro', 'cidade', 'uf'];
+enderecoRoute.post(
+	'/admin/novo-endereco',
+	async (req: Request, res: Response) => {
+		try {
+			const camposAValidar = ['cep', 'rua', 'numero', 'bairro', 'cidade', 'uf'];
 
-		const erros: string[] = [];
+			const erros: string[] = [];
 
-		validation.finalizarValidacao(camposAValidar, req, erros);
-		const errosFiltrados = erros.filter(erro => erro !== '');
+			validation.finalizarValidacao(camposAValidar, req, erros);
+			const errosFiltrados = erros.filter(erro => erro !== '');
 
-		if (errosFiltrados.length > 0) {
-			return res.json({
-				Message: 'Campos inválidos',
-				Errors: errosFiltrados,
-			});
-		} else {
-			const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
-			console.log(req.body.cep);
-			return res.status(201).json(novoEndereco);
+			if (errosFiltrados.length > 0) {
+				return res.json({
+					Message: 'Campos inválidos',
+					Errors: errosFiltrados,
+				});
+			} else {
+				const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
+				console.log(req.body.cep);
+				return res.status(201).json(novoEndereco);
+			}
+		} catch (error) {
+			return res.status(500).json(error);
 		}
-	} catch (error) {
-		return res.status(500).json(error);
-	}
-});
+	},
+);
 
 // alterar endereço
 enderecoRoute.put(

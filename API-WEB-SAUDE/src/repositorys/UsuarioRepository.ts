@@ -29,8 +29,7 @@ class UsuarioRepository implements IUsuarioRepository {
 	}
 	public async pegarEmail(email: string): Promise<IUsuario | null> {
 		try {
-			return  await this.model.findOne({ email: email });
-
+			return await this.model.findOne({ email: email });
 		} catch (error) {
 			throw new Error('Erro ao verificar o Usuário!' + error);
 		}

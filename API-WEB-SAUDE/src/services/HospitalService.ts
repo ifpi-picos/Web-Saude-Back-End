@@ -18,7 +18,7 @@ class HospitalService implements IHospitalService {
 				hospitalData.nome,
 			);
 			if (hospitalExistente) {
-				throw new Error('Esse Hospital já está Cadastrada!');
+				return null;
 			}
 			const novoHospital = this.model.create(hospitalData);
 			return novoHospital;
@@ -36,7 +36,7 @@ class HospitalService implements IHospitalService {
 				hospitalData.nome,
 			);
 			if (hospitalExistente) {
-				throw new Error('Esse Hospital já está Cadastrada!');
+				return null;
 			}
 			const atualizarHospital = await this.model.findByIdAndUpdate(
 				hospitalId,

@@ -39,6 +39,7 @@ usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 				req.body.email,
 				req.body.senha,
 			);
+
 			return res.json({
 				Message: 'Usuário salvo com Sucesso!',
 				data: novoUsuario,

@@ -20,8 +20,8 @@ class UsuarioService implements IUsuarioService {
 			const usuarioExistente = await UsuarioRepository.pegarEmail(email);
 			const hashedPassword = await AuthService.hashPassword(senha);
 
-            if(usuarioExistente){
-				throw new Error('Usuário já está Cadstrado!')
+			if (usuarioExistente) {
+				throw new Error('Usuário já está Cadstrado!');
 			}
 			const newUser = await Usuario.create({
 				nome,
@@ -100,7 +100,7 @@ class UsuarioService implements IUsuarioService {
 		} catch (error) {
 			throw new Error('Erro ao Deletar o Usuário!' + error);
 		}
-	} 
+	}
 
 	public async deletarTodosUsuarios(): Promise<void> {
 		try {
