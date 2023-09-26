@@ -7,7 +7,7 @@ interface IClinica extends Document {
 		open: string;
 		close: string;
 	};
-	Sabado: {
+	sabado: {
 		open: string;
 		close: string;
 	};

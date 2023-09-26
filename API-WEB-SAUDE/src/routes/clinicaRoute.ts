@@ -13,7 +13,7 @@ clinicaRouter.post(
 			const camposAValidar = [
 				'nome',
 				'horarioSemana',
-				'Sabado',
+				'sabado',
 				'longitude',
 				'latitude',
 				'especialidades',
@@ -60,7 +60,7 @@ clinicaRouter.put(
 			const camposAValidar = [
 				'nome',
 				'horarioSemana',
-				'Sabado',
+				'sabado',
 				'longitude',
 				'latitude',
 				'especialidades',
@@ -107,7 +107,7 @@ clinicaRouter.delete(
 		try {
 			const { id } = req.params;
 			await ClinicaService.deletarClinica(id);
-			return res.status(201).json({ Message: 'Clínica Deletada com Sucesso!' });
+			return res.status(204).json({ Message: 'Clínica Deletada com Sucesso!' });
 		} catch (error) {
 			return res.status(500).json(error);
 		}
@@ -118,7 +118,7 @@ clinicaRouter.delete('/admin/deletar', async (req: Request, res: Response) => {
 	try {
 		await ClinicaService.deletarTodasClinicas();
 		res
-			.status(201)
+			.status(204)
 			.json({ Message: 'Todas as Clínicas foram Deletadas com Sucesso!' });
 	} catch (error) {
 		return res.status(500).json(error);

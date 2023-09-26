@@ -1,0 +1,660 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "API de informações de Clínicas e Hospitais",
+		"description": "Sobre a API de Clínicas e Hospitais",
+		"contact": {
+			"email": "ericspsantos@gmail.com"
+		},
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://localhost:5000",
+			"description": "API WEB SAÚDE"
+		}
+	],
+	"paths": {
+		"/admin/nova-clinica": {
+			"post": {
+				"summary": "Cadastrar Clínica",
+				"description": "Essa rota será responsável por cadastrar uma clínica",
+				"tags": ["Clinicas"],
+				"requestBody": {
+					"description": "Dados da Clínica",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Clinica"
+							},
+							"examples": {
+								"clinica": {
+									"value": {
+										"nome": "Clinica X",
+										"imagem": "url_da_imagem",
+										"horarioSemana": {
+											"open": "08:00",
+											"close": "17:00"
+										},
+										"Sabado": {
+											"open": "09:00",
+											"close": "13:00"
+										},
+										"longitude": -43.123456,
+										"latitude": -22.987654,
+										"especialidades": [
+											"id_especialidade_1",
+											"id_especialidade_2"
+										],
+										"instagram": "perfil_instagram",
+										"email": "email@clinica.com",
+										"whatsapp": "+55 11 1234-5678",
+										"descricao": "Descrição da clínica",
+										"endereco": "id_endereco"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Clínica salva com Sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Clinica"
+								},
+								"examples": {
+									"clinica": {
+										"value": {
+											"nome": "Clinica X",
+											"imagem": "url_da_imagem",
+											"horarioSemana": {
+												"open": "08:00",
+												"close": "17:00"
+											},
+											"Sabado": {
+												"open": "09:00",
+												"close": "13:00"
+											},
+											"longitude": -43.123456,
+											"latitude": -22.987654,
+											"especialidades": [
+												"id_especialidade_1",
+												"id_especialidade_2"
+											],
+											"instagram": "perfil_instagram",
+											"email": "email@clinica.com",
+											"whatsapp": "+55 11 1234-5678",
+											"descricao": "Descrição da clínica",
+											"endereco": "id_endereco"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Campos inválidos ou nome muito curto",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										},
+										"Errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/alterar-clinica/{id}": {
+			"put": {
+				"summary": "Alterar Clínica",
+				"description": "Essa rota será responsável por alterar uma clínica existente",
+				"tags": ["Clinicas"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "ID da clínica a ser alterada"
+					}
+				],
+				"requestBody": {
+					"description": "Dados atualizados da Clínica",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Clinica"
+							},
+							"examples": {
+								"clinica": {
+									"value": {
+										"nome": "Clinica X Atualizada",
+										"imagem": "url_da_imagem_atualizada",
+										"horarioSemana": {
+											"open": "09:00",
+											"close": "18:00"
+										},
+										"Sabado": {
+											"open": "10:00",
+											"close": "14:00"
+										},
+										"longitude": -43.123456,
+										"latitude": -22.987654,
+										"especialidades": [
+											"id_especialidade_1",
+											"id_especialidade_3"
+										],
+										"instagram": "perfil_instagram_atualizado",
+										"email": "novo_email@clinica.com",
+										"whatsapp": "+55 11 9876-5432",
+										"descricao": "Descrição atualizada da clínica",
+										"endereco": "id_endereco_atualizado"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Clínica atualizada com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Clinica"
+								},
+								"examples": {
+									"clinica": {
+										"value": {
+											"nome": "Clinica X Atualizada",
+											"imagem": "url_da_imagem_atualizada",
+											"horarioSemana": {
+												"open": "09:00",
+												"close": "18:00"
+											},
+											"Sabado": {
+												"open": "10:00",
+												"close": "14:00"
+											},
+											"longitude": -43.123456,
+											"latitude": -22.987654,
+											"especialidades": [
+												"id_especialidade_1",
+												"id_especialidade_3"
+											],
+											"instagram": "perfil_instagram_atualizado",
+											"email": "novo_email@clinica.com",
+											"whatsapp": "+55 11 9876-5432",
+											"descricao": "Descrição atualizada da clínica",
+											"endereco": "id_endereco_atualizado"
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Campos inválidos ou nome muito curto",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										},
+										"Errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/deletar-clinica/{id}": {
+			"delete": {
+				"summary": "Deletar Clínica",
+				"description": "Essa rota será responsável por deletar uma clínica existente",
+				"tags": ["Clinicas"],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "ID da clínica a ser deletada"
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "Clínica deletada com sucesso"
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/deletar": {
+			"delete": {
+				"summary": "Deletar Todas as Clínicas",
+				"description": "Essa rota será responsável por deletar todas as clínicas existentes",
+				"tags": ["Clinicas"],
+				"responses": {
+					"204": {
+						"description": "Todas as Clínicas foram deletadas com sucesso"
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/clinicas": {
+			"get": {
+				"summary": "Listar Clínicas",
+				"description": "Essa rota será responsável por listar todas as clínicas",
+				"tags": ["Clinicas"],
+				"responses": {
+					"201": {
+						"description": "Lista de clínicas",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Clinica"
+									}
+								},
+								"examples": {
+									"clinicas": {
+										"value": [
+											{
+												"nome": "Clinica A",
+												"imagem": "url_da_imagem_A",
+												"horarioSemana": {
+													"open": "08:00",
+													"close": "17:00"
+												},
+												"Sabado": {
+													"open": "09:00",
+													"close": "13:00"
+												},
+												"longitude": -43.123456,
+												"latitude": -22.987654,
+												"especialidades": [
+													"id_especialidade_1",
+													"id_especialidade_2"
+												],
+												"instagram": "perfil_instagram_A",
+												"email": "email@clinicaA.com",
+												"whatsapp": "+55 11 1234-5678",
+												"descricao": "Descrição da clínica A",
+												"endereco": "id_endereco_A"
+											},
+											{
+												"nome": "Clinica B",
+												"imagem": "url_da_imagem_B",
+												"horarioSemana": {
+													"open": "09:00",
+													"close": "18:00"
+												},
+												"Sabado": {
+													"open": "10:00",
+													"close": "14:00"
+												},
+												"longitude": -43.654321,
+												"latitude": -22.123456,
+												"especialidades": [
+													"id_especialidade_2",
+													"id_especialidade_3"
+												],
+												"instagram": "perfil_instagram_B",
+												"email": "email@clinicaB.com",
+												"whatsapp": "+55 11 9876-5432",
+												"descricao": "Descrição da clínica B",
+												"endereco": "id_endereco_B"
+											}
+										]
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/clinica/{nome}": {
+			"get": {
+				"summary": "Filtrar Clínica por Nome",
+				"description": "Essa rota será responsável por filtrar uma clínica por nome",
+				"tags": ["Clinicas"],
+				"parameters": [
+					{
+						"name": "nome",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Nome da clínica a ser filtrada"
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Clínica filtrada pelo nome",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Clinica"
+								},
+								"examples": {
+									"clinica": {
+										"value": {
+											"nome": "Clinica A",
+											"imagem": "url_da_imagem_A",
+											"horarioSemana": {
+												"open": "08:00",
+												"close": "17:00"
+											},
+											"Sabado": {
+												"open": "09:00",
+												"close": "13:00"
+											},
+											"longitude": -43.123456,
+											"latitude": -22.987654,
+											"especialidades": [
+												"id_especialidade_1",
+												"id_especialidade_2"
+											],
+											"instagram": "perfil_instagram_A",
+											"email": "email@clinicaA.com",
+											"whatsapp": "+55 11 1234-5678",
+											"descricao": "Descrição da clínica A",
+											"endereco": "id_endereco_A"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/clinica/especialidade/{nome}": {
+			"get": {
+				"summary": "Filtrar Clínicas por Especialidade",
+				"description": "Essa rota será responsável por filtrar clínicas por especialidade",
+				"tags": ["Clinicas"],
+				"parameters": [
+					{
+						"name": "nome",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Nome da especialidade a ser filtrada"
+					}
+				],
+				"responses": {
+					"201": {
+						"description": "Lista de clínicas filtradas pela especialidade",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Clinica"
+									}
+								},
+								"examples": {
+									"clinicas": {
+										"value": [
+											{
+												"nome": "Clinica A",
+												"imagem": "url_da_imagem_A",
+												"horarioSemana": {
+													"open": "08:00",
+													"close": "17:00"
+												},
+												"Sabado": {
+													"open": "09:00",
+													"close": "13:00"
+												},
+												"longitude": -43.123456,
+												"latitude": -22.987654,
+												"especialidades": [
+													"id_especialidade_1",
+													"id_especialidade_2"
+												],
+												"instagram": "perfil_instagram_A",
+												"email": "email@clinicaA.com",
+												"whatsapp": "+55 11 1234-5678",
+												"descricao": "Descrição da clínica A",
+												"endereco": "id_endereco_A"
+											},
+											{
+												"nome": "Clinica B",
+												"imagem": "url_da_imagem_B",
+												"horarioSemana": {
+													"open": "09:00",
+													"close": "18:00"
+												},
+												"Sabado": {
+													"open": "10:00",
+													"close": "14:00"
+												},
+												"longitude": -43.654321,
+												"latitude": -22.123456,
+												"especialidades": [
+													"id_especialidade_2",
+													"id_especialidade_3"
+												],
+												"instagram": "perfil_instagram_B",
+												"email": "email@clinicaB.com",
+												"whatsapp": "+55 11 9876-5432",
+												"descricao": "Descrição da clínica B",
+												"endereco": "id_endereco_B"
+											}
+										]
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Clinica": {
+				"type": "object",
+				"properties": {
+					"nome": {
+						"type": "string"
+					},
+					"imagem": {
+						"type": "string"
+					},
+					"horarioSemana": {
+						"type": "object",
+						"properties": {
+							"open": {
+								"type": "string"
+							},
+							"close": {
+								"type": "string"
+							}
+						}
+					},
+					"Sabado": {
+						"type": "object",
+						"properties": {
+							"open": {
+								"type": "string"
+							},
+							"close": {
+								"type": "string"
+							}
+						}
+					},
+					"longitude": {
+						"type": "number"
+					},
+					"latitude": {
+						"type": "number"
+					},
+					"especialidades": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"instagram": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"whatsapp": {
+						"type": "string"
+					},
+					"descricao": {
+						"type": "string"
+					},
+					"endereco": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}

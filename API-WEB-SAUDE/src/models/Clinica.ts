@@ -16,7 +16,7 @@ const ClinicaSchema = new Schema<IClinica>({
 			type: String,
 		},
 	},
-	Sabado: {
+	sabado: {
 		open: {
 			type: String,
 		},
