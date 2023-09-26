@@ -33,11 +33,7 @@ export class App {
 		this.express.use(cors());
 		this.express.use(compression());
 		this.express.use(bodyParser.json());
-		this.express.use(
-			'/api-docs',
-			swaggerUI.serve,
-			swaggerUI.setup(swaggerDocs),
-		);
+		this.express.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 	}
 	private database(): void {
 		const mongoUser = process.env.MONGO_USER;

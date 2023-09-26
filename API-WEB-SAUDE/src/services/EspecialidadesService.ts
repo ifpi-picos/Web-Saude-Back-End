@@ -15,9 +15,7 @@ class EspecialidadesServices implements IEspecailidadesService {
 	): Promise<IEspecialidade | null> {
 		try {
 			const especialidadeExistente =
-				await EspecialidadesRepository.pegarEspecialidade(
-					especialidadeData.nome,
-				);
+				await EspecialidadesRepository.pegarEspecialidade(especialidadeData.nome);
 			if (especialidadeExistente) {
 				throw new Error('Essa especialidade já está Cadastrada!');
 			}
@@ -32,9 +30,7 @@ class EspecialidadesServices implements IEspecailidadesService {
 	): Promise<IEspecialidade | null> {
 		try {
 			const especialidadeExistente =
-				await EspecialidadesRepository.pegarEspecialidade(
-					especialidadeData.nome,
-				);
+				await EspecialidadesRepository.pegarEspecialidade(especialidadeData.nome);
 			if (especialidadeExistente) {
 				throw new Error('Essa especialidade já está Cadastrada!');
 			}

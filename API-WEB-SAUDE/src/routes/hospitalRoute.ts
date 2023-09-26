@@ -103,9 +103,7 @@ hospitalRouter.delete(
 		try {
 			const { id } = req.params;
 			await HospitalService.deletarHospital(id);
-			return res
-				.status(201)
-				.json({ Message: 'Hospital Deletado com Sucesso!' });
+			return res.status(201).json({ Message: 'Hospital Deletado com Sucesso!' });
 		} catch (error) {
 			return res.status(500).json(error);
 		}

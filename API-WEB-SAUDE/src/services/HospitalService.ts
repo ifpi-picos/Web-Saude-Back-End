@@ -10,9 +10,7 @@ class HospitalService implements IHospitalService {
 	constructor() {
 		this.model = Hospital;
 	}
-	public async novoHospital(
-		hospitalData: IHospital,
-	): Promise<IHospital | null> {
+	public async novoHospital(hospitalData: IHospital): Promise<IHospital | null> {
 		try {
 			const hospitalExistente = await HospitalRepository.pegarHospital(
 				hospitalData.nome,

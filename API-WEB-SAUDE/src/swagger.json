@@ -43,10 +43,7 @@
 										},
 										"longitude": -43.123456,
 										"latitude": -22.987654,
-										"especialidades": [
-											"id_especialidade_1",
-											"id_especialidade_2"
-										],
+										"especialidades": ["id_especialidade_1", "id_especialidade_2"],
 										"instagram": "perfil_instagram",
 										"email": "email@clinica.com",
 										"whatsapp": "+55 11 1234-5678",
@@ -81,10 +78,7 @@
 											},
 											"longitude": -43.123456,
 											"latitude": -22.987654,
-											"especialidades": [
-												"id_especialidade_1",
-												"id_especialidade_2"
-											],
+											"especialidades": ["id_especialidade_1", "id_especialidade_2"],
 											"instagram": "perfil_instagram",
 											"email": "email@clinica.com",
 											"whatsapp": "+55 11 1234-5678",
@@ -174,10 +168,7 @@
 										},
 										"longitude": -43.123456,
 										"latitude": -22.987654,
-										"especialidades": [
-											"id_especialidade_1",
-											"id_especialidade_3"
-										],
+										"especialidades": ["id_especialidade_1", "id_especialidade_3"],
 										"instagram": "perfil_instagram_atualizado",
 										"email": "novo_email@clinica.com",
 										"whatsapp": "+55 11 9876-5432",
@@ -212,10 +203,7 @@
 											},
 											"longitude": -43.123456,
 											"latitude": -22.987654,
-											"especialidades": [
-												"id_especialidade_1",
-												"id_especialidade_3"
-											],
+											"especialidades": ["id_especialidade_1", "id_especialidade_3"],
 											"instagram": "perfil_instagram_atualizado",
 											"email": "novo_email@clinica.com",
 											"whatsapp": "+55 11 9876-5432",
@@ -363,10 +351,7 @@
 												},
 												"longitude": -43.123456,
 												"latitude": -22.987654,
-												"especialidades": [
-													"id_especialidade_1",
-													"id_especialidade_2"
-												],
+												"especialidades": ["id_especialidade_1", "id_especialidade_2"],
 												"instagram": "perfil_instagram_A",
 												"email": "email@clinicaA.com",
 												"whatsapp": "+55 11 1234-5678",
@@ -386,10 +371,7 @@
 												},
 												"longitude": -43.654321,
 												"latitude": -22.123456,
-												"especialidades": [
-													"id_especialidade_2",
-													"id_especialidade_3"
-												],
+												"especialidades": ["id_especialidade_2", "id_especialidade_3"],
 												"instagram": "perfil_instagram_B",
 												"email": "email@clinicaB.com",
 												"whatsapp": "+55 11 9876-5432",
@@ -459,10 +441,7 @@
 											},
 											"longitude": -43.123456,
 											"latitude": -22.987654,
-											"especialidades": [
-												"id_especialidade_1",
-												"id_especialidade_2"
-											],
+											"especialidades": ["id_especialidade_1", "id_especialidade_2"],
 											"instagram": "perfil_instagram_A",
 											"email": "email@clinicaA.com",
 											"whatsapp": "+55 11 1234-5678",
@@ -535,10 +514,7 @@
 												},
 												"longitude": -43.123456,
 												"latitude": -22.987654,
-												"especialidades": [
-													"id_especialidade_1",
-													"id_especialidade_2"
-												],
+												"especialidades": ["id_especialidade_1", "id_especialidade_2"],
 												"instagram": "perfil_instagram_A",
 												"email": "email@clinicaA.com",
 												"whatsapp": "+55 11 1234-5678",
@@ -558,10 +534,7 @@
 												},
 												"longitude": -43.654321,
 												"latitude": -22.123456,
-												"especialidades": [
-													"id_especialidade_2",
-													"id_especialidade_3"
-												],
+												"especialidades": ["id_especialidade_2", "id_especialidade_3"],
 												"instagram": "perfil_instagram_B",
 												"email": "email@clinicaB.com",
 												"whatsapp": "+55 11 9876-5432",

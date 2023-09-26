@@ -44,8 +44,7 @@ especialidadesRouter.get(
 	'/especialidades',
 	async (req: Request, res: Response) => {
 		try {
-			const especialidades =
-				await EspecialidadesRepository.pegarEspecialidades();
+			const especialidades = await EspecialidadesRepository.pegarEspecialidades();
 			return res.status(201).json(especialidades);
 		} catch (error) {
 			console.log(error);
@@ -66,9 +65,7 @@ especialidadesRouter.get(
 			if (especialidade) {
 				return res.json(especialidade);
 			} else {
-				return res
-					.status(404)
-					.json({ message: 'Especialidade não Encontrada!' });
+				return res.status(404).json({ message: 'Especialidade não Encontrada!' });
 			}
 		} catch (error) {
 			return res.status(500).json(error);

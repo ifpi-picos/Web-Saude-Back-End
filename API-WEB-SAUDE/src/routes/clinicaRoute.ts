@@ -80,10 +80,7 @@ clinicaRouter.put(
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				const clinicaAtualizada = await ClinicaService.alterarClinica(
-					id,
-					req.body,
-				);
+				const clinicaAtualizada = await ClinicaService.alterarClinica(id, req.body);
 				if (clinicaAtualizada === null) {
 					return res
 						.status(400)
@@ -153,9 +150,7 @@ clinicaRouter.get(
 	async (req: Request, res: Response) => {
 		try {
 			const { nome } = req.params;
-			const clinicas = await ClinicaRepository.pegarClinicaPelaEspecialidade(
-				nome,
-			);
+			const clinicas = await ClinicaRepository.pegarClinicaPelaEspecialidade(nome);
 
 			return res.status(201).json(clinicas);
 		} catch (error) {
