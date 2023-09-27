@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import swaggerUI from 'swagger-ui-express';
 import swaggerDocs from './swagger.json';
+
 export class App {
 	private express = Express.application;
 	private porta: number = 5000;
@@ -33,7 +34,11 @@ export class App {
 		this.express.use(cors());
 		this.express.use(compression());
 		this.express.use(bodyParser.json());
-		this.express.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+		this.express.use(
+			'/api-docs',
+			swaggerUI.serve,
+			swaggerUI.setup(swaggerDocs),
+		);
 	}
 	private database(): void {
 		const mongoUser = process.env.MONGO_USER;

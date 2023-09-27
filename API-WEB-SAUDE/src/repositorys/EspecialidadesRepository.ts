@@ -16,7 +16,9 @@ class EspecialidadesRepositorys implements IEspecialidadesRepositories {
 			throw new Error('Erro ao Listas as Especialidades!' + error);
 		}
 	}
-	public async pegarEspecialidade(nome: string): Promise<IEspecialidade | null> {
+	public async pegarEspecialidade(
+		nome: string,
+	): Promise<IEspecialidade | null> {
 		try {
 			return await this.model.findOne({ nome: nome });
 		} catch (error) {

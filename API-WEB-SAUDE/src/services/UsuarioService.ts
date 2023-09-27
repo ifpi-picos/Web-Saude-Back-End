@@ -35,7 +35,10 @@ class UsuarioService implements IUsuarioService {
 		}
 	}
 
-	public async autenticarUsuario(email: string, senha: string): Promise<string> {
+	public async autenticarUsuario(
+		email: string,
+		senha: string,
+	): Promise<string> {
 		try {
 			const token = await AuthService.authenticateUser(email, senha);
 

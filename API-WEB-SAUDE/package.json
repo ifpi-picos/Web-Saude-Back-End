@@ -8,12 +8,12 @@
 		"src/**/*"
 	],
 	"scripts": {
-		"start": "node dist/src/server.ts",
+		"start": "node ./dist/src/server.ts",
 		"start:dev": "ts-node-dev src/server.ts",
 		"lint": "eslint ./src --ext .ts",
 		"lint-fix": "eslint ./src .test --ext .ts --fix",
-		"build": "sucrase ./src -d ./dist --transforms typescript,imports",
-		"format": "prettier --write \"**/*.{html,js,ts,tsx,json,jsx,css}\"",
+		"build": "npx tsc",
+		"format": "prettier --write \"**/*.{ts,json,}\"",
 		"test": "jest"
 	},
 	"dependencies": {

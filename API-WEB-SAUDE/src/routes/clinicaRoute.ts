@@ -1,13 +1,14 @@
 import { Request, Response, Router } from 'express';
 import ClinicaService from '../services/ClinicaService';
 import ClinicaRepository from '../repositorys/ClinicaRepository';
+import { authMiddleware } from '../middlewares/auth';
 import validation from '../middlewares/validation';
 
 const clinicaRouter = Router();
 
 // cadastrar clínica
 clinicaRouter.post(
-	'/admin/nova-clinica',
+	'/admin/nova-clinica',authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			const camposAValidar = [
@@ -53,7 +54,7 @@ clinicaRouter.post(
 
 // alterar a clínica
 clinicaRouter.put(
-	'/admin/alterar-clinica/:id',
+	'/admin/alterar-clinica/:id',authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
@@ -80,7 +81,10 @@ clinicaRouter.put(
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				const clinicaAtualizada = await ClinicaService.alterarClinica(id, req.body);
+				const clinicaAtualizada = await ClinicaService.alterarClinica(
+					id,
+					req.body,
+				);
 				if (clinicaAtualizada === null) {
 					return res
 						.status(400)
@@ -99,7 +103,7 @@ clinicaRouter.put(
 
 // deletar a clínica
 clinicaRouter.delete(
-	'/admin/deletar-clinica/:id',
+	'/admin/deletar-clinica/:id',authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
@@ -111,7 +115,7 @@ clinicaRouter.delete(
 	},
 );
 // deletar todas clínicas
-clinicaRouter.delete('/admin/deletar', async (req: Request, res: Response) => {
+clinicaRouter.delete('/admin/deletar',authMiddleware, async (req: Request, res: Response) => {
 	try {
 		await ClinicaService.deletarTodasClinicas();
 		res
@@ -126,6 +130,9 @@ clinicaRouter.delete('/admin/deletar', async (req: Request, res: Response) => {
 clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
 	try {
 		const clinicas = await ClinicaRepository.pegarClinicas();
+		if(!clinicas){
+			return res.status(404).json('Nenhuma clínica foi encontrada!')
+		}
 		return res.status(201).json(clinicas);
 	} catch (error) {
 		console.log(error);
@@ -137,7 +144,9 @@ clinicaRouter.get('/clinica/:nome', async (req: Request, res: Response) => {
 	try {
 		const { nome } = req.params;
 		const clinica = await ClinicaRepository.pegarClinica(nome);
-
+		if(!clinica){
+			return res.status(404).json('Clínica não encontrada!')
+		}
 		return res.status(201).json(clinica);
 	} catch (error) {
 		return res.status(500).json(error);
@@ -150,8 +159,12 @@ clinicaRouter.get(
 	async (req: Request, res: Response) => {
 		try {
 			const { nome } = req.params;
-			const clinicas = await ClinicaRepository.pegarClinicaPelaEspecialidade(nome);
-
+			const clinicas = await ClinicaRepository.pegarClinicaPelaEspecialidade(
+				nome,
+			);
+			if(!clinicas){
+				return res.status(404).json('Nenhuma clínica foi encontrada!')
+			}
 			return res.status(201).json(clinicas);
 		} catch (error) {
 			return res.status(500).json(error);

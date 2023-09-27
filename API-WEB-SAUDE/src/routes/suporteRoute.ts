@@ -22,7 +22,7 @@ suporteRoute.post('/enviarMensagem', async (req: Request, res: Response) => {
 			return res.json({ Message: 'Nome muito curto!' });
 		} else {
 			const enviarMensagem = await SuporteService.enviarMsg(req.body);
-			return res.status(201).json({ Message: 'Mensagem Enviada com Sucesso!' });
+			return res.status(201).json({ Message: 'Mensagem Enviada com Sucesso!',enviarMensagem});
 		}
 	} catch (error) {
 		return res.status(500).json(error);

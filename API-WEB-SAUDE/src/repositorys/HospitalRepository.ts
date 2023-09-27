@@ -42,12 +42,15 @@ class HospitailRepository implements IHospitalRepository {
 			const clinicasFiltradas = clinicas.filter(clinica =>
 				clinica.especialidades.some(
 					especialidadeClinica =>
-						especialidadeClinica._id.toString() === especialidade._id.toString(),
+						especialidadeClinica._id.toString() ===
+						especialidade._id.toString(),
 				),
 			);
 			return clinicasFiltradas;
 		} catch (error) {
-			throw new Error('Erro ao Filtrar os Hospitais pela Especialidades!' + error);
+			throw new Error(
+				'Erro ao Filtrar os Hospitais pela Especialidades!' + error,
+			);
 		}
 	}
 }
