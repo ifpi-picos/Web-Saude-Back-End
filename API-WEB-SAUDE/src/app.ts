@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import swaggerUI from 'swagger-ui-express';
 import swaggerDocs from './swagger.json';
+import cookieParser from 'cookie-parser';
 
 export class App {
 	private express = Express.application;
@@ -29,6 +30,7 @@ export class App {
 	}
 	private middlewares(): void {
 		this.express.use(morgan('combined'));
+		this.express.use(cookieParser())
 		this.express.use(helmet());
 		this.express.use(Express.json());
 		this.express.use(cors());
