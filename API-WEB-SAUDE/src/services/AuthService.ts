@@ -23,10 +23,10 @@ export default class AuthService {
 
 	public static generateToken(sub: string): string {
 		const key = process.env.JWT_SECRET as Secret;
-		
+
 		const signOptions: jwt.SignOptions = {
 			expiresIn: '1h',
-			algorithm: 'HS256', 
+			algorithm: 'HS256',
 		};
 
 		return jwt.sign({ sub }, key, signOptions);

@@ -2,7 +2,7 @@
 	"App": {
 		"auth": {
 			"tokenExpiresIn": "1h",
-			"key":"${JWT_SECRET}"
+			"key": "${JWT_SECRET}"
 		}
 	}
 }

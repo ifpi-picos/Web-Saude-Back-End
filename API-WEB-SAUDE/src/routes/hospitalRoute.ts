@@ -8,7 +8,8 @@ const hospitalRouter = Router();
 
 // cadastrar hospital
 hospitalRouter.post(
-	'/admin/novo-hospital',authMiddleware,
+	'/admin/novo-hospital',
+	authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			const camposAValidar = [
@@ -52,7 +53,8 @@ hospitalRouter.post(
 
 // alterar o hospital
 hospitalRouter.put(
-	'/admin/alterar-hospital/:id',authMiddleware,
+	'/admin/alterar-hospital/:id',
+	authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
@@ -99,7 +101,8 @@ hospitalRouter.put(
 
 // deletar o hospital
 hospitalRouter.delete(
-	'/admin/deletar-hospital/:id',authMiddleware,
+	'/admin/deletar-hospital/:id',
+	authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
@@ -113,23 +116,27 @@ hospitalRouter.delete(
 	},
 );
 // deletar todos hospitais
-hospitalRouter.delete('/admin/deletar', authMiddleware, async (req: Request, res: Response) => {
-	try {
-		await HospitalService.deletarTodosHospitais();
-		res
-			.status(201)
-			.json({ Message: 'Todos os Hospitais foram Deletados com Sucesso!' });
-	} catch (error) {
-		return res.status(500).json(error);
-	}
-});
+hospitalRouter.delete(
+	'/admin/deletar',
+	authMiddleware,
+	async (req: Request, res: Response) => {
+		try {
+			await HospitalService.deletarTodosHospitais();
+			res
+				.status(201)
+				.json({ Message: 'Todos os Hospitais foram Deletados com Sucesso!' });
+		} catch (error) {
+			return res.status(500).json(error);
+		}
+	},
+);
 
 // listar hospitais
 hospitalRouter.get('/hospitais', async (req: Request, res: Response) => {
 	try {
 		const hospitais = await HospitalRepository.pegarHospitais();
-		if(!hospitais){
-			return res.status(404).json('Nenhum hsopital foi encontrado!')
+		if (!hospitais) {
+			return res.status(404).json('Nenhum hsopital foi encontrado!');
 		}
 		return res.status(201).json(hospitais);
 	} catch (error) {
@@ -142,8 +149,8 @@ hospitalRouter.get('/hospital/:nome', async (req: Request, res: Response) => {
 	try {
 		const { nome } = req.params;
 		const hospital = await HospitalRepository.pegarHospital(nome);
-        if(!hospital){
-			res.status(404).json('Hsopital não encontrado!')
+		if (!hospital) {
+			res.status(404).json('Hsopital não encontrado!');
 		}
 		return res.status(201).json(hospital);
 	} catch (error) {
@@ -151,22 +158,4 @@ hospitalRouter.get('/hospital/:nome', async (req: Request, res: Response) => {
 	}
 });
 
-//filtrar hospitais pelas especialidade
-hospitalRouter.get(
-	'/hospital/especialidade/:nome',
-	async (req: Request, res: Response) => {
-		try {
-			const { nome } = req.params;
-			const hospitais = await HospitalRepository.pegarHospitalPelaEspecialidade(
-				nome,
-			);
-			if(!hospitais){
-				return res.status(404).json('Nenhum hsopital foi encontrado!')
-			}
-			return res.status(201).json(hospitais);
-		} catch (error) {
-			return res.status(500).json(error);
-		}
-	},
-);
 export default hospitalRouter;

@@ -28,30 +28,5 @@ class HospitailRepository implements IHospitalRepository {
 			throw new Error('Erro ao Filtrar o Hospital!' + error);
 		}
 	}
-	public async pegarHospitalPelaEspecialidade(
-		nome: string,
-	): Promise<IHospital[] | null> {
-		try {
-			const especialidade = await EspecialidadesRepository.pegarEspecialidade(
-				nome,
-			);
-			if (!especialidade) {
-				throw new Error('Especialidade não Encontrada!');
-			}
-			const clinicas = await this.model.find({}).populate('especialidades');
-			const clinicasFiltradas = clinicas.filter(clinica =>
-				clinica.especialidades.some(
-					especialidadeClinica =>
-						especialidadeClinica._id.toString() ===
-						especialidade._id.toString(),
-				),
-			);
-			return clinicasFiltradas;
-		} catch (error) {
-			throw new Error(
-				'Erro ao Filtrar os Hospitais pela Especialidades!' + error,
-			);
-		}
-	}
 }
 export default new HospitailRepository();

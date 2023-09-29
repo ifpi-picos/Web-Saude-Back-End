@@ -8,7 +8,8 @@ const especialidadesRouter = Router();
 
 // cadastrar especialidades
 especialidadesRouter.post(
-	'/nova-especialidade',authMiddleware,
+	'/nova-especialidade',
+	authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			const camposAValidar = ['nome'];
@@ -55,25 +56,4 @@ especialidadesRouter.get(
 	},
 );
 
-// filtrar Especialidade
-especialidadesRouter.get(
-	'/especialidade/:nome',
-	async (req: Request, res: Response) => {
-		try {
-			const { nome } = req.params;
-			const especialidade = await EspecialidadesRepository.pegarEspecialidade(
-				nome,
-			);
-			if (especialidade) {
-				return res.json(especialidade);
-			} else {
-				return res
-					.status(404)
-					.json({ message: 'Especialidade não Encontrada!' });
-			}
-		} catch (error) {
-			return res.status(500).json(error);
-		}
-	},
-);
 export default especialidadesRouter;
