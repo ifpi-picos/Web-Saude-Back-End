@@ -49,9 +49,9 @@ class HospitalService implements IHospitalService {
 			throw new Error('Erro ao Atualizar o Hospital!' + error);
 		}
 	}
-	public async deletarHospital(hospitalId: string): Promise<void> {
+	public async deletarHospital(hospitalId: string): Promise<IHospital | null> {
 		try {
-			await this.model.findByIdAndDelete(hospitalId);
+			return await this.model.findByIdAndDelete(hospitalId);
 		} catch (error) {
 			throw new Error('Erro ao Deletar o Hospital!' + error);
 		}

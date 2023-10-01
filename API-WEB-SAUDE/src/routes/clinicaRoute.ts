@@ -1,25 +1,19 @@
 import { Request, Response, Router } from 'express';
 import ClinicaService from '../services/ClinicaService';
 import ClinicaRepository from '../repositorys/ClinicaRepository';
-import { authMiddleware } from '../middlewares/auth';
 import validation from '../middlewares/validation';
+import EnderecoService from '../services/EnderecoService';
 
 const clinicaRouter = Router();
 
 // cadastrar clínica
 clinicaRouter.post(
 	'/admin/nova-clinica',
-	authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			const camposAValidar = [
-				'nome',
-				'horarioSemana',
-				'sabado',
-				'longitude',
-				'latitude',
-				'especialidades',
-				'endereco',
+				'cep', 'rua', 'numero', 'bairro', 'cidade', 'uf',
+				'nome','horarioSemana','sabado','longitude','latitude','especialidades',
 			];
 
 			const erros: string[] = [];
@@ -35,17 +29,23 @@ clinicaRouter.post(
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				const novaClinica = await ClinicaService.novaClinica(req.body);
+				const novoEndereco = await EnderecoService.cadastrarEndereco(req.body)
+				
+				if(novoEndereco){
+					const novaClinicaData = { ...req.body, endereco: novoEndereco._id };
+					const novaClinica = await ClinicaService.novaClinica(novaClinicaData);
 
-				if (novaClinica === null) {
-					return res
-						.status(400)
-						.json({ Message: 'Essa Clínica já está Cadastrada!' });
+					if (novaClinica === null) {
+						return res
+							.status(400)
+							.json({ Message: 'Essa Clínica já está Cadastrada!' });
+					}
+					return res.status(201).json({
+						Message: 'Clínica salva com Sucesso!',
+						data: novaClinica,
+					});
 				}
-				return res.status(201).json({
-					Message: 'Clínica salva com Sucesso!',
-					data: novaClinica,
-				});
+				
 			}
 		} catch (error) {
 			if (error instanceof Error) return res.status(500).json(error.message);
@@ -56,18 +56,13 @@ clinicaRouter.post(
 // alterar a clínica
 clinicaRouter.put(
 	'/admin/alterar-clinica/:id',
-	authMiddleware,
+	
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
 			const camposAValidar = [
-				'nome',
-				'horarioSemana',
-				'sabado',
-				'longitude',
-				'latitude',
-				'especialidades',
-				'endereco',
+				'cep', 'rua', 'numero', 'bairro', 'cidade', 'uf',
+				'nome','horarioSemana','sabado','longitude','latitude','especialidades',
 			];
 			const erros: string[] = [];
 
@@ -92,10 +87,13 @@ clinicaRouter.put(
 						.status(400)
 						.json({ Message: 'Essa Clínica já está Cadastrada!' });
 				}
+				await EnderecoService.alterarEndereco(clinicaAtualizada.endereco.toString(),req.body)
+
 				return res.status(201).json({
 					Message: 'Clínica Atualizada com Sucesso!',
 					data: clinicaAtualizada,
 				});
+				
 			}
 		} catch (error) {
 			return res.status(500).json(error);
@@ -106,12 +104,16 @@ clinicaRouter.put(
 // deletar a clínica
 clinicaRouter.delete(
 	'/admin/deletar-clinica/:id',
-	authMiddleware,
+	
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
-			await ClinicaService.deletarClinica(id);
-			return res.status(204).json({ Message: 'Clínica Deletada com Sucesso!' });
+			const deletarCliinca = await ClinicaService.deletarClinica(id);
+			if(deletarCliinca){
+			EnderecoService.deletarEndereco(deletarCliinca.endereco.toString())
+			return res.status(201).json({ Message: 'Clínica Deletada com Sucesso!' });
+			}
+			return res.status(404).json({ Message: 'Clínica não Encontrada' });
 		} catch (error) {
 			return res.status(500).json(error);
 		}
@@ -120,7 +122,6 @@ clinicaRouter.delete(
 // deletar todas clínicas
 clinicaRouter.delete(
 	'/admin/deletar',
-	authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			await ClinicaService.deletarTodasClinicas();

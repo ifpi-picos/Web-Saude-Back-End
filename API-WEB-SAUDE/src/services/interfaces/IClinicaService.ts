@@ -5,7 +5,7 @@ interface IClinicaService {
 		clinicaId: string,
 		clinicaData: IClinica,
 	): Promise<IClinica | null>;
-	deletarClinica(clinicaId: string): Promise<void>;
+	deletarClinica(clinicaId: string): Promise<IClinica | null>;
 	deletarTodasClinicas(): Promise<void>;
 }
 

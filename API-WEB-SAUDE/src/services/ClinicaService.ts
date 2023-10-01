@@ -48,9 +48,9 @@ class ClinicaService implements IClinicaService {
 			throw new Error('Erro ao Atualizar a Clínica!' + error);
 		}
 	}
-	public async deletarClinica(clinicaId: string): Promise<void> {
+	public async deletarClinica(clinicaId: string): Promise<IClinica | null> {
 		try {
-			await this.model.findByIdAndDelete(clinicaId);
+			return await this.model.findByIdAndDelete(clinicaId);
 		} catch (error) {
 			throw new Error('Erro ao Deletar a Clínica!' + error);
 		}

@@ -1,4 +1,4 @@
-/*import ISuporteRepository from './interfaces/ISuporteRespository';
+import ISuporteRepository from './interfaces/ISuporteRespository';
 import ISuporte from '../models/interfaces/ISuporte';
 import Suporte from '../models/Suporte';
 import { Model } from 'mongoose';
@@ -20,4 +20,4 @@ class SuporteRepository implements ISuporteRepository {
 }
 
 export default new SuporteRepository();
-*/
+

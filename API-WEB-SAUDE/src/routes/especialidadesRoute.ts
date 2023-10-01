@@ -1,7 +1,6 @@
 import { Request, Response, Router } from 'express';
 import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
-import { authMiddleware } from '../middlewares/auth';
 import validation from '../middlewares/validation';
 
 const especialidadesRouter = Router();
@@ -9,7 +8,6 @@ const especialidadesRouter = Router();
 // cadastrar especialidades
 especialidadesRouter.post(
 	'/nova-especialidade',
-	authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			const camposAValidar = ['nome'];

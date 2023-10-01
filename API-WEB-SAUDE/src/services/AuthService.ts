@@ -22,7 +22,7 @@ export default class AuthService {
 	}
 
 	public static generateToken(sub: string): string {
-		const key = process.env.JWT_SECRET as Secret;
+		const key = config.get<Secret>('App.auth.key');
 
 		const signOptions: jwt.SignOptions = {
 			expiresIn: '1h',
