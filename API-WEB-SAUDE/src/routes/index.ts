@@ -13,6 +13,6 @@ router.use('/', clinicaRouter);
 router.use('/', especialidadesRouter);
 router.use('/', hospitalRouter);
 router.use('/', filtroRouter);
-router.use('/',suporteRoute)
+router.use('/', suporteRoute);
 
 export default router;

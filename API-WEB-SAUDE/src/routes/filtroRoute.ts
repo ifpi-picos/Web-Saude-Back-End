@@ -13,8 +13,8 @@ filtroRouter.get('/buscar/:nome', async (req: Request, res: Response) => {
 			return res.status(404).json('Nenhum resultado foi encontado!');
 		}
 		return res.status(201).json(filtro);
-	} catch (error: any) {
-		return res.json(error.message);
+	} catch (error) {
+		return res.json(error);
 	}
 });
 

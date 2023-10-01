@@ -2,7 +2,6 @@ import { Model } from 'mongoose';
 import IHospital from '../models/interfaces/IHospital';
 import IHospitalRepository from './interfaces/IHospitalRepositorys';
 import Hospital from '../models/Hospital';
-import EspecialidadesRepository from './EspecialidadesRepository';
 
 class HospitailRepository implements IHospitalRepository {
 	private model: Model<IHospital>;

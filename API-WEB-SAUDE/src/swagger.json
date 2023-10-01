@@ -20,6 +20,11 @@
 				"summary": "Cadastrar Clínica",
 				"description": "Essa rota será responsável por cadastrar uma clínica",
 				"tags": ["Clinicas"],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"requestBody": {
 					"description": "Dados da Clínica",
 					"required": true,
@@ -53,7 +58,15 @@
 										"descricao": "Descrição da clínica",
 										"endereco": "id_endereco"
 									}
-								}
+								},
+								"required": [
+									"nome",
+									"horarioSemana",
+									"Sabado",
+									"longitude",
+									"latitude",
+									"especialidades"
+								]
 							}
 						}
 					}
@@ -92,7 +105,15 @@
 											"endereco": "id_endereco"
 										}
 									}
-								}
+								},
+								"required": [
+									"nome",
+									"horarioSemana",
+									"Sabado",
+									"longitude",
+									"latitude",
+									"especialidades"
+								]
 							}
 						}
 					},
@@ -140,6 +161,11 @@
 				"summary": "Alterar Clínica",
 				"description": "Essa rota será responsável por alterar uma clínica existente",
 				"tags": ["Clinicas"],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"name": "id",
@@ -184,7 +210,15 @@
 										"descricao": "Descrição atualizada da clínica",
 										"endereco": "id_endereco_atualizado"
 									}
-								}
+								},
+								"required": [
+									"nome",
+									"horarioSemana",
+									"Sabado",
+									"longitude",
+									"latitude",
+									"especialidades"
+								]
 							}
 						}
 					}
@@ -271,6 +305,11 @@
 				"summary": "Deletar Clínica",
 				"description": "Essa rota será responsável por deletar uma clínica existente",
 				"tags": ["Clinicas"],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"name": "id",
@@ -284,7 +323,7 @@
 				],
 				"responses": {
 					"204": {
-						"description": "Clínica deletada com sucesso"
+						"description": "no content"
 					},
 					"500": {
 						"description": "Erro interno do servidor",
@@ -304,33 +343,7 @@
 				}
 			}
 		},
-		"/admin/deletar": {
-			"delete": {
-				"summary": "Deletar Todas as Clínicas",
-				"description": "Essa rota será responsável por deletar todas as clínicas existentes",
-				"tags": ["Clinicas"],
-				"responses": {
-					"204": {
-						"description": "Todas as Clínicas foram deletadas com sucesso"
-					},
-					"500": {
-						"description": "Erro interno do servidor",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "object",
-									"properties": {
-										"Message": {
-											"type": "string"
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
+
 		"/clinicas": {
 			"get": {
 				"summary": "Listar Clínicas",
@@ -663,6 +676,13 @@
 						"type": "string"
 					}
 				}
+			}
+		},
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
 			}
 		}
 	}

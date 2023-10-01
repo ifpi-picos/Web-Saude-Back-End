@@ -30,7 +30,7 @@ export class App {
 	}
 	private middlewares(): void {
 		this.express.use(morgan('combined'));
-		this.express.use(cookieParser())
+		this.express.use(cookieParser());
 		this.express.use(helmet());
 		this.express.use(Express.json());
 		this.express.use(cors());

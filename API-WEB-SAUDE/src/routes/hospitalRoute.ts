@@ -13,8 +13,18 @@ hospitalRouter.post(
 	async (req: Request, res: Response) => {
 		try {
 			const camposAValidar = [
-				'cep', 'rua', 'numero', 'bairro', 'cidade', 'uf',
-				'nome','horarioSemana','sabado','longitude','latitude','especialidades',
+				'cep',
+				'rua',
+				'numero',
+				'bairro',
+				'cidade',
+				'uf',
+				'nome',
+				'horarioSemana',
+				'sabado',
+				'longitude',
+				'latitude',
+				'especialidades',
 			];
 
 			const erros: string[] = [];
@@ -30,11 +40,13 @@ hospitalRouter.post(
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				const novoEndereco = await EnderecoService.cadastrarEndereco(req.body)
-				
-				if(novoEndereco){
+				const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
+
+				if (novoEndereco) {
 					const novoHospitalData = { ...req.body, endereco: novoEndereco._id };
-					const novoHospital = await HospitalService.novoHospital(novoHospitalData);
+					const novoHospital = await HospitalService.novoHospital(
+						novoHospitalData,
+					);
 
 					if (novoHospital === null) {
 						return res
@@ -46,7 +58,6 @@ hospitalRouter.post(
 						data: novoHospital,
 					});
 				}
-				
 			}
 		} catch (error) {
 			return res.status(500).json(error);
@@ -57,13 +68,23 @@ hospitalRouter.post(
 // alterar o hospital
 hospitalRouter.put(
 	'/admin/alterar-hospital/:id',
-	
+
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
 			const camposAValidar = [
-				'cep', 'rua', 'numero', 'bairro', 'cidade', 'uf',
-				'nome','horarioSemana','sabado','longitude','latitude','especialidades',
+				'cep',
+				'rua',
+				'numero',
+				'bairro',
+				'cidade',
+				'uf',
+				'nome',
+				'horarioSemana',
+				'sabado',
+				'longitude',
+				'latitude',
+				'especialidades',
 			];
 
 			const erros: string[] = [];
@@ -88,7 +109,10 @@ hospitalRouter.put(
 						.status(400)
 						.json({ Message: 'Esse Hospital já está Cadastrado!' });
 				}
-				await EnderecoService.alterarEndereco(hosítalAtualizado.endereco.toString(),req.body)
+				await EnderecoService.alterarEndereco(
+					hosítalAtualizado.endereco.toString(),
+					req.body,
+				);
 
 				return res.status(201).json({
 					Message: 'Hospital Atualizado com Sucesso!',
@@ -108,11 +132,9 @@ hospitalRouter.delete(
 		try {
 			const { id } = req.params;
 			const deletarHospital = await HospitalService.deletarHospital(id);
-			if(deletarHospital){
-			EnderecoService.deletarEndereco(deletarHospital.endereco.toString())
-			return res
-				.status(201)
-				.json({ Message: 'Hospital Deletado com Sucesso!' });
+			if (deletarHospital) {
+				EnderecoService.deletarEndereco(deletarHospital.endereco.toString());
+				return res.status(204);
 			}
 			return res.status(404).json({ Message: 'Hospital não Encontrado' });
 		} catch (error) {

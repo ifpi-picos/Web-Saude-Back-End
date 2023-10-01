@@ -1,7 +1,6 @@
 import { Model } from 'mongoose';
 import IClinica from '../models/interfaces/IClinica';
 import IHospital from '../models/interfaces/IHospital';
-import EspecialidadesRepository from './EspecialidadesRepository';
 import Clinica from '../models/Clinica';
 import Hospital from '../models/Hospital';
 import IEspecialidade from '../models/interfaces/IEspecialidades';

@@ -20,4 +20,3 @@ class SuporteRepository implements ISuporteRepository {
 }
 
 export default new SuporteRepository();
-
