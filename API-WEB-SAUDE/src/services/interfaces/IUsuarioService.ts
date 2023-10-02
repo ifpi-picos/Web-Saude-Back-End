@@ -6,14 +6,14 @@ interface IUsuarioService {
 		email: string,
 		senha: string,
 		senah: string,
-	): Promise<IUsuario>;
+	): Promise<IUsuario | null>;
 	autenticarUsuario(email: string, senha: string): Promise<string>;
 	alterarUsuario(
 		id: string,
 		nome: string,
 		email: string,
 		senha: string,
-	): Promise<IUsuario>;
+	): Promise<IUsuario | null>;
 	alterarSenhaUsuario(id: string, senha: string): Promise<void>;
 	deletarUsuario(id: string): Promise<void>;
 	deletarTodosUsuarios(): Promise<void>;

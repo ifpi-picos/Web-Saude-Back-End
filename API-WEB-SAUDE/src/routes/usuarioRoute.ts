@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import UsuarioRepository from '../repositorys/UsuarioRepository';
 import Usuario from '../models/Usuario';
 import UsuarioService from '../services/UsuarioService';
+import validation from '../middlewares/validation';
 
 function validaCampoVazio(campo: string, valor: object) {
 	if (!valor || valor === undefined || valor === null) {
@@ -15,20 +16,17 @@ const usuarioRouter = Router();
 usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 	try {
 		const camposAValidar = ['nome', 'email', 'senha'];
+
 		const erros: string[] = [];
 
-		camposAValidar.forEach(campo => {
-			const valor = req.body[campo];
-			const erro = validaCampoVazio(campo, valor);
-			if (erro) {
-				erros.push(erro);
-			}
-		});
-
-		const errosFiltrados = erros.filter(erro => erro !== '');
+		validation.finalizarValidacao(camposAValidar, req, erros);
+			const errosFiltrados = erros.filter(erro => erro !== '');
 
 		if (errosFiltrados.length > 0) {
-			return res.json({ Message: 'Campos inválidos', Errors: errosFiltrados });
+				return res.json({
+					Message: 'Campos inválidos',
+					Errors: errosFiltrados,
+				});
 		} else if (req.body.nome.length < 6) {
 			return res.json({ Message: 'Nome muito curto!' });
 		} else if (req.body.senha.length < 6) {
@@ -39,8 +37,10 @@ usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 				req.body.email,
 				req.body.senha,
 			);
-
-			return res.json({
+           if(novoUsuario === null){
+				return res.status(400).json({Message:'Usuário já está cadastrado!'})
+		   }
+			return res.status(201).json({
 				Message: 'Usuário salvo com Sucesso!',
 				data: novoUsuario,
 			});
@@ -59,16 +59,8 @@ usuarioRouter.put(
 			const camposAValidar = ['nome', 'email', 'senha'];
 			const erros: string[] = [];
 
-			camposAValidar.forEach(campo => {
-				const valor = req.body[campo];
-				const erro = validaCampoVazio(campo, valor);
-				if (erro) {
-					erros.push(erro);
-				}
-			});
-
+			validation.finalizarValidacao(camposAValidar, req, erros);
 			const errosFiltrados = erros.filter(erro => erro !== '');
-
 			if (errosFiltrados.length > 0) {
 				return res.json({
 					Message: 'Campos inválidos',
@@ -79,25 +71,22 @@ usuarioRouter.put(
 			} else if (req.body.senha.length < 6) {
 				return res.json({ Message: 'Senha muito curta!' });
 			} else {
-				const usuarioExistente = await Usuario.findOne({
-					email: req.body.email,
-				});
-
-				if (usuarioExistente) {
-					return res.json({ Message: 'Esse Usuário já está Cadastrado!' });
-				} else {
+			
 					const novoUsuario = await UsuarioService.alterarUsuario(
 						id,
 						req.body.nome,
 						req.body.email,
 						req.body.senha,
 					);
+					if(novoUsuario === null){
+					  return res.status(400).json({Message:'Usuário já está cadastrado!'})
+				   }
 					return res.json({
 						Message: 'Usuário alterado com sucesso!',
 						data: novoUsuario,
 					});
 				}
-			}
+		
 		} catch (error) {
 			return res.status(500).json(error);
 		}

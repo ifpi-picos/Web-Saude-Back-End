@@ -10,6 +10,7 @@ import helmet from 'helmet';
 import swaggerUI from 'swagger-ui-express';
 import swaggerDocs from './swagger.json';
 import cookieParser from 'cookie-parser';
+import { authMiddleware } from './middlewares/auth';
 
 export class App {
 	private express = Express.application;
@@ -59,6 +60,7 @@ export class App {
 			});
 	}
 	private rotas() {
+		this.express.all('*',authMiddleware)
 		this.express.use('/', router);
 	}
 }
