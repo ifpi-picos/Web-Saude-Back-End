@@ -1,15 +1,9 @@
 import { Router, Request, Response } from 'express';
 import UsuarioRepository from '../repositorys/UsuarioRepository';
-import Usuario from '../models/Usuario';
 import UsuarioService from '../services/UsuarioService';
 import validation from '../middlewares/validation';
 
-function validaCampoVazio(campo: string, valor: object) {
-	if (!valor || valor === undefined || valor === null) {
-		return `${campo} vazio!!`;
-	}
-	return '';
-}
+
 const usuarioRouter = Router();
 
 // rota para salvar usuário
@@ -99,7 +93,12 @@ usuarioRouter.delete(
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
-			await UsuarioService.deletarUsuario(id);
+			const deletarUsuario = await UsuarioService.deletarUsuario(id);
+			if(deletarUsuario){
+				return res.status(404)
+			}
+			return res.status(404).json({ Message: 'Usuário não Encontrado' });
+
 		} catch (error) {
 			return res.status(500).json(error);
 		}
@@ -122,6 +121,9 @@ usuarioRouter.delete(
 usuarioRouter.get('/usuarios', async (req: Request, res: Response) => {
 	try {
 		const usuarios = await UsuarioRepository.listarUsuarios();
+		if (!usuarios) {
+			return res.status(404).json('Nenhum usuário foi encontrado!');
+		}
 		return res.status(201).json(usuarios);
 	} catch (error) {
 		return res.status(500).json(error);
@@ -138,23 +140,15 @@ usuarioRouter.put('/usuario/:id', async (req: Request, res: Response) => {
 		return res.status(500).json(error);
 	}
 });
-
 // Rota de autenticação
 usuarioRouter.post('/login', async (req: Request, res: Response) => {
 	try {
 		const camposAValidar = ['email', 'senha'];
 		const erros: string[] = [];
 
-		camposAValidar.forEach(campo => {
-			const valor = req.body[campo];
-			const erro = validaCampoVazio(campo, valor);
-			if (erro) {
-				erros.push(erro);
-			}
-		});
-
+		validation.finalizarValidacao(camposAValidar, req, erros);
 		const errosFiltrados = erros.filter(erro => erro !== '');
-
+	
 		if (errosFiltrados.length > 0) {
 			return res.json({ Message: 'Campos inválidos', Errors: errosFiltrados });
 		} else {
@@ -162,9 +156,15 @@ usuarioRouter.post('/login', async (req: Request, res: Response) => {
 				req.body.email,
 				req.body.senha,
 			);
-
+			if (!token) {
+				
+				res.status(401).json({
+				  error: 'Login não autorizado',
+				  message: 'Credenciais inválidas. Por favor, verifique seu nome de usuário e senha.',
+				});
 			return res.status(200).json({ token });
 		}
+	}
 	} catch (error) {
 		return res.status(500).json(error);
 	}

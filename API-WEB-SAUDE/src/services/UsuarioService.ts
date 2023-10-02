@@ -98,9 +98,9 @@ class UsuarioService implements IUsuarioService {
 		}
 	}
 
-	public async deletarUsuario(id: string): Promise<void> {
+	public async deletarUsuario(id: string): Promise<IUsuario | null> {
 		try {
-			await this.model.findByIdAndDelete(id);
+			return await this.model.findByIdAndDelete(id);
 		} catch (error) {
 			throw new Error('Erro ao Deletar o Usuário!' + error);
 		}

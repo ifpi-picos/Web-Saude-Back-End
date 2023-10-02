@@ -15,7 +15,7 @@ interface IUsuarioService {
 		senha: string,
 	): Promise<IUsuario | null>;
 	alterarSenhaUsuario(id: string, senha: string): Promise<void>;
-	deletarUsuario(id: string): Promise<void>;
+	deletarUsuario(id: string): Promise<IUsuario | null>;
 	deletarTodosUsuarios(): Promise<void>;
 }
 
