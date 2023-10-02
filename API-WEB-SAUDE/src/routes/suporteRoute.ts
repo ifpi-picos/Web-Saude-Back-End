@@ -1,4 +1,4 @@
-import SuporteService from '../services/SuporteService';
+/*import SuporteService from '../services/SuporteService';
 import SuporteRepository from '../repositorys/SuporteRepository';
 import { Request, Response, Router } from 'express';
 import validation from '../middlewares/validation';
@@ -41,3 +41,4 @@ suporteRoute.get('/mensagensRecebidas', async (req: Request, res: Response) => {
 });
 
 export default suporteRoute;
+*/
