@@ -19,289 +19,332 @@
 			"post": {
 				"summary": "Autenticar usuário",
 				"tags": ["Usuarios"],
-				  "requestBody": {
+				"requestBody": {
 					"required": true,
 					"content": {
-					  "application/json": {
-						"schema": {
-						  "type": "object",
-						  "properties": {
-							"email": {
-							  "type": "string"
-							},
-							"senha": {
-							  "type": "string"
-							}
-						  },
-						  "required": ["email", "senha"]
-						}
-					  }
-					}
-				  },
-				  "responses": {
-					"200": {
-					  "description": "Autenticação bem-sucedida",
-					  "content": {
 						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "token": {
-								"type": "string"
-							  }
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string"
+									},
+									"senha": {
+										"type": "string"
+									}
+								},
+								"required": ["email", "senha"]
 							}
-						  }
 						}
-					  }
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Autenticação bem-sucedida",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"token": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
 					},
 					"401": {
-					  "description": "Login não autorizado",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "error": {
-								"type": "string"
-							  },
-							  "message": {
-								"type": "string"
-							  }
+						"description": "Login não autorizado",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"error": {
+											"type": "string"
+										},
+										"message": {
+											"type": "string"
+										}
+									}
+								}
 							}
-						  }
 						}
-					  }
 					},
 					"500": {
-					  "description": "Erro interno do servidor"
+						"description": "Erro interno do servidor"
 					}
-				  }
 				}
-			  },
-			  "/usuario/novo-usuario": {
-				"post": {
-				  "summary": "Cadastrar Usuário",
-				  "description": "Essa rota será responsável por cadastrar um usuário",
-				  "tags": ["Usuarios"],
-				  "security": [
+			}
+		},
+		"/usuario/novo-usuario": {
+			"post": {
+				"summary": "Cadastrar Usuário",
+				"description": "Essa rota será responsável por cadastrar um usuário",
+				"tags": ["Usuarios"],
+				"security": [
 					{
-					  "bearerAuth": []
+						"bearerAuth": []
 					}
-				  ],
-				  "requestBody": {
+				],
+				"requestBody": {
 					"description": "Dados do Usuário",
 					"required": true,
 					"content": {
-					  "application/json": {
-						"schema": {
-						  "$ref": "#/components/schemas/Usuario"
-						}
-					  }
-					}
-				  },
-				  "responses": {
-					"201": {
-					  "description": "Usuário cadastrado com Sucesso!",
-					  "content": {
 						"application/json": {
-						  "schema": {
-							"$ref": "#/components/schemas/Usuario"
-						  }
+							"schema": {
+								"$ref": "#/components/schemas/Usuario"
+							}
 						}
-					  }
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Usuário cadastrado com Sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Usuario"
+								}
+							}
+						}
 					},
 					"400": {
-					  "description": "Campos inválidos ou nome muito curto",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  },
-							  "Errors": {
-								"type": "array",
-								"items": {
-								  "type": "string"
+						"description": "Campos inválidos ou nome muito curto",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										},
+										"Errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
 								}
-							  }
 							}
-						  }
 						}
-					  }
 					},
 					"500": {
-					  "description": "Erro interno do servidor",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
 							}
-						  }
 						}
-					  }
 					}
-				  }
 				}
-			  },
-			  "/usuario/alterar-usuario/{id}": {
-				"put": {
-				  "summary": "Alterar Usuário",
-				  "description": "Essa rota será responsável por alterar um usuário existente",
-				  "tags": ["Usuarios"],
-				  "security": [
+			}
+		},
+		"/usuario/alterar-usuario/{id}": {
+			"put": {
+				"summary": "Alterar Usuário",
+				"description": "Essa rota será responsável por alterar um usuário existente",
+				"tags": ["Usuarios"],
+				"security": [
 					{
-					  "bearerAuth": []
+						"bearerAuth": []
 					}
-				  ],
-				  "parameters": [
+				],
+				"parameters": [
 					{
-					  "name": "id",
-					  "in": "path",
-					  "required": true,
-					  "schema": {
-						"type": "string"
-					  },
-					  "description": "ID do usuário a ser alterado"
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "ID do usuário a ser alterado"
 					}
-				  ],
-				  "requestBody": {
+				],
+				"requestBody": {
 					"description": "Dados atualizados do Usuário",
 					"required": true,
 					"content": {
-					  "application/json": {
-						"schema": {
-						  "$ref": "#/components/schemas/Usuario"
-						}
-					  }
-					}
-				  },
-				  "responses": {
-					"200": {
-					  "description": "Usuário alterado com sucesso",
-					  "content": {
 						"application/json": {
-						  "schema": {
-							"$ref": "#/components/schemas/Usuario"
-						  }
+							"schema": {
+								"$ref": "#/components/schemas/Usuario"
+							}
 						}
-					  }
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Usuário alterado com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Usuario"
+								}
+							}
+						}
 					},
 					"400": {
-					  "description": "Campos inválidos ou nome muito curto",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  },
-							  "Errors": {
-								"type": "array",
-								"items": {
-								  "type": "string"
+						"description": "Campos inválidos ou nome muito curto",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										},
+										"Errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
 								}
-							  }
 							}
-						  }
 						}
-					  }
 					},
 					"500": {
-					  "description": "Erro interno do servidor",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
 							}
-						  }
 						}
-					  }
 					}
-				  }
 				}
-			  },
-			  "/usuario/deletar-usuario/{id}": {
-				"delete": {
-				  "summary": "Deletar Usuário",
-				  "description": "Essa rota será responsável por deletar um usuário existente",
-				  "tags": ["Usuarios"],
-				  "security": [
+			}
+		},
+		"/usuario/deletar-usuario/{id}": {
+			"delete": {
+				"summary": "Deletar Usuário",
+				"description": "Essa rota será responsável por deletar um usuário existente",
+				"tags": ["Usuarios"],
+				"security": [
 					{
-					  "bearerAuth": []
+						"bearerAuth": []
 					}
-				  ],
-				  "parameters": [
+				],
+				"parameters": [
 					{
-					  "name": "id",
-					  "in": "path",
-					  "required": true,
-					  "schema": {
-						"type": "string"
-					  },
-					  "description": "ID do usuário a ser deletado"
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "ID do usuário a ser deletado"
 					}
-				  ],
-				  "responses": {
+				],
+				"responses": {
 					"204": {
-					  "description": "Usuário deletado com sucesso"
+						"description": "Usuário deletado com sucesso"
 					},
 					"404": {
-					  "description": "Usuário não encontrado",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
+						"description": "Usuário não encontrado",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
 							}
-						  }
 						}
-					  }
 					},
 					"500": {
-					  "description": "Erro interno do servidor",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
 							}
-						  }
 						}
-					  }
 					}
-				  }
 				}
-			  },
-			  "/admin/nova-clinica": {
-				"post": {
-					"summary": "Cadastrar Clínica",
-					"description": "Essa rota será responsável por cadastrar uma clínica",
-					"tags": ["Clinicas"],
-					"security": [
-						{
-							"bearerAuth": []
+			}
+		},
+		"/admin/nova-clinica": {
+			"post": {
+				"summary": "Cadastrar Clínica",
+				"description": "Essa rota será responsável por cadastrar uma clínica",
+				"tags": ["Clinicas"],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"description": "Dados da Clínica",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Clinica"
+							},
+							"examples": {
+								"clinica": {
+									"value": {
+										"cep":"00000-000",
+										"rua":"rua x",
+										"numero":123,
+										"bairro":"bairro x",
+										"cidade":"cidade x",
+										"uf":"xx",
+										"nome": "Clinica x",
+										"imagem": "url_da_imagem",
+										"horarioSemana": {
+											"open": "08:00",
+											"close": "17:00"
+										},
+										"Sabado": {
+											"open": "09:00",
+											"close": "13:00"
+										},
+										"longitude": -43.123456,
+										"latitude": -22.987654,
+										"especialidades": [
+											"id_especialidade_1",
+											"id_especialidade_2"
+										],
+										"instagram": "perfil_instagram",
+										"email": "email@clinica.com",
+										"whatsapp": "+55 11 1234-5678",
+										"descricao": "Descrição da clínica"
+									}
+								}
+							}
 						}
-					],
-					"requestBody": {
-						"description": "Dados da Clínica",
-						"required": true,
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Clínica salva com Sucesso!",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -333,81 +376,40 @@
 											"endereco": "id_endereco"
 										}
 									}
-									
 								}
 							}
 						}
 					},
-					"responses": {
-						"201": {
-							"description": "Clínica salva com Sucesso!",
-							"content": {
-								"application/json": {
-									"schema": {
-										"$ref": "#/components/schemas/Clinica"
-									},
-									"examples": {
-										"clinica": {
-											"value": {
-												"nome": "Clinica X",
-												"imagem": "url_da_imagem",
-												"horarioSemana": {
-													"open": "08:00",
-													"close": "17:00"
-												},
-												"Sabado": {
-													"open": "09:00",
-													"close": "13:00"
-												},
-												"longitude": -43.123456,
-												"latitude": -22.987654,
-												"especialidades": [
-													"id_especialidade_1",
-													"id_especialidade_2"
-												],
-												"instagram": "perfil_instagram",
-												"email": "email@clinica.com",
-												"whatsapp": "+55 11 1234-5678",
-												"descricao": "Descrição da clínica",
-												"endereco": "id_endereco"
-											}
-										}
-									}
-									
-								}
-							}
-						},
-						"400": {
-							"description": "Campos inválidos ou nome muito curto",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "object",
-										"properties": {
-											"Message": {
+					"400": {
+						"description": "Campos inválidos ou nome muito curto",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										},
+										"Errors": {
+											"type": "array",
+											"items": {
 												"type": "string"
-											},
-											"Errors": {
-												"type": "array",
-												"items": {
-													"type": "string"
-												}
 											}
 										}
 									}
 								}
 							}
-						},
-						"500": {
-							"description": "Erro interno do servidor",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "object",
-										"properties": {
-											"Message": {
-												"type": "string"
-											}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
 										}
 									}
 								}
@@ -415,31 +417,70 @@
 						}
 					}
 				}
-			},
-			"/admin/alterar-clinica/{id}": {
-				"put": {
-					"summary": "Alterar Clínica",
-					"description": "Essa rota será responsável por alterar uma clínica existente",
-					"tags": ["Clinicas"],
-					"security": [
-						{
-							"bearerAuth": []
-						}
-					],
-					"parameters": [
-						{
-							"name": "id",
-							"in": "path",
-							"required": true,
-							"schema": {
-								"type": "string"
-							},
-							"description": "ID da clínica a ser alterada"
-						}
-					],
-					"requestBody": {
-						"description": "Dados atualizados da Clínica",
+			}
+		},
+		"/admin/alterar-clinica/{id}": {
+			"put": {
+				"summary": "Alterar Clínica",
+				"description": "Essa rota será responsável por alterar uma clínica existente",
+				"tags": ["Clinicas"],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
 						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "ID da clínica a ser alterada"
+					}
+				],
+				"requestBody": {
+					"description": "Dados atualizados da Clínica",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Clinica"
+							},
+							"examples": {
+								"clinica": {
+									"value": {
+										"nome": "Clinica X Atualizada",
+										"imagem": "url_da_imagem_atualizada",
+										"horarioSemana": {
+											"open": "09:00",
+											"close": "18:00"
+										},
+										"Sabado": {
+											"open": "10:00",
+											"close": "14:00"
+										},
+										"longitude": -43.123456,
+										"latitude": -22.987654,
+										"especialidades": [
+											"id_especialidade_1",
+											"id_especialidade_3"
+										],
+										"instagram": "perfil_instagram_atualizado",
+										"email": "novo_email@clinica.com",
+										"whatsapp": "+55 11 9876-5432",
+										"descricao": "Descrição atualizada da clínica",
+										"endereco": "id_endereco_atualizado"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Clínica atualizada com sucesso",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -448,6 +489,12 @@
 								"examples": {
 									"clinica": {
 										"value": {
+											"cep":"00000-000",
+											"rua":"rua x",
+											"numero":123,
+											"bairro":"bairro x",
+											"cidade":"cidade x",
+											"uf":"xx",
 											"nome": "Clinica X Atualizada",
 											"imagem": "url_da_imagem_atualizada",
 											"horarioSemana": {
@@ -471,252 +518,114 @@
 											"endereco": "id_endereco_atualizado"
 										}
 									}
-									
 								}
 							}
 						}
 					},
-					"responses": {
-						"201": {
-							"description": "Clínica atualizada com sucesso",
-							"content": {
-								"application/json": {
-									"schema": {
+					"400": {
+						"description": "Campos inválidos ou nome muito curto",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										},
+										"Errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/deletar-clinica/{id}": {
+			"delete": {
+				"summary": "Deletar Clínica",
+				"description": "Essa rota será responsável por deletar uma clínica existente",
+				"tags": ["Clinicas"],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "ID da clínica a ser deletada"
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "no content"
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+
+		"/clinicas": {
+			"get": {
+				"summary": "Listar Clínicas",
+				"description": "Essa rota será responsável por listar todas as clínicas",
+				"tags": ["Clinicas"],
+				"responses": {
+					"201": {
+						"description": "Lista de clínicas",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
 										"$ref": "#/components/schemas/Clinica"
-									},
-									"examples": {
-										"clinica": {
-											"value": {
-												"nome": "Clinica X Atualizada",
-												"imagem": "url_da_imagem_atualizada",
-												"horarioSemana": {
-													"open": "09:00",
-													"close": "18:00"
-												},
-												"Sabado": {
-													"open": "10:00",
-													"close": "14:00"
-												},
-												"longitude": -43.123456,
-												"latitude": -22.987654,
-												"especialidades": [
-													"id_especialidade_1",
-													"id_especialidade_3"
-												],
-												"instagram": "perfil_instagram_atualizado",
-												"email": "novo_email@clinica.com",
-												"whatsapp": "+55 11 9876-5432",
-												"descricao": "Descrição atualizada da clínica",
-												"endereco": "id_endereco_atualizado"
-											}
-										}
 									}
-								}
-							}
-						},
-						"400": {
-							"description": "Campos inválidos ou nome muito curto",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "object",
-										"properties": {
-											"Message": {
-												"type": "string"
-											},
-											"Errors": {
-												"type": "array",
-												"items": {
-													"type": "string"
-												}
-											}
-										}
-									}
-								}
-							}
-						},
-						"500": {
-							"description": "Erro interno do servidor",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "object",
-										"properties": {
-											"Message": {
-												"type": "string"
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"/admin/deletar-clinica/{id}": {
-				"delete": {
-					"summary": "Deletar Clínica",
-					"description": "Essa rota será responsável por deletar uma clínica existente",
-					"tags": ["Clinicas"],
-					"security": [
-						{
-							"bearerAuth": []
-						}
-					],
-					"parameters": [
-						{
-							"name": "id",
-							"in": "path",
-							"required": true,
-							"schema": {
-								"type": "string"
-							},
-							"description": "ID da clínica a ser deletada"
-						}
-					],
-					"responses": {
-						"204": {
-							"description": "no content"
-						},
-						"500": {
-							"description": "Erro interno do servidor",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "object",
-										"properties": {
-											"Message": {
-												"type": "string"
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-	
-			"/clinicas": {
-				"get": {
-					"summary": "Listar Clínicas",
-					"description": "Essa rota será responsável por listar todas as clínicas",
-					"tags": ["Clinicas"],
-					"responses": {
-						"201": {
-							"description": "Lista de clínicas",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "array",
-										"items": {
-											"$ref": "#/components/schemas/Clinica"
-										}
-									},
-									"examples": {
-										"clinicas": {
-											"value": [
-												{
-													"nome": "Clinica A",
-													"imagem": "url_da_imagem_A",
-													"horarioSemana": {
-														"open": "08:00",
-														"close": "17:00"
-													},
-													"Sabado": {
-														"open": "09:00",
-														"close": "13:00"
-													},
-													"longitude": -43.123456,
-													"latitude": -22.987654,
-													"especialidades": [
-														"id_especialidade_1",
-														"id_especialidade_2"
-													],
-													"instagram": "perfil_instagram_A",
-													"email": "email@clinicaA.com",
-													"whatsapp": "+55 11 1234-5678",
-													"descricao": "Descrição da clínica A",
-													"endereco": "id_endereco_A"
-												},
-												{
-													"nome": "Clinica B",
-													"imagem": "url_da_imagem_B",
-													"horarioSemana": {
-														"open": "09:00",
-														"close": "18:00"
-													},
-													"Sabado": {
-														"open": "10:00",
-														"close": "14:00"
-													},
-													"longitude": -43.654321,
-													"latitude": -22.123456,
-													"especialidades": [
-														"id_especialidade_2",
-														"id_especialidade_3"
-													],
-													"instagram": "perfil_instagram_B",
-													"email": "email@clinicaB.com",
-													"whatsapp": "+55 11 9876-5432",
-													"descricao": "Descrição da clínica B",
-													"endereco": "id_endereco_B"
-												}
-											]
-										}
-									}
-								}
-							}
-						},
-						"404": {
-							"description": "Nenhuma clínica encontrada"
-						},
-						"500": {
-							"description": "Erro interno do servidor",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "object",
-										"properties": {
-											"Message": {
-												"type": "string"
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"/clinica/{nome}": {
-				"get": {
-					"summary": "Filtrar Clínica por Nome",
-					"description": "Essa rota será responsável por filtrar uma clínica por nome",
-					"tags": ["Clinicas"],
-					"parameters": [
-						{
-							"name": "nome",
-							"in": "path",
-							"required": true,
-							"schema": {
-								"type": "string"
-							},
-							"description": "Nome da clínica a ser filtrada"
-						}
-					],
-					"responses": {
-						"201": {
-							"description": "Clínica filtrada pelo nome",
-							"content": {
-								"application/json": {
-									"schema": {
-										"$ref": "#/components/schemas/Clinica"
-									},
-									"examples": {
-										"clinica": {
-											"value": {
-												"nome": "Clinica A",
+								},
+								"examples": {
+									"clinicas": {
+										"value": [
+											{
+												"nome": "Clinica x",
 												"imagem": "url_da_imagem_A",
 												"horarioSemana": {
 													"open": "08:00",
@@ -737,128 +646,57 @@
 												"whatsapp": "+55 11 1234-5678",
 												"descricao": "Descrição da clínica A",
 												"endereco": "id_endereco_A"
-											}
-										}
-									}
-								}
-							}
-						},
-						"404": {
-							"description": "Clínica não encontrada"
-						},
-						"500": {
-							"description": "Erro interno do servidor",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "object",
-										"properties": {
-											"Message": {
-												"type": "string"
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			"/clinica/especialidade/{nome}": {
-				"get": {
-					"summary": "Filtrar Clínicas por Especialidade",
-					"description": "Essa rota será responsável por filtrar clínicas por especialidade",
-					"tags": ["Clinicas"],
-					"parameters": [
-						{
-							"name": "nome",
-							"in": "path",
-							"required": true,
-							"schema": {
-								"type": "string"
-							},
-							"description": "Nome da especialidade a ser filtrada"
-						}
-					],
-					"responses": {
-						"201": {
-							"description": "Lista de clínicas filtradas pela especialidade",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "array",
-										"items": {
-											"$ref": "#/components/schemas/Clinica"
-										}
-									},
-									"examples": {
-										"clinicas": {
-											"value": [
-												{
-													"nome": "Clinica A",
-													"imagem": "url_da_imagem_A",
-													"horarioSemana": {
-														"open": "08:00",
-														"close": "17:00"
-													},
-													"Sabado": {
-														"open": "09:00",
-														"close": "13:00"
-													},
-													"longitude": -43.123456,
-													"latitude": -22.987654,
-													"especialidades": [
-														"id_especialidade_1",
-														"id_especialidade_2"
-													],
-													"instagram": "perfil_instagram_A",
-													"email": "email@clinicaA.com",
-													"whatsapp": "+55 11 1234-5678",
-													"descricao": "Descrição da clínica A",
-													"endereco": "id_endereco_A"
+											},
+											{
+												"nome": "Clinica B",
+												"imagem": "url_da_imagem_B",
+												"horarioSemana": {
+													"open": "09:00",
+													"close": "18:00"
 												},
-												{
-													"nome": "Clinica B",
-													"imagem": "url_da_imagem_B",
-													"horarioSemana": {
-														"open": "09:00",
-														"close": "18:00"
-													},
-													"Sabado": {
-														"open": "10:00",
-														"close": "14:00"
-													},
-													"longitude": -43.654321,
-													"latitude": -22.123456,
-													"especialidades": [
-														"id_especialidade_2",
-														"id_especialidade_3"
-													],
-													"instagram": "perfil_instagram_B",
-													"email": "email@clinicaB.com",
-													"whatsapp": "+55 11 9876-5432",
-													"descricao": "Descrição da clínica B",
-													"endereco": "id_endereco_B"
+												"Sabado": {
+													"open": "10:00",
+													"close": "14:00"
+												},
+												"longitude": -43.654321,
+												"latitude": -22.123456,
+												"especialidades": [
+													"id_especialidade_2",
+													"id_especialidade_3"
+												],
+												"instagram": "perfil_instagram_B",
+												"email": "email@clinicaB.com",
+												"whatsapp": "+55 11 9876-5432",
+												"descricao": "Descrição da clínica B",
+												"endereco": {
+													"value": {
+														"cep":"00000-000",
+														"rua":"rua x",
+														"numero":123,
+														"bairro":"bairro x",
+														"cidade":"cidade x",
+														"uf":"xx"
+													}
 												}
-											]
-										}
+											}
+										]
 									}
 								}
 							}
-						},
-						"404": {
-							"description": "Nenhuma clínica foi encontrada"
-						},
-						"500": {
-							"description": "Erro interno do servidor",
-							"content": {
-								"application/json": {
-									"schema": {
-										"type": "object",
-										"properties": {
-											"Message": {
-												"type": "string"
-											}
+						}
+					},
+					"404": {
+						"description": "Nenhuma clínica encontrada"
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
 										}
 									}
 								}
@@ -866,339 +704,489 @@
 						}
 					}
 				}
-			},
-			"/admin/novo-hospital": {
-				"post": {
-				  "summary": "Cadastrar Hospital",
-				  "description": "Essa rota será responsável por cadastrar um hospital",
-				  "tags": ["Hospitais"],
-				  "security": [
+			}
+		},
+		"/clinica/{nome}": {
+			"get": {
+				"summary": "Filtrar Clínica por Nome",
+				"description": "Essa rota será responsável por filtrar uma clínica por nome",
+				"tags": ["Clinicas"],
+				"parameters": [
 					{
-					  "bearerAuth": []
+						"name": "nome",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Nome da clínica a ser filtrada"
 					}
-				  ],
-				  "requestBody": {
+				],
+				"responses": {
+					"201": {
+						"description": "Clínica filtrada pelo nome",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Clinica"
+								},
+								"examples": {
+									"clinica": {
+										"value": {
+											"nome": "Clinica A",
+											"imagem": "url_da_imagem_A",
+											"horarioSemana": {
+												"open": "08:00",
+												"close": "17:00"
+											},
+											"Sabado": {
+												"open": "09:00",
+												"close": "13:00"
+											},
+											"longitude": -43.123456,
+											"latitude": -22.987654,
+											"especialidades": [
+												"id_especialidade_1",
+												"id_especialidade_2"
+											],
+											"instagram": "perfil_instagram_A",
+											"email": "email@clinicaA.com",
+											"whatsapp": "+55 11 1234-5678",
+											"descricao": "Descrição da clínica A",
+											"endereco": "id_endereco_A"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Clínica não encontrada"
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		
+		"/admin/novo-hospital": {
+			"post": {
+				"summary": "Cadastrar Hospital",
+				"description": "Essa rota será responsável por cadastrar um hospital",
+				"tags": ["Hospitais"],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
 					"description": "Dados do Hospital",
 					"required": true,
 					"content": {
-					  "application/json": {
-						"schema": {
-						  "$ref": "#/components/schemas/Hospital"
-						}
-					  }
-					}
-				  },
-				  "responses": {
-					"201": {
-					  "description": "Hospital cadastrado com Sucesso!",
-					  "content": {
 						"application/json": {
-						  "schema": {
-							"$ref": "#/components/schemas/Hospital"
-						  }
+							"schema": {
+								"$ref": "#/components/schemas/Hospital"
+							},
+							"examples": {
+								"clinica": {
+									"value": {
+										"cep":"00000-000",
+										"rua":"rua x",
+										"numero":123,
+										"bairro":"bairro x",
+										"cidade":"cidade x",
+										"uf":"xx",
+										"nome": "Hospital x",
+										"imagem": "url_da_imagem",
+										"horarioSemana": {
+											"open": "08:00",
+											"close": "17:00"
+										},
+										"Sabado": {
+											"open": "09:00",
+											"close": "13:00"
+										},
+										"longitude": -43.123456,
+										"latitude": -22.987654,
+										"especialidades": [
+											"id_especialidade_1",
+											"id_especialidade_2"
+										],
+										"instagram": "perfil_instagram",
+										"email": "emailhospital.com",
+										"whatsapp": "+55 11 1234-5678",
+										"descricao": "Descrição do hospital"
+									}
+								}
+							}
 						}
-					  }
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Hospital cadastrado com Sucesso!",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Hospital"
+								}
+							}
+						}
 					},
 					"400": {
-					  "description": "Campos inválidos ou nome muito curto",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  },
-							  "Errors": {
-								"type": "array",
-								"items": {
-								  "type": "string"
+						"description": "Campos inválidos ou nome muito curto",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										},
+										"Errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
 								}
-							  }
 							}
-						  }
 						}
-					  }
 					},
 					"500": {
-					  "description": "Erro interno do servidor",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
 							}
-						  }
 						}
-					  }
 					}
-				  }
 				}
-			  },
-			  "/admin/alterar-hospital/{id}": {
-				"put": {
-				  "summary": "Alterar Hospital",
-				  "description": "Essa rota será responsável por alterar um hospital existente",
-				  "tags": ["Hospitais"],
-				  "security": [
+			}
+		},
+		"/admin/alterar-hospital/{id}": {
+			"put": {
+				"summary": "Alterar Hospital",
+				"description": "Essa rota será responsável por alterar um hospital existente",
+				"tags": ["Hospitais"],
+				"security": [
 					{
-					  "bearerAuth": []
+						"bearerAuth": []
 					}
-				  ],
-				  "parameters": [
+				],
+				"parameters": [
 					{
-					  "name": "id",
-					  "in": "path",
-					  "required": true,
-					  "schema": {
-						"type": "string"
-					  },
-					  "description": "ID do hospital a ser alterado"
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "ID do hospital a ser alterado"
 					}
-				  ],
-				  "requestBody": {
+				],
+				"requestBody": {
 					"description": "Dados atualizados do Hospital",
 					"required": true,
 					"content": {
-					  "application/json": {
-						"schema": {
-						  "$ref": "#/components/schemas/Hospital"
-						}
-					  }
-					}
-				  },
-				  "responses": {
-					"200": {
-					  "description": "Hospital alterado com sucesso",
-					  "content": {
 						"application/json": {
-						  "schema": {
-							"$ref": "#/components/schemas/Hospital"
-						  }
+							"schema": {
+								"$ref": "#/components/schemas/Hospital"
+							},
+							"examples": {
+								"clinica": {
+									"value": {
+										"cep":"00000-000",
+										"rua":"rua x",
+										"numero":123,
+										"bairro":"bairro x",
+										"cidade":"cidade x",
+										"uf":"xx",
+										"nome": "Hospital x",
+										"imagem": "url_da_imagem",
+										"horarioSemana": {
+											"open": "08:00",
+											"close": "17:00"
+										},
+										"Sabado": {
+											"open": "09:00",
+											"close": "13:00"
+										},
+										"longitude": -43.123456,
+										"latitude": -22.987654,
+										"especialidades": [
+											"id_especialidade_1",
+											"id_especialidade_2"
+										],
+										"instagram": "perfil_instagram",
+										"email": "emailhospital.com",
+										"whatsapp": "+55 11 1234-5678",
+										"descricao": "Descrição do hospital"
+									}
+								}
+							}
 						}
-					  }
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Hospital alterado com sucesso",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Hospital"
+								}
+							}
+						}
 					},
 					"400": {
-					  "description": "Campos inválidos ou nome muito curto",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  },
-							  "Errors": {
-								"type": "array",
-								"items": {
-								  "type": "string"
+						"description": "Campos inválidos ou nome muito curto",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										},
+										"Errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
 								}
-							  }
 							}
-						  }
 						}
-					  }
 					},
 					"404": {
-					  "description": "Hospital não encontrado",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
-							}
-						  }
-						}
-					  }
-					},
-					"500": {
-					  "description": "Erro interno do servidor",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
-							}
-						  }
-						}
-					  }
-					}
-				  }
-				}
-			  },
-			  "/admin/deletar-hospital/{id}": {
-				"delete": {
-				  "summary": "Deletar Hospital",
-				  "description": "Essa rota será responsável por deletar um hospital existente",
-				  "tags": ["Hospitais"],
-				  "security": [
-					{
-					  "bearerAuth": []
-					}
-				  ],
-				  "parameters": [
-					{
-					  "name": "id",
-					  "in": "path",
-					  "required": true,
-					  "schema": {
-						"type": "string"
-					  },
-					  "description": "ID do hospital a ser deletado"
-					}
-				  ],
-				  "responses": {
-					"204": {
-					  "description": "Hospital deletado com sucesso"
-					},
-					"404": {
-					  "description": "Hospital não encontrado",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
-							}
-						  }
-						}
-					  }
-					},
-					"500": {
-					  "description": "Erro interno do servidor",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
-							}
-						  }
-						}
-					  }
-					}
-				  }
-				}
-			  },
-			  "/hospitais": {
-				"get": {
-				  "summary": "Listar Hospitais",
-				  "description": "Essa rota será responsável por listar todos os hospitais",
-				  "tags": ["Hospitais"],
-				  "responses": {
-					"201": {
-					  "description": "Lista de hospitais",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "array",
-							"items": {
-							  "$ref": "#/components/schemas/Hospital"
-							}
-						  },
-						  "examples": {
-							"hospitais": {
-							  "value": [
-								{
-								  "nome": "Hospital A",
-								  "imagem": "url_da_imagem_A",
-								  "horarioSemana": {
-									"open": "08:00",
-									"close": "17:00"
-								  },
-								  "Sabado": {
-									"open": "09:00",
-									"close": "13:00"
-								  },
-								  "longitude": -43.123456,
-								  "latitude": -22.987654,
-								  "especialidades": [
-									"id_especialidade_1",
-									"id_especialidade_2"
-								  ],
-								  "email": "email@hospitalA.com",
-								  "whatsapp": "+55 11 1234-5678",
-								  "descricao": "Descrição do Hospital A",
-								  "endereco": "id_endereco_A"
-								},
-								{
-								  "nome": "Hospital B",
-								  "imagem": "url_da_imagem_B",
-								  "horarioSemana": {
-									"open": "09:00",
-									"close": "18:00"
-								  },
-								  "Sabado": {
-									"open": "10:00",
-									"close": "14:00"
-								  },
-								  "longitude": -43.654321,
-								  "latitude": -22.123456,
-								  "especialidades": [
-									"id_especialidade_2",
-									"id_especialidade_3"
-								  ],
-								  "email": "email@hospitalB.com",
-								  "whatsapp": "+55 11 9876-5432",
-								  "descricao": "Descrição do Hospital B",
-								  "endereco": "id_endereco_B"
+						"description": "Hospital não encontrado",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
 								}
-							  ]
 							}
-						  }
 						}
-					  }
 					},
 					"500": {
-					  "description": "Erro interno do servidor",
-					  "content": {
-						"application/json": {
-						  "schema": {
-							"type": "object",
-							"properties": {
-							  "Message": {
-								"type": "string"
-							  }
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
 							}
-						  }
 						}
-					  }
 					}
-				  }
 				}
 			}
+		},
+		"/admin/deletar-hospital/{id}": {
+			"delete": {
+				"summary": "Deletar Hospital",
+				"description": "Essa rota será responsável por deletar um hospital existente",
+				"tags": ["Hospitais"],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"description": "ID do hospital a ser deletado"
+					}
+				],
+				"responses": {
+					"204": {
+						"description": "Hospital deletado com sucesso"
+					},
+					"404": {
+						"description": "Hospital não encontrado",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/hospitais": {
+			"get": {
+				"summary": "Listar Hospitais",
+				"description": "Essa rota será responsável por listar todos os hospitais",
+				"tags": ["Hospitais"],
+				"responses": {
+					"201": {
+						"description": "Lista de hospitais",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Hospital"
+									}
+								},
+								"examples": {
+									"hospitais": {
+										"value": [
+											{
+												"nome": "Hospital x",
+												"imagem": "url_da_imagem_A",
+												"horarioSemana": {
+													"open": "08:00",
+													"close": "17:00"
+												},
+												"Sabado": {
+													"open": "09:00",
+													"close": "13:00"
+												},
+												"longitude": -43.123456,
+												"latitude": -22.987654,
+												"especialidades": [
+													"id_especialidade_1",
+													"id_especialidade_2"
+												],
+												"email": "email@hospitalA.com",
+												"whatsapp": "+55 11 1234-5678",
+												"descricao": "Descrição do Hospital A",
+												"endereco": "id_endereco_A"
+											},
+											{
+												"nome": "Hospital B",
+												"imagem": "url_da_imagem_B",
+												"horarioSemana": {
+													"open": "09:00",
+													"close": "18:00"
+												},
+												"Sabado": {
+													"open": "10:00",
+													"close": "14:00"
+												},
+												"longitude": -43.654321,
+												"latitude": -22.123456,
+												"especialidades": [
+													"id_especialidade_2",
+													"id_especialidade_3"
+												],
+												"email": "email@hospitalB.com",
+												"whatsapp": "+55 11 9876-5432",
+												"descricao": "Descrição do Hospital B",
+												"endereco": {
+													"value": {
+														"cep":"00000-000",
+														"rua":"rua x",
+														"numero":123,
+														"bairro":"bairro x",
+														"cidade":"cidade x",
+														"uf":"xx"
+													}
+												}
+											}
+										]
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	},
 	"components": {
 		"schemas": {
 			"Usuario": {
 				"type": "object",
 				"properties": {
-				  "nome": {
-					"type": "string"
-				  },
-				  "email": {
-					"type": "string"
-				  },
-				  "senha": {
-					"type": "string"
-				  }
+					"nome": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"senha": {
+						"type": "string"
+					}
 				},
 				"required": ["nome", "email", "senha"]
-			  },
-			  "Clinica": {
+			},
+			"Clinica": {
 				"type": "object",
 				"properties": {
 					"nome": {
@@ -1257,74 +1245,71 @@
 						"type": "string"
 					}
 				}
-				
 			},
 			"Hospital": {
 				"type": "object",
 				"properties": {
-				  "nome": {
-					"type": "string"
-				  },
-				  "imagem": {
-					"type": "string"
-				  },
-				  "horarioSemana": {
-					"type": "object",
-					"properties": {
-					  "open": {
+					"nome": {
 						"type": "string"
-					  },
-					  "close": {
+					},
+					"imagem": {
 						"type": "string"
-					  }
+					},
+					"horarioSemana": {
+						"type": "object",
+						"properties": {
+							"open": {
+								"type": "string"
+							},
+							"close": {
+								"type": "string"
+							}
+						}
+					},
+					"Sabado": {
+						"type": "object",
+						"properties": {
+							"open": {
+								"type": "string"
+							},
+							"close": {
+								"type": "string"
+							}
+						}
+					},
+					"longitude": {
+						"type": "number"
+					},
+					"latitude": {
+						"type": "number"
+					},
+					"especialidades": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"email": {
+						"type": "string"
+					},
+					"whatsapp": {
+						"type": "string"
+					},
+					"descricao": {
+						"type": "string"
+					},
+					"endereco": {
+						"type": "string"
 					}
-				  },
-				  "Sabado": {
-					"type": "object",
-					"properties": {
-					  "open": {
-						"type": "string"
-					  },
-					  "close": {
-						"type": "string"
-					  }
-					}
-				  },
-				  "longitude": {
-					"type": "number"
-				  },
-				  "latitude": {
-					"type": "number"
-				  },
-				  "especialidades": {
-					"type": "array",
-					"items": {
-					  "type": "string"
-					}
-				  },
-				  "email": {
-					"type": "string"
-				  },
-				  "whatsapp": {
-					"type": "string"
-				  },
-				  "descricao": {
-					"type": "string"
-				  },
-				  "endereco": {
-					"type": "string"
-				  }
 				}
-			  }
+			}
 		},
 		"securitySchemes": {
 			"bearerAuth": {
-			  "type": "http",
-			  "scheme": "bearer",
-			  "bearerFormat": "JWT"
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
 			}
-		  }
-			}
-			
-		
+		}
 	}
+}

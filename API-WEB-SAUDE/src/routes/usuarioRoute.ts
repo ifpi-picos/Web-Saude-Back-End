@@ -3,7 +3,6 @@ import UsuarioRepository from '../repositorys/UsuarioRepository';
 import UsuarioService from '../services/UsuarioService';
 import validation from '../middlewares/validation';
 
-
 const usuarioRouter = Router();
 
 // rota para salvar usuário
@@ -14,13 +13,13 @@ usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 		const erros: string[] = [];
 
 		validation.finalizarValidacao(camposAValidar, req, erros);
-			const errosFiltrados = erros.filter(erro => erro !== '');
+		const errosFiltrados = erros.filter(erro => erro !== '');
 
 		if (errosFiltrados.length > 0) {
-				return res.json({
-					Message: 'Campos inválidos',
-					Errors: errosFiltrados,
-				});
+			return res.json({
+				Message: 'Campos inválidos',
+				Errors: errosFiltrados,
+			});
 		} else if (req.body.nome.length < 6) {
 			return res.json({ Message: 'Nome muito curto!' });
 		} else if (req.body.senha.length < 6) {
@@ -31,9 +30,9 @@ usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 				req.body.email,
 				req.body.senha,
 			);
-           if(novoUsuario === null){
-				return res.status(400).json({Message:'Usuário já está cadastrado!'})
-		   }
+			if (novoUsuario === null) {
+				return res.status(400).json({ Message: 'Usuário já está cadastrado!' });
+			}
 			return res.status(201).json({
 				Message: 'Usuário salvo com Sucesso!',
 				data: novoUsuario,
@@ -65,22 +64,22 @@ usuarioRouter.put(
 			} else if (req.body.senha.length < 6) {
 				return res.json({ Message: 'Senha muito curta!' });
 			} else {
-			
-					const novoUsuario = await UsuarioService.alterarUsuario(
-						id,
-						req.body.nome,
-						req.body.email,
-						req.body.senha,
-					);
-					if(novoUsuario === null){
-					  return res.status(400).json({Message:'Usuário já está cadastrado!'})
-				   }
-					return res.json({
-						Message: 'Usuário alterado com sucesso!',
-						data: novoUsuario,
-					});
+				const novoUsuario = await UsuarioService.alterarUsuario(
+					id,
+					req.body.nome,
+					req.body.email,
+					req.body.senha,
+				);
+				if (novoUsuario === null) {
+					return res
+						.status(400)
+						.json({ Message: 'Usuário já está cadastrado!' });
 				}
-		
+				return res.json({
+					Message: 'Usuário alterado com sucesso!',
+					data: novoUsuario,
+				});
+			}
 		} catch (error) {
 			return res.status(500).json(error);
 		}
@@ -94,11 +93,10 @@ usuarioRouter.delete(
 		try {
 			const { id } = req.params;
 			const deletarUsuario = await UsuarioService.deletarUsuario(id);
-			if(deletarUsuario){
-				return res.status(404)
+			if (deletarUsuario) {
+				return res.status(404);
 			}
 			return res.status(404).json({ Message: 'Usuário não Encontrado' });
-
 		} catch (error) {
 			return res.status(500).json(error);
 		}
@@ -148,7 +146,7 @@ usuarioRouter.post('/login', async (req: Request, res: Response) => {
 
 		validation.finalizarValidacao(camposAValidar, req, erros);
 		const errosFiltrados = erros.filter(erro => erro !== '');
-	
+
 		if (errosFiltrados.length > 0) {
 			return res.json({ Message: 'Campos inválidos', Errors: errosFiltrados });
 		} else {
@@ -157,14 +155,15 @@ usuarioRouter.post('/login', async (req: Request, res: Response) => {
 				req.body.senha,
 			);
 			if (!token) {
-				
-				res.status(401).json({
-				  error: 'Login não autorizado',
-				  message: 'Credenciais inválidas. Por favor, verifique seu nome de usuário e senha.',
+				return res.status(401).json({
+					error: 'Login não autorizado',
+					message:
+						'Credenciais inválidas. Por favor, verifique seu nome de usuário e senha.',
 				});
+			}
 			return res.status(200).json({ token });
+
 		}
-	}
 	} catch (error) {
 		return res.status(500).json(error);
 	}

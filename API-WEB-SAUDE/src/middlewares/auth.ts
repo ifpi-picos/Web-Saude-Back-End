@@ -24,7 +24,10 @@ export function authMiddleware(
 	if (
 		rotasPublicas.includes(rotaAtual) ||
 		rotaAtual.startsWith('/clinica/') ||
-		rotaAtual.startsWith('/hospital/')
+		rotaAtual.startsWith('/hospital/')||
+		rotaAtual.startsWith('/buscar/')
+
+		
 	) {
 		// Esta é uma rota pública, não exigindo autenticação
 		next();

@@ -1,4 +1,4 @@
-import IEspecialidade from '@src/models/interfaces/IEspecialidades';
+import IEspecialidade from '../../models/interfaces/IEspecialidades';
 
 interface IEspecailidadesService {
 	novaEspecailidade(
@@ -8,6 +8,7 @@ interface IEspecailidadesService {
 		especialidadeID: string,
 		especialidadeData: IEspecialidade,
 	): Promise<IEspecialidade | null>;
+	adicionarClinicaAEspecialidades(especialidadesIds: string[], novaClinicaId: string):Promise<void>;
 	deletarEspecialidade(especialidadeID: string): Promise<void>;
 	deletarTodasEspecialidade(): Promise<void>;
 }

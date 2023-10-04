@@ -21,7 +21,7 @@ class UsuarioService implements IUsuarioService {
 			const hashedPassword = await AuthService.hashPassword(senha);
 
 			if (usuarioExistente) {
-				return null
+				return null;
 			}
 			const newUser = await Usuario.create({
 				nome,
@@ -59,8 +59,8 @@ class UsuarioService implements IUsuarioService {
 	): Promise<IUsuario | null> {
 		try {
 			const usuarioExistente = await UsuarioRepository.pegarEmail(email);
-			if(usuarioExistente){
-				return null
+			if (usuarioExistente) {
+				return null;
 			}
 			const usuario = await this.model.findById(id);
 			if (!usuario) {

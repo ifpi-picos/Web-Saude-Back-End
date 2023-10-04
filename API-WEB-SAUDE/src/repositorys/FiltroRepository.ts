@@ -16,6 +16,7 @@ class FlltroRepository {
 		this.hospital = Hospital;
 		this.especialidade = Especialidades;
 	}
+
 	public async filtrar(
 		nome: string,
 	): Promise<IClinica | IHospital | IEspecialidade[] | null> {
@@ -30,11 +31,20 @@ class FlltroRepository {
 				.populate('endereco')
 				.populate('especialidades');
 
-			const especialidade = await this.especialidade
-				.findOne({ nome: nome })
-				.populate('clinicas')
-				.populate('hospitais');
-
+				const especialidade = await this.especialidade
+				.find({ nome: nome })
+				.populate({
+				  path: 'clinicas',
+				  populate: {
+					path: 'endereco', // Especifique o caminho para o endereço
+				  },
+				})
+				.populate({
+				  path: 'hospitais',
+				  populate: {
+					path: 'endereco', // Especifique o caminho para o endereço
+				  },
+				});
 			if (clinica) {
 				return clinica;
 			}
@@ -42,7 +52,9 @@ class FlltroRepository {
 				return hospital;
 			}
 			if (especialidade) {
-				return [especialidade];
+				
+				return especialidade;
+				
 			}
 			return null;
 		} catch (error) {

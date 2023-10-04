@@ -3,10 +3,12 @@ import { Request, Response, Router } from 'express';
 
 const filtroRouter = Router();
 
-filtroRouter.get('/buscar/:nome', async (req: Request, res: Response) => {
+filtroRouter.get('/buscar/', async (req: Request, res: Response) => {
 	try {
-		const { nome } = req.params;
-
+		const nome = req.query.nome?.toString();
+		if (!nome) {
+            return res.status(400).json('O parâmetro "nome" é obrigatório na query.');
+        }
 		const filtro = await FiltroRepository.filtrar(nome);
 
 		if (!filtro) {

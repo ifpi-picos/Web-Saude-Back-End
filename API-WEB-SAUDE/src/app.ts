@@ -60,7 +60,7 @@ export class App {
 			});
 	}
 	private rotas() {
-		this.express.all('*',authMiddleware)
+		this.express.all('*', authMiddleware);
 		this.express.use('/', router);
 	}
 }

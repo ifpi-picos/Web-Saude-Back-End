@@ -3,7 +3,7 @@ import ClinicaService from '../services/ClinicaService';
 import ClinicaRepository from '../repositorys/ClinicaRepository';
 import validation from '../middlewares/validation';
 import EnderecoService from '../services/EnderecoService';
-
+import EspecialidadesService from '../services/EspecialidadesService';
 const clinicaRouter = Router();
 
 // cadastrar clínica
@@ -50,6 +50,11 @@ clinicaRouter.post(
 							.status(400)
 							.json({ Message: 'Essa Clínica já está Cadastrada!' });
 					}
+					const especialidadesIds = req.body.especialidades;
+
+					await EspecialidadesService.adicionarClinicaAEspecialidades
+					(especialidadesIds, novaClinica._id);
+  
 					return res.status(201).json({
 						Message: 'Clínica salva com Sucesso!',
 						data: novaClinica,
