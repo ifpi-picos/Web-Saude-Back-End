@@ -3,58 +3,54 @@ import IClinica from '../models/interfaces/IClinica';
 import IHospital from '../models/interfaces/IHospital';
 import Clinica from '../models/Clinica';
 import Hospital from '../models/Hospital';
-import IEspecialidade from '../models/interfaces/IEspecialidades';
-import Especialidades from '../models/Especialidades';
+import IFiltroRepository from './interfaces/IFiltroRepository';
 
-class FlltroRepository {
+class FlltroRepository implements IFiltroRepository {
 	private clinica: Model<IClinica>;
 	private hospital: Model<IHospital>;
-	private especialidade: Model<IEspecialidade>;
 
 	constructor() {
 		this.clinica = Clinica;
 		this.hospital = Hospital;
-		this.especialidade = Especialidades;
 	}
 
 	public async filtrar(
 		nome: string,
-	): Promise<IClinica | IHospital | IEspecialidade[] | null> {
+	): Promise<IClinica[] | IHospital[] | (IClinica | IHospital)[] | null> {
 		try {
 			const clinica = await this.clinica
-				.findOne({ nome: nome })
+				.find({ nome: nome })
 				.populate('endereco')
 				.populate('especialidades');
 
 			const hospital = await this.hospital
-				.findOne({ nome: nome })
+				.find({ nome: nome })
 				.populate('endereco')
 				.populate('especialidades');
 
-				const especialidade = await this.especialidade
-				.find({ nome: nome })
-				.populate({
-				  path: 'clinicas',
-				  populate: {
-					path: 'endereco', // Especifique o caminho para o endereço
-				  },
-				})
-				.populate({
-				  path: 'hospitais',
-				  populate: {
-					path: 'endereco', // Especifique o caminho para o endereço
-				  },
-				});
-			if (clinica) {
+			if (clinica.length > 0) {
 				return clinica;
 			}
-			if (hospital) {
+			if (hospital.length > 0) {
 				return hospital;
 			}
-			if (especialidade) {
-				
-				return especialidade;
-				
+			const clinicas = await this.clinica
+				.find()
+				.populate('endereco')
+				.populate({
+					path: 'especialidades',
+					match: { nome: nome },
+				});
+			const hospitais = await this.hospital
+				.find()
+				.populate('endereco')
+				.populate({
+					path: 'especialidades',
+					match: { nome: nome },
+				});
+			const clinicasEhospitais = [...clinicas, ...hospitais];
+			if (clinicasEhospitais.length > 0) {
+				return clinicasEhospitais;
 			}
 			return null;
 		} catch (error) {

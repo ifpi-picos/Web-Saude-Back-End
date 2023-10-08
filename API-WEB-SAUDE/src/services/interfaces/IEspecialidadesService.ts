@@ -8,7 +8,10 @@ interface IEspecailidadesService {
 		especialidadeID: string,
 		especialidadeData: IEspecialidade,
 	): Promise<IEspecialidade | null>;
-	adicionarClinicaAEspecialidades(especialidadesIds: string[], novaClinicaId: string):Promise<void>;
+	adicionarClinicaAEspecialidades(
+		especialidadesIds: string[],
+		novaClinicaId: string,
+	): Promise<void>;
 	deletarEspecialidade(especialidadeID: string): Promise<void>;
 	deletarTodasEspecialidade(): Promise<void>;
 }

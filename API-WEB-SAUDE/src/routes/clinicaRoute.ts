@@ -52,9 +52,11 @@ clinicaRouter.post(
 					}
 					const especialidadesIds = req.body.especialidades;
 
-					await EspecialidadesService.adicionarClinicaAEspecialidades
-					(especialidadesIds, novaClinica._id);
-  
+					await EspecialidadesService.adicionarClinicaAEspecialidades(
+						especialidadesIds,
+						novaClinica._id,
+					);
+
 					return res.status(201).json({
 						Message: 'Clínica salva com Sucesso!',
 						data: novaClinica,
@@ -146,16 +148,17 @@ clinicaRouter.delete(
 	},
 );
 // deletar todas clínicas
-clinicaRouter.delete('/admin/deletar', async (req: Request, res: Response) => {
-	try {
-		await ClinicaService.deletarTodasClinicas();
-		res
-			.status(204)
-			.json({ Message: 'Todas as Clínicas foram Deletadas com Sucesso!' });
-	} catch (error) {
-		return res.status(500).json(error);
-	}
-});
+clinicaRouter.delete(
+	'/admin/clinica/deletar',
+	async (req: Request, res: Response) => {
+		try {
+			await ClinicaService.deletarTodasClinicas();
+			res.status(204);
+		} catch (error) {
+			return res.status(500).json(error);
+		}
+	},
+);
 
 // listar clínicas
 clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {

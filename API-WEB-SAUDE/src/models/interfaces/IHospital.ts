@@ -3,6 +3,7 @@ import Iespecialidade from './IEspecialidades';
 interface IHospital extends Document {
 	nome: string;
 	imagem: string;
+	horario: string;
 	longitude: number;
 	latitude: number;
 	especialidades: Iespecialidade[];

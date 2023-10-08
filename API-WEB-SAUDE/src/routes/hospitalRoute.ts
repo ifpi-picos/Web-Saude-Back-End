@@ -4,7 +4,7 @@ import HospitalRepository from '../repositorys/HospitalRepository';
 import { authMiddleware } from '../middlewares/auth';
 import validation from '../middlewares/validation';
 import EnderecoService from '../services/EnderecoService';
-
+import EspecialidadesService from '../services/EspecialidadesService';
 const hospitalRouter = Router();
 
 // cadastrar hospital
@@ -20,8 +20,6 @@ hospitalRouter.post(
 				'cidade',
 				'uf',
 				'nome',
-				'horarioSemana',
-				'sabado',
 				'longitude',
 				'latitude',
 				'especialidades',
@@ -53,6 +51,13 @@ hospitalRouter.post(
 							.status(400)
 							.json({ Message: 'Esse Hospital já está Cadastrada!' });
 					}
+					const especialidadesIds = req.body.especialidades;
+
+					await EspecialidadesService.adicionarHospitaisAEspecialidades(
+						especialidadesIds,
+						novoHospital._id,
+					);
+
 					return res.status(201).json({
 						Message: 'Hospital salvo com Sucesso!',
 						data: novoHospital,
@@ -80,8 +85,6 @@ hospitalRouter.put(
 				'cidade',
 				'uf',
 				'nome',
-				'horarioSemana',
-				'sabado',
 				'longitude',
 				'latitude',
 				'especialidades',
@@ -144,14 +147,12 @@ hospitalRouter.delete(
 );
 // deletar todos hospitais
 hospitalRouter.delete(
-	'/admin/deletar',
+	'/admin/hospital/deletar',
 	authMiddleware,
 	async (req: Request, res: Response) => {
 		try {
 			await HospitalService.deletarTodosHospitais();
-			res
-				.status(201)
-				.json({ Message: 'Todos os Hospitais foram Deletados com Sucesso!' });
+			return res.status(201);
 		} catch (error) {
 			return res.status(500).json(error);
 		}

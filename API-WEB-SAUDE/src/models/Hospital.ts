@@ -9,6 +9,10 @@ const HospitalSchema = new Schema<IHospital>({
 	imagem: {
 		type: String,
 	},
+	horario: {
+		type: String,
+		default: 'Atendimento 24 Horas',
+	},
 	longitude: {
 		type: Number,
 		required: true,

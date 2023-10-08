@@ -47,16 +47,32 @@ class EspecialidadesServices implements IEspecailidadesService {
 			throw new Error('Erro ao atualizar uma nova Especialidade!' + error);
 		}
 	}
-	public async adicionarClinicaAEspecialidades(especialidadesIds: string[], novaClinicaId: string):Promise<void>{
+	public async adicionarClinicaAEspecialidades(
+		especialidadesIds: string[],
+		novaClinicaId: string,
+	): Promise<void> {
 		try {
-		  await this.model.updateMany(
-			{ _id: { $in: especialidadesIds } },
-			{ $push: { clinicas: novaClinicaId } }
-		  );
+			await this.model.updateMany(
+				{ _id: { $in: especialidadesIds } },
+				{ $push: { clinicas: novaClinicaId } },
+			);
 		} catch (error) {
-		  throw new Error('Erro ao adicionar a nova clínica às especialidades');
+			throw new Error('Erro ao adicionar a nova clínica às especialidades');
 		}
-	  }
+	}
+	public async adicionarHospitaisAEspecialidades(
+		especialidadesIds: string[],
+		novoHospitalId: string,
+	): Promise<void> {
+		try {
+			await this.model.updateMany(
+				{ _id: { $in: especialidadesIds } },
+				{ $push: { hospitais: novoHospitalId } },
+			);
+		} catch (error) {
+			throw new Error('Erro ao adicionar a nova clínica às especialidades');
+		}
+	}
 	public async deletarEspecialidade(especialidadeID: string): Promise<void> {
 		try {
 			await this.model.findByIdAndDelete(especialidadeID);

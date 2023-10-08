@@ -310,12 +310,12 @@
 							"examples": {
 								"clinica": {
 									"value": {
-										"cep":"00000-000",
-										"rua":"rua x",
-										"numero":123,
-										"bairro":"bairro x",
-										"cidade":"cidade x",
-										"uf":"xx",
+										"cep": "00000-000",
+										"rua": "rua x",
+										"numero": 123,
+										"bairro": "bairro x",
+										"cidade": "cidade x",
+										"uf": "xx",
 										"nome": "Clinica x",
 										"imagem": "url_da_imagem",
 										"horarioSemana": {
@@ -489,12 +489,12 @@
 								"examples": {
 									"clinica": {
 										"value": {
-											"cep":"00000-000",
-											"rua":"rua x",
-											"numero":123,
-											"bairro":"bairro x",
-											"cidade":"cidade x",
-											"uf":"xx",
+											"cep": "00000-000",
+											"rua": "rua x",
+											"numero": 123,
+											"bairro": "bairro x",
+											"cidade": "cidade x",
+											"uf": "xx",
 											"nome": "Clinica X Atualizada",
 											"imagem": "url_da_imagem_atualizada",
 											"horarioSemana": {
@@ -670,12 +670,12 @@
 												"descricao": "Descrição da clínica B",
 												"endereco": {
 													"value": {
-														"cep":"00000-000",
-														"rua":"rua x",
-														"numero":123,
-														"bairro":"bairro x",
-														"cidade":"cidade x",
-														"uf":"xx"
+														"cep": "00000-000",
+														"rua": "rua x",
+														"numero": 123,
+														"bairro": "bairro x",
+														"cidade": "cidade x",
+														"uf": "xx"
 													}
 												}
 											}
@@ -781,7 +781,7 @@
 				}
 			}
 		},
-		
+
 		"/admin/novo-hospital": {
 			"post": {
 				"summary": "Cadastrar Hospital",
@@ -803,12 +803,12 @@
 							"examples": {
 								"clinica": {
 									"value": {
-										"cep":"00000-000",
-										"rua":"rua x",
-										"numero":123,
-										"bairro":"bairro x",
-										"cidade":"cidade x",
-										"uf":"xx",
+										"cep": "00000-000",
+										"rua": "rua x",
+										"numero": 123,
+										"bairro": "bairro x",
+										"cidade": "cidade x",
+										"uf": "xx",
 										"nome": "Hospital x",
 										"imagem": "url_da_imagem",
 										"horarioSemana": {
@@ -917,12 +917,12 @@
 							"examples": {
 								"clinica": {
 									"value": {
-										"cep":"00000-000",
-										"rua":"rua x",
-										"numero":123,
-										"bairro":"bairro x",
-										"cidade":"cidade x",
-										"uf":"xx",
+										"cep": "00000-000",
+										"rua": "rua x",
+										"numero": 123,
+										"bairro": "bairro x",
+										"cidade": "cidade x",
+										"uf": "xx",
 										"nome": "Hospital x",
 										"imagem": "url_da_imagem",
 										"horarioSemana": {
@@ -1135,12 +1135,12 @@
 												"descricao": "Descrição do Hospital B",
 												"endereco": {
 													"value": {
-														"cep":"00000-000",
-														"rua":"rua x",
-														"numero":123,
-														"bairro":"bairro x",
-														"cidade":"cidade x",
-														"uf":"xx"
+														"cep": "00000-000",
+														"rua": "rua x",
+														"numero": 123,
+														"bairro": "bairro x",
+														"cidade": "cidade x",
+														"uf": "xx"
 													}
 												}
 											}
