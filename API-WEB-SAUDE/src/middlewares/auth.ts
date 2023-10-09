@@ -9,12 +9,12 @@ const rotasPublicas = [
 	'/hospitais/',
 	'/especialidades',
 	'/especialidades/',
-	'/clinicas/especialidade',
-	'/clinicas/especialidade/',
 	'/login',
 	'/login/',
 	'/admin/nova-clinica',
 	'/admin/nova-clinica/',
+	'/admin/novo-hospital',
+	'/admin/novo-hospital',
 ];
 export function authMiddleware(
 	req: Request,
@@ -29,8 +29,7 @@ export function authMiddleware(
 		rotasPublicas.includes(rotaAtual) ||
 		rotaAtual.startsWith('/clinica/') ||
 		rotaAtual.startsWith('/hospital/') ||
-		rotaAtual.startsWith('/buscar/') ||
-		rotaAtual.startsWith('/clinicas/especialidade/')
+		rotaAtual.startsWith('/buscar/')
 	) {
 		// Esta é uma rota pública, não exigindo autenticação
 		next();

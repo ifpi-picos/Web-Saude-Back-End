@@ -24,16 +24,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"type": "object",
-								"properties": {
-									"email": {
-										"type": "string"
-									},
-									"senha": {
-										"type": "string"
-									}
-								},
-								"required": ["email", "senha"]
+								"$ref": "#/components/schemas/Login"
 							}
 						}
 					}
@@ -59,15 +50,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "object",
-									"properties": {
-										"error": {
-											"type": "string"
-										},
-										"message": {
-											"type": "string"
-										}
-									}
+									"$ref": "#/components/schemas/Login"
 								}
 							}
 						}
@@ -1171,6 +1154,18 @@
 	},
 	"components": {
 		"schemas": {
+			"Login": {
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"senha": {
+						"type": "string"
+					}
+				},
+				"required": ["email", "senha"]
+			},
 			"Usuario": {
 				"type": "object",
 				"properties": {
@@ -1241,10 +1236,40 @@
 					"descricao": {
 						"type": "string"
 					},
-					"endereco": {
+
+					"cep": {
+						"type": "string"
+					},
+					"rua": {
+						"type": "string"
+					},
+					"numero": {
+						"type": "string"
+					},
+					"bairro": {
+						"type": "string"
+					},
+					"cidade": {
+						"type": "string"
+					},
+					"uf": {
 						"type": "string"
 					}
-				}
+				},
+				"required": [
+					"nome",
+					"horarioSemana",
+					"Sabado",
+					"longitude",
+					"latitude",
+					"especialidades",
+					"cep",
+					"rua",
+					"numero",
+					"bairro",
+					"cidade",
+					"uf"
+				]
 			},
 			"Hospital": {
 				"type": "object",
@@ -1295,13 +1320,37 @@
 					"whatsapp": {
 						"type": "string"
 					},
-					"descricao": {
+					"cep": {
 						"type": "string"
 					},
-					"endereco": {
+					"rua": {
+						"type": "string"
+					},
+					"numero": {
+						"type": "string"
+					},
+					"bairro": {
+						"type": "string"
+					},
+					"cidade": {
+						"type": "string"
+					},
+					"uf": {
 						"type": "string"
 					}
-				}
+				},
+				"required": [
+					"nome",
+					"longitude",
+					"latitude",
+					"especialidades",
+					"cep",
+					"rua",
+					"numero",
+					"bairro",
+					"cidade",
+					"uf"
+				]
 			}
 		},
 		"securitySchemes": {

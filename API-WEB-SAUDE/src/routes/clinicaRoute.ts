@@ -37,7 +37,7 @@ clinicaRouter.post(
 					Errors: errosFiltrados,
 				});
 			} else if (req.body.nome.length < 2) {
-				return res.json({ Message: 'Nome muito curto!!' });
+				return res.json({ Message: 'Nome muito curto!' });
 			} else {
 				const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
 

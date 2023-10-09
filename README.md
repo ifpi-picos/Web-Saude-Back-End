@@ -22,7 +22,7 @@ npm run start:dev
 ### Acessar documentação da api:
 [http://localhost:5000/api-docs/](http://localhost:5000/api-docs/)
 
-## TECNOLOGIAS Usada no projeto:
+## 🛠️ Tecnologias utilizadas
 
 - [Documentação do Node.js](https://nodejs.org/en/docs/)
 - [Documentação do Express.js](https://expressjs.com/en/4x/api.html)
@@ -31,7 +31,9 @@ npm run start:dev
 - [Documentação do Vercel](https://vercel.com/docs)
 - [Documentação do Swagger](https://swagger.io/docs/)
 
-## EQUIPE
+Lista de pessoas que fizeram parte do projeto:
 
-- Francisco Eric Santos - Full-stack
-- Yuck Gabriel Nascimento Guedes - Full-stack
+* **Eric Santos** - *Back-End* - [Eric Santos](https://github.com/Eric-Developer/eric-developer)
+* **Yuck Guedes** - *Front-End* - [Yuck Guedes](https://github.com/linkParaPerfil)
+
+ 
