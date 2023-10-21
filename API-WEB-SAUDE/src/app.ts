@@ -13,7 +13,7 @@ import cookieParser from 'cookie-parser';
 import { authMiddleware } from './middlewares/auth';
 
 export class App {
-	private express = Express.application;
+	public express = Express.application;
 	private porta: number = 5000;
 
 	constructor() {
@@ -64,3 +64,4 @@ export class App {
 		this.express.use('/', router);
 	}
 }
+export default App

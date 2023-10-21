@@ -36,7 +36,7 @@ class EspecialidadesServices implements IEspecailidadesService {
 					especialidadeData.nome,
 				);
 			if (especialidadeExistente) {
-				throw new Error('Essa especialidade já está Cadastrada!');
+				return null
 			}
 			return await this.model.findByIdAndUpdate(
 				especialidadeID,
@@ -73,9 +73,9 @@ class EspecialidadesServices implements IEspecailidadesService {
 			throw new Error('Erro ao adicionar a nova clínica às especialidades');
 		}
 	}
-	public async deletarEspecialidade(especialidadeID: string): Promise<void> {
+	public async deletarEspecialidade(especialidadeID: string): Promise<IEspecialidade | null> {
 		try {
-			await this.model.findByIdAndDelete(especialidadeID);
+			return await this.model.findByIdAndDelete(especialidadeID);
 		} catch (error) {
 			throw new Error('Erro ao Deletar uma Especialidade!' + error);
 		}

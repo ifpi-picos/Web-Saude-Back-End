@@ -12,7 +12,7 @@ interface IEspecailidadesService {
 		especialidadesIds: string[],
 		novaClinicaId: string,
 	): Promise<void>;
-	deletarEspecialidade(especialidadeID: string): Promise<void>;
+	deletarEspecialidade(especialidadeID: string): Promise<IEspecialidade | null>;
 	deletarTodasEspecialidade(): Promise<void>;
 }
 

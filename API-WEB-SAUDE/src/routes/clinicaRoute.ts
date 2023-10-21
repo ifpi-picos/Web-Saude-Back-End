@@ -20,7 +20,6 @@ clinicaRouter.post(
 				'uf',
 				'nome',
 				'horarioSemana',
-				'sabado',
 				'longitude',
 				'latitude',
 				'especialidades',
@@ -77,15 +76,8 @@ clinicaRouter.put(
 		try {
 			const { id } = req.params;
 			const camposAValidar = [
-				'cep',
-				'rua',
-				'numero',
-				'bairro',
-				'cidade',
-				'uf',
 				'nome',
 				'horarioSemana',
-				'sabado',
 				'longitude',
 				'latitude',
 				'especialidades',
@@ -138,8 +130,8 @@ clinicaRouter.delete(
 			const { id } = req.params;
 			const deletarCliinca = await ClinicaService.deletarClinica(id);
 			if (deletarCliinca) {
-				EnderecoService.deletarEndereco(deletarCliinca.endereco.toString());
-				return res.status(204);
+				await EnderecoService.deletarEndereco(deletarCliinca.endereco.toString());
+				return res.status(204).json('');
 			}
 			return res.status(404).json({ Message: 'Clínica não Encontrada' });
 		} catch (error) {
@@ -167,7 +159,7 @@ clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
 		if (!clinicas) {
 			return res.status(404).json('Nenhuma clínica foi encontrada!');
 		}
-		return res.status(201).json(clinicas);
+		return res.status(200).json(clinicas);
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json(error);
