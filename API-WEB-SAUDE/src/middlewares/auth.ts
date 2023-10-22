@@ -19,6 +19,9 @@ const rotasPublicas = [
 	'/admin/novo-hospital',
 	'/nova-especialidade',
 	'/nova-especialidade/',
+	"/unidades-de-saude",
+	"/unidades-de-saude/",
+
 ];
 export function authMiddleware(
 	req: Request,

@@ -136,7 +136,7 @@ hospitalRouter.delete(
 			const deletarHospital = await HospitalService.deletarHospital(id);
 			if (deletarHospital) {
 				EnderecoService.deletarEndereco(deletarHospital.endereco.toString());
-				return res.status(204);
+				return res.status(204).json('');
 			}
 			return res.status(404).json({ Message: 'Hospital não Encontrado' });
 		} catch (error) {

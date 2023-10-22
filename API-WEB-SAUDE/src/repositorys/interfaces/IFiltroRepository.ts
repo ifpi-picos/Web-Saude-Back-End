@@ -3,5 +3,6 @@ import IHospital from '../../models/interfaces/IHospital';
 
 interface IFiltroRepository {
 	filtrar(nome: string): Promise<(IClinica | IHospital)[] | null>;
+	pegarHospitaiseClinicas():Promise<(IClinica | IHospital)[] | null>;
 }
 export default IFiltroRepository;

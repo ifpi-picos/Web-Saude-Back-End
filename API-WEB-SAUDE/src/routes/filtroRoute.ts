@@ -15,10 +15,24 @@ filtroRouter.get('/buscar/', async (req: Request, res: Response) => {
 			return res.status(404).json('Nenhum resultado foi encontado!');
 		}
 
-		return res.status(201).json(filtro);
+		return res.status(200).json(filtro);
 	} catch (error) {
 		return res.json(error);
 	}
 });
 
+filtroRouter.get('/unidades-de-saude',async(req:Request,res:Response)=>{
+	try {
+		const unidadesDeSaude = await FiltroRepository.pegarHospitaiseClinicas();
+		if(unidadesDeSaude === null){
+			return res.status(404).json({Message:'nenhum resultado encontrado!'})
+
+		}
+		return res.status(200).json({Message:unidadesDeSaude})
+
+	} catch (error) {
+		return res.json(error);
+
+	}
+})
 export default filtroRouter;

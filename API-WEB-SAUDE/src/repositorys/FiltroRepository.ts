@@ -4,18 +4,16 @@ import IHospital from '../models/interfaces/IHospital';
 import Clinica from '../models/Clinica';
 import Hospital from '../models/Hospital';
 import IFiltroRepository from './interfaces/IFiltroRepository';
-import IEspecialidade from '../models/interfaces/IEspecialidades';
-import Especialidades from '../models/Especialidades';
+import HospitalRepository from './HospitalRepository';
+import ClinicaRepository from './ClinicaRepository';
 
 class FlltroRepository implements IFiltroRepository {
 	private clinica: Model<IClinica>;
 	private hospital: Model<IHospital>;
-	private especialidades: Model<IEspecialidade>;
 
 	constructor() {
 		this.clinica = Clinica;
 		this.hospital = Hospital;
-		this.especialidades = Especialidades;
 	}
 
 	public async filtrar(nome: string): Promise<(IClinica | IHospital)[] | null> {
@@ -73,6 +71,24 @@ class FlltroRepository implements IFiltroRepository {
 			return null;
 		} catch (error) {
 			throw new Error('Erro ao filtrar!' + error);
+		}
+	}
+
+	public async pegarHospitaiseClinicas():Promise<(IClinica | IHospital)[] | null>{
+		try {
+			const hospitais = await HospitalRepository.pegarHospitais();
+			const clinicas = await  ClinicaRepository.pegarClinicas()
+            
+			const hospitaiseClinicas = [...hospitais, ...clinicas]
+
+			if(hospitaiseClinicas.length > 0){
+				return hospitaiseClinicas
+			}
+
+			return null
+		} catch (error) {
+			throw new Error('Erro ao listar!' + error);
+
 		}
 	}
 }
