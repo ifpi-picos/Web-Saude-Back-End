@@ -64,4 +64,4 @@ export class App {
 		this.express.use('/', router);
 	}
 }
-export default App
+export default App;

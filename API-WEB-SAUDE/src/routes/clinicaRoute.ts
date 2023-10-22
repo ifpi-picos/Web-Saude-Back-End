@@ -130,22 +130,12 @@ clinicaRouter.delete(
 			const { id } = req.params;
 			const deletarCliinca = await ClinicaService.deletarClinica(id);
 			if (deletarCliinca) {
-				await EnderecoService.deletarEndereco(deletarCliinca.endereco.toString());
+				await EnderecoService.deletarEndereco(
+					deletarCliinca.endereco.toString(),
+				);
 				return res.status(204).json('');
 			}
 			return res.status(404).json({ Message: 'Clínica não Encontrada' });
-		} catch (error) {
-			return res.status(500).json(error);
-		}
-	},
-);
-// deletar todas clínicas
-clinicaRouter.delete(
-	'/admin/clinica/deletar',
-	async (req: Request, res: Response) => {
-		try {
-			await ClinicaService.deletarTodasClinicas();
-			res.status(204);
 		} catch (error) {
 			return res.status(500).json(error);
 		}
@@ -156,7 +146,7 @@ clinicaRouter.delete(
 clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
 	try {
 		const clinicas = await ClinicaRepository.pegarClinicas();
-		if (!clinicas) {
+		if (clinicas.length === 0) {
 			return res.status(404).json('Nenhuma clínica foi encontrada!');
 		}
 		return res.status(200).json(clinicas);
@@ -173,7 +163,7 @@ clinicaRouter.get('/clinica/:nome', async (req: Request, res: Response) => {
 		if (!clinica) {
 			return res.status(404).json('Clínica não encontrada!');
 		}
-		return res.status(201).json(clinica);
+		return res.status(200).json(clinica);
 	} catch (error) {
 		return res.status(500).json(error);
 	}

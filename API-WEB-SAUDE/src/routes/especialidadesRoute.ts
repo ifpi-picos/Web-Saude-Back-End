@@ -39,15 +39,17 @@ especialidadesRouter.post(
 	},
 );
 // alterar especialidade
-especialidadesRouter.put('/alterar-especialidade/:id',async(req:Request,res:Response)=>{
-	try {
-		const { id } = req.params
-		const camposAValidar = ['nome'];
+especialidadesRouter.put(
+	'/alterar-especialidade/:id',
+	async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+			const camposAValidar = ['nome'];
 
-		const erros: string[] = [];
-		validation.finalizarValidacao(camposAValidar, req, erros);
+			const erros: string[] = [];
+			validation.finalizarValidacao(camposAValidar, req, erros);
 
-		const errosFiltrados = erros.filter(erro => erro !== '');
+			const errosFiltrados = erros.filter(erro => erro !== '');
 
 			if (errosFiltrados.length > 0) {
 				return res.json({
@@ -57,36 +59,38 @@ especialidadesRouter.put('/alterar-especialidade/:id',async(req:Request,res:Resp
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				const atualizarEspecialidade = await EspecialidadesService.atualizarEspecailidade(id,
-					req.body,
-				);
+				const atualizarEspecialidade =
+					await EspecialidadesService.atualizarEspecailidade(id, req.body);
 
-				if(atualizarEspecialidade === null){
-					return res.status(400).json({Message:'Especialidade já cadastrada!'})
+				if (atualizarEspecialidade === null) {
+					return res
+						.status(400)
+						.json({ Message: 'Especialidade já cadastrada!' });
 				}
 				return res.status(201).json({
 					Message: 'Especialidade alterada com Sucesso!',
 					data: atualizarEspecialidade,
 				});
 			}
-	} catch (error) {
-		return res.status(500).json(error);
+		} catch (error) {
+			return res.status(500).json(error);
+		}
+	},
+);
 
-	}
-})
-
-// deletar especialidade 
-especialidadesRouter.delete('/deletar-especialidade/:id',async(req:Request,res:Response)=>{
-	try {
-		const { id } = req.params
-		 await EspecialidadesService.deletarEspecialidade(id)
-			return res.status(204).send('')
-	
-	} catch (error) {
-		return res.status(500).json(error);
-
-	}
-})
+// deletar especialidade
+especialidadesRouter.delete(
+	'/deletar-especialidade/:id',
+	async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+			await EspecialidadesService.deletarEspecialidade(id);
+			return res.status(204).send('');
+		} catch (error) {
+			return res.status(500).json(error);
+		}
+	},
+);
 // listar especialidades
 especialidadesRouter.get(
 	'/especialidades',

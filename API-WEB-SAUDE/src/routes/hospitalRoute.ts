@@ -1,7 +1,6 @@
 import { Request, Response, Router } from 'express';
 import HospitalService from '../services/HospitalService';
 import HospitalRepository from '../repositorys/HospitalRepository';
-import { authMiddleware } from '../middlewares/auth';
 import validation from '../middlewares/validation';
 import EnderecoService from '../services/EnderecoService';
 import EspecialidadesService from '../services/EspecialidadesService';
@@ -145,34 +144,21 @@ hospitalRouter.delete(
 		}
 	},
 );
-// deletar todos hospitais
-hospitalRouter.delete(
-	'/admin/hospital/deletar',
-	authMiddleware,
-	async (req: Request, res: Response) => {
-		try {
-			await HospitalService.deletarTodosHospitais();
-			return res.status(201);
-		} catch (error) {
-			return res.status(500).json(error);
-		}
-	},
-);
 
 // listar hospitais
 hospitalRouter.get('/hospitais', async (req: Request, res: Response) => {
 	try {
 		const hospitais = await HospitalRepository.pegarHospitais();
-		if (!hospitais) {
+		if (hospitais.length === 0) {
 			return res.status(404).json('Nenhum hsopital foi encontrado!');
 		}
-		return res.status(201).json(hospitais);
+		return res.status(200).json(hospitais);
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json(error);
 	}
 });
-// filtrar clinica
+// filtrar hospital
 hospitalRouter.get('/hospital/:nome', async (req: Request, res: Response) => {
 	try {
 		const { nome } = req.params;
@@ -180,7 +166,7 @@ hospitalRouter.get('/hospital/:nome', async (req: Request, res: Response) => {
 		if (!hospital) {
 			res.status(404).json('Hsopital não encontrado!');
 		}
-		return res.status(201).json(hospital);
+		return res.status(200).json(hospital);
 	} catch (error) {
 		return res.status(500).json(error);
 	}

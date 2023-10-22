@@ -56,12 +56,5 @@ class HospitalService implements IHospitalService {
 			throw new Error('Erro ao Deletar o Hospital!' + error);
 		}
 	}
-	public async deletarTodosHospitais(): Promise<void> {
-		try {
-			await this.model.deleteMany({});
-		} catch (error) {
-			throw new Error('Errro ao Deletar todos os Hospitais!' + error);
-		}
-	}
 }
 export default new HospitalService();

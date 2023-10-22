@@ -55,12 +55,5 @@ class ClinicaService implements IClinicaService {
 			throw new Error('Erro ao Deletar a Clínica!' + error);
 		}
 	}
-	public async deletarTodasClinicas(): Promise<void> {
-		try {
-			await this.model.deleteMany({});
-		} catch (error) {
-			throw new Error('Errro ao Deletar todas as Clínicas!' + error);
-		}
-	}
 }
 export default new ClinicaService();

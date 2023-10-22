@@ -594,7 +594,7 @@
 				"description": "Essa rota será responsável por listar todas as clínicas",
 				"tags": ["Clinicas"],
 				"responses": {
-					"201": {
+					"200": {
 						"description": "Lista de clínicas",
 						"content": {
 							"application/json": {
@@ -706,7 +706,7 @@
 					}
 				],
 				"responses": {
-					"201": {
+					"200": {
 						"description": "Clínica filtrada pelo nome",
 						"content": {
 							"application/json": {
@@ -1061,7 +1061,7 @@
 				"description": "Essa rota será responsável por listar todos os hospitais",
 				"tags": ["Hospitais"],
 				"responses": {
-					"201": {
+					"200": {
 						"description": "Lista de hospitais",
 						"content": {
 							"application/json": {

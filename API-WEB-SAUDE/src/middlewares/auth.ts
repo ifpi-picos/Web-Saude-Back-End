@@ -11,16 +11,14 @@ const rotasPublicas = [
 	'/especialidades/',
 	'/login',
 	'/login/',
-	"/novo-usuario",
-	"/novo-usuario/",
+	'/novo-usuario',
+	'/novo-usuario/',
 	'/admin/nova-clinica',
 	'/admin/nova-clinica/',
 	'/admin/novo-hospital',
 	'/admin/novo-hospital',
 	'/nova-especialidade',
 	'/nova-especialidade/',
-	
-	
 ];
 export function authMiddleware(
 	req: Request,
@@ -36,10 +34,8 @@ export function authMiddleware(
 		rotaAtual.startsWith('/clinica/') ||
 		rotaAtual.startsWith('/hospital/') ||
 		rotaAtual.startsWith('/buscar/') ||
-		rotaAtual.startsWith('/alterar-especialidade/')||
+		rotaAtual.startsWith('/alterar-especialidade/') ||
 		rotaAtual.startsWith('/deletar-especialidade/')
-
-
 	) {
 		// Esta é uma rota pública, não exigindo autenticação
 		next();

@@ -15,8 +15,6 @@
 		"build": "npx tsc",
 		"format": "prettier --write \"**/*.{ts,json,}\"",
 		"test": "jest --projects ./test --forceExit --runInBand"
-
-
 	},
 	"dependencies": {
 		"@types/bcrypt": "^5.0.0",

@@ -6,7 +6,6 @@ interface IHospitalService {
 		hospitalData: IHospital,
 	): Promise<IHospital | null>;
 	deletarHospital(hospitalId: string): Promise<IHospital | null>;
-	deletarTodosHospitais(): Promise<void>;
 }
 
 export default IHospitalService;

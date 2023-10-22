@@ -36,7 +36,7 @@ class EspecialidadesServices implements IEspecailidadesService {
 					especialidadeData.nome,
 				);
 			if (especialidadeExistente) {
-				return null
+				return null;
 			}
 			return await this.model.findByIdAndUpdate(
 				especialidadeID,
@@ -73,7 +73,9 @@ class EspecialidadesServices implements IEspecailidadesService {
 			throw new Error('Erro ao adicionar a nova clínica às especialidades');
 		}
 	}
-	public async deletarEspecialidade(especialidadeID: string): Promise<IEspecialidade | null> {
+	public async deletarEspecialidade(
+		especialidadeID: string,
+	): Promise<IEspecialidade | null> {
 		try {
 			return await this.model.findByIdAndDelete(especialidadeID);
 		} catch (error) {
