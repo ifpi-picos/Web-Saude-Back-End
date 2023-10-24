@@ -74,21 +74,46 @@ class FlltroRepository implements IFiltroRepository {
 		}
 	}
 
-	public async pegarHospitaiseClinicas():Promise<(IClinica | IHospital)[] | null>{
+	public async pegarHospitaiseClinicas(): Promise<
+		(IClinica | IHospital)[] | null
+	> {
 		try {
 			const hospitais = await HospitalRepository.pegarHospitais();
-			const clinicas = await  ClinicaRepository.pegarClinicas()
-            
-			const hospitaiseClinicas = [...hospitais, ...clinicas]
+			const clinicas = await ClinicaRepository.pegarClinicas();
 
-			if(hospitaiseClinicas.length > 0){
-				return hospitaiseClinicas
+			const hospitaiseClinicas = [...hospitais, ...clinicas];
+			console.log(hospitaiseClinicas);
+
+			if (hospitaiseClinicas.length > 0) {
+				return hospitaiseClinicas;
 			}
 
-			return null
+			return null;
 		} catch (error) {
 			throw new Error('Erro ao listar!' + error);
-
+		}
+	}
+	public async pegarHospitalouClinica(
+		nome: string,
+	): Promise<IClinica | IHospital | null> {
+		try {
+			const hospital = await this.hospital
+				.findOne({ nome: nome })
+				.populate('endereco')
+				.populate('especialidades');
+			const clinica = await this.clinica
+				.findOne({ nome: nome })
+				.populate('endereco')
+				.populate('especialidades');
+			if (hospital) {
+				return hospital;
+			}
+			if (clinica) {
+				return clinica;
+			}
+			return null;
+		} catch (error) {
+			throw new Error('Erro ao pegar os dados!' + error);
 		}
 	}
 }

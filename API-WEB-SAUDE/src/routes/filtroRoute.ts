@@ -21,18 +21,32 @@ filtroRouter.get('/buscar/', async (req: Request, res: Response) => {
 	}
 });
 
-filtroRouter.get('/unidades-de-saude',async(req:Request,res:Response)=>{
+filtroRouter.get('/unidades-de-saude', async (req: Request, res: Response) => {
 	try {
 		const unidadesDeSaude = await FiltroRepository.pegarHospitaiseClinicas();
-		if(unidadesDeSaude === null){
-			return res.status(404).json({Message:'nenhum resultado encontrado!'})
 
-		}
-		return res.status(200).json({Message:unidadesDeSaude})
-
+		return res.status(200).json({ Message: unidadesDeSaude });
 	} catch (error) {
 		return res.json(error);
-
 	}
-})
+});
+
+filtroRouter.get(
+	'/hospital-ou-cliinca/:nome',
+	async (req: Request, res: Response) => {
+		try {
+			const { nome } = req.params;
+			const unidadesDeSuade = await FiltroRepository.pegarHospitalouClinica(
+				nome,
+			);
+
+			if (unidadesDeSuade) {
+				return res.status(200).json(unidadesDeSuade);
+			}
+			return res.status(404).json({ Message: 'Nenhum resultado encontrado!' });
+		} catch (error) {
+			return res.json(error);
+		}
+	},
+);
 export default filtroRouter;
