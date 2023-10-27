@@ -32,7 +32,7 @@ filtroRouter.get('/unidades-de-saude', async (req: Request, res: Response) => {
 });
 
 filtroRouter.get(
-	'/hospital-ou-cliinca/:nome',
+	'/hospital-ou-clinica/:nome',
 	async (req: Request, res: Response) => {
 		try {
 			const { nome } = req.params;

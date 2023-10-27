@@ -1,8 +1,0 @@
-{
-	"App": {
-		"auth": {
-			"tokenExpiresIn": "1h",
-			"key": "dfthrjyjyyjdtfdzdffsf"
-		}
-	}
-}

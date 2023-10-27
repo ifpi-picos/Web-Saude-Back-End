@@ -38,9 +38,10 @@ export function authMiddleware(
 		rotaAtual.startsWith('/buscar/') ||
 		rotaAtual.startsWith('/alterar-especialidade/') ||
 		rotaAtual.startsWith('/deletar-especialidade/') ||
-		rotaAtual.startsWith('/hospital-ou-cliinca/')
+		rotaAtual.startsWith('/hospital-ou-clinica/') ||
+		rotaAtual.startsWith('/admin/alterar-clinica/') 
+
 	) {
-		// Esta é uma rota pública, não exigindo autenticação
 		next();
 	} else {
 		try {

@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
-import config from 'config';
-import jwt, { Secret } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import Usuario from '../models/Usuario';
 
 export interface JwtToken {
@@ -22,18 +21,20 @@ export default class AuthService {
 	}
 
 	public static generateToken(sub: string): string {
-		const key = config.get<Secret>('App.auth.key');
+		const key = process.env.JWT_SECRET || '';
 
 		const signOptions: jwt.SignOptions = {
 			expiresIn: '1h',
 			algorithm: 'HS256',
 		};
-
 		return jwt.sign({ sub }, key, signOptions);
+
 	}
 
 	public static decodeToken(token: string): JwtToken {
-		return jwt.verify(token, config.get('App.auth.key')) as JwtToken;
+		const key = process.env.JWT_SECRET || ''; 
+
+		return jwt.verify(token, key) as JwtToken;
 	}
 
 	public static async authenticateUser(
