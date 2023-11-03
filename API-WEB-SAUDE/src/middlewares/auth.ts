@@ -11,14 +11,6 @@ const rotasPublicas = [
 	'/especialidades/',
 	'/login',
 	'/login/',
-	'/novo-usuario',
-	'/novo-usuario/',
-	'/admin/nova-clinica',
-	'/admin/nova-clinica/',
-	'/admin/novo-hospital',
-	'/admin/novo-hospital',
-	'/nova-especialidade',
-	'/nova-especialidade/',
 	'/unidades-de-saude',
 	'/unidades-de-saude/',
 ];
@@ -30,17 +22,13 @@ export function authMiddleware(
 	const token = req.headers?.['x-access-token'];
 	const rotaAtual = req.path;
 
-	// Verificar se a rota atual está na lista de rotas públicas ou se corresponde aos padrões '/clinica/:nome' ou '/hospital/:nome'
 	if (
 		rotasPublicas.includes(rotaAtual) ||
 		rotaAtual.startsWith('/clinica/') ||
 		rotaAtual.startsWith('/hospital/') ||
 		rotaAtual.startsWith('/buscar/') ||
-		rotaAtual.startsWith('/alterar-especialidade/') ||
-		rotaAtual.startsWith('/deletar-especialidade/') ||
 		rotaAtual.startsWith('/hospital-ou-clinica/') ||
-		rotaAtual.startsWith('/admin/alterar-clinica/') 
-
+		rotaAtual.startsWith('/especialidades//')
 	) {
 		next();
 	} else {

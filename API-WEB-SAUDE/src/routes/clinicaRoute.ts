@@ -72,64 +72,72 @@ clinicaRouter.post(
 clinicaRouter.put(
 	'/admin/alterar-clinica/:id',
 	async (req: Request, res: Response) => {
-	  try {
-		const { id } = req.params;
-  
-		// Copie os campos que deseja validar, incluindo campos exclusivos de atualização
-		const camposAValidar = [
-		  'cep',
-		  'rua',
-		  'numero',
-		  'bairro',
-		  'cidade',
-		  'uf',
-		  'nome',
-		  'horarioSemana',
-		  'longitude',
-		  'latitude',
-		  'especialidades',
-		];
-  
-		const erros: string[] = [];
-  
-		validation.finalizarValidacao(camposAValidar, req, erros);
-  
-		const errosFiltrados = erros.filter(erro => erro !== '');
-  
-		if (errosFiltrados.length > 0) {
-		  return res.json({
-			Message: 'Campos inválidos',
-			Errors: errosFiltrados,
-		  });
-		} else if (req.body.nome.length < 2) {
-		  return res.json({ Message: 'Nome muito curto!!' });
-		} else {
-		  // Atualize o endereço da clínica (ou crie um novo se necessário)
-		  const enderecoId = await EnderecoService.cadastrarEndereco(req.body);
-  
-		  // Atualize os dados da clínica
-		  const clinicaAtualizadaData = { ...req.body, endereco: enderecoId };
-		  const clinicaAtualizada = await ClinicaService.alterarClinica(id, clinicaAtualizadaData);
-  
-		  if (clinicaAtualizada === null) {
-			return res.status(400).json({ Message: 'Essa Clínica já está Cadastrada!' });
-		  }
-  
-		  // Atualize as especialidades da clínica
-		  const especialidadesIds = req.body.especialidades;
-		  await EspecialidadesService.adicionarClinicaAEspecialidades(especialidadesIds, clinicaAtualizada._id);
-  
-		  return res.status(201).json({
-			Message: 'Clínica Atualizada com Sucesso!',
-			data: clinicaAtualizada,
-		  });
+		try {
+			const { id } = req.params;
+
+			// Copie os campos que deseja validar, incluindo campos exclusivos de atualização
+			const camposAValidar = [
+				'cep',
+				'rua',
+				'numero',
+				'bairro',
+				'cidade',
+				'uf',
+				'nome',
+				'horarioSemana',
+				'longitude',
+				'latitude',
+				'especialidades',
+			];
+
+			const erros: string[] = [];
+
+			validation.finalizarValidacao(camposAValidar, req, erros);
+
+			const errosFiltrados = erros.filter(erro => erro !== '');
+
+			if (errosFiltrados.length > 0) {
+				return res.json({
+					Message: 'Campos inválidos',
+					Errors: errosFiltrados,
+				});
+			} else if (req.body.nome.length < 2) {
+				return res.json({ Message: 'Nome muito curto!!' });
+			} else {
+				// Atualize o endereço da clínica (ou crie um novo se necessário)
+				const enderecoId = await EnderecoService.cadastrarEndereco(req.body);
+
+				// Atualize os dados da clínica
+				const clinicaAtualizadaData = { ...req.body, endereco: enderecoId };
+				const clinicaAtualizada = await ClinicaService.alterarClinica(
+					id,
+					clinicaAtualizadaData,
+				);
+
+				if (clinicaAtualizada === null) {
+					return res
+						.status(400)
+						.json({ Message: 'Essa Clínica já está Cadastrada!' });
+				}
+
+				// Atualize as especialidades da clínica
+				const especialidadesIds = req.body.especialidades;
+				await EspecialidadesService.adicionarClinicaAEspecialidades(
+					especialidadesIds,
+					clinicaAtualizada._id,
+				);
+
+				return res.status(201).json({
+					Message: 'Clínica Atualizada com Sucesso!',
+					data: clinicaAtualizada,
+				});
+			}
+		} catch (error) {
+			return res.status(500).json(error);
 		}
-	  } catch (error) {
-		return res.status(500).json(error);
-	  }
 	},
-  );
-  
+);
+
 // deletar a clínica
 clinicaRouter.delete(
 	'/admin/deletar-clinica/:id',

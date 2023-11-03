@@ -28,11 +28,10 @@ export default class AuthService {
 			algorithm: 'HS256',
 		};
 		return jwt.sign({ sub }, key, signOptions);
-
 	}
 
 	public static decodeToken(token: string): JwtToken {
-		const key = process.env.JWT_SECRET || ''; 
+		const key = process.env.JWT_SECRET || '';
 
 		return jwt.verify(token, key) as JwtToken;
 	}

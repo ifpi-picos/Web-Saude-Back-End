@@ -11,10 +11,12 @@ import swaggerUI from 'swagger-ui-express';
 import swaggerDocs from './swagger.json';
 import cookieParser from 'cookie-parser';
 import { authMiddleware } from './middlewares/auth';
+import http from 'http';
 
 export class App {
 	public express = Express.application;
 	private porta: number = 5000;
+	private servidor: http.Server | null = null;
 
 	constructor() {
 		dotenv.config();
@@ -62,6 +64,13 @@ export class App {
 	private rotas() {
 		this.express.all('*', authMiddleware);
 		this.express.use('/', router);
+	}
+	public fecharServidor(): void {
+		if (this.servidor) {
+			this.servidor.close(() => {
+				console.log('Servidor Express fechado.');
+			});
+		}
 	}
 }
 export default App;

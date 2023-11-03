@@ -3,7 +3,7 @@ import clinicaRouter from './clinicaRoute';
 import usuarioRouter from './usuarioRoute';
 import especialidadesRouter from './especialidadesRoute';
 import hospitalRouter from './hospitalRoute';
-import filtroRouter from './filtroRoute';
+import filtroRouter from './consultasRoute';
 /*import suporteRoute from './suporteRoute';*/
 
 const router = Router();

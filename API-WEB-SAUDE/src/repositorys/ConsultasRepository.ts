@@ -3,11 +3,11 @@ import IClinica from '../models/interfaces/IClinica';
 import IHospital from '../models/interfaces/IHospital';
 import Clinica from '../models/Clinica';
 import Hospital from '../models/Hospital';
-import IFiltroRepository from './interfaces/IFiltroRepository';
+import IConsultasRepository from './interfaces/IConsultasRepository';
 import HospitalRepository from './HospitalRepository';
 import ClinicaRepository from './ClinicaRepository';
 
-class FlltroRepository implements IFiltroRepository {
+class ConsultasRepoaitory implements IConsultasRepository {
 	private clinica: Model<IClinica>;
 	private hospital: Model<IHospital>;
 
@@ -16,7 +16,7 @@ class FlltroRepository implements IFiltroRepository {
 		this.hospital = Hospital;
 	}
 
-	public async filtrar(nome: string): Promise<(IClinica | IHospital)[] | null> {
+	public async filtrar(nome: string): Promise<(IClinica | IHospital)[] | []> {
 		try {
 			const clinica = await this.clinica
 				.find({ nome: nome })
@@ -68,34 +68,33 @@ class FlltroRepository implements IFiltroRepository {
 				return clinicasEhospitais;
 			}
 
-			return null;
+			return [];
 		} catch (error) {
 			throw new Error('Erro ao filtrar!' + error);
 		}
 	}
 
 	public async pegarHospitaiseClinicas(): Promise<
-		(IClinica | IHospital)[] | null
+		(IClinica | IHospital)[] | []
 	> {
 		try {
 			const hospitais = await HospitalRepository.pegarHospitais();
 			const clinicas = await ClinicaRepository.pegarClinicas();
 
 			const hospitaiseClinicas = [...hospitais, ...clinicas];
-			console.log(hospitaiseClinicas);
 
 			if (hospitaiseClinicas.length > 0) {
 				return hospitaiseClinicas;
 			}
 
-			return null;
+			return [];
 		} catch (error) {
 			throw new Error('Erro ao listar!' + error);
 		}
 	}
 	public async pegarHospitalouClinica(
 		nome: string,
-	): Promise<IClinica | IHospital | null> {
+	): Promise<IClinica | IHospital | []> {
 		try {
 			const hospital = await this.hospital
 				.findOne({ nome: nome })
@@ -111,11 +110,41 @@ class FlltroRepository implements IFiltroRepository {
 			if (clinica) {
 				return clinica;
 			}
-			return null;
+			return [];
 		} catch (error) {
 			throw new Error('Erro ao pegar os dados!' + error);
 		}
 	}
+	public async pegarEspecialidadesPeloNomeDaUnidadeDeSaude(
+		nome: string,
+	): Promise<string[]> {
+		try {
+			const hospital = await this.hospital
+				.findOne({ nome: nome })
+				.populate('especialidades', 'nome');
+			const clinica = await this.clinica
+				.findOne({ nome: nome })
+				.populate('especialidades', 'nome');
+
+			const especialidades = [];
+
+			if (hospital) {
+				for (const especialidade of hospital.especialidades) {
+					especialidades.push(especialidade.nome);
+				}
+			}
+
+			if (clinica) {
+				for (const especialidade of clinica.especialidades) {
+					especialidades.push(especialidade.nome);
+				}
+			}
+
+			return especialidades;
+		} catch (error) {
+			throw new Error('Erro ao listar especialidades!' + error);
+		}
+	}
 }
 
-export default new FlltroRepository();
+export default new ConsultasRepoaitory();

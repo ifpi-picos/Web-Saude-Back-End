@@ -1150,6 +1150,211 @@
 					}
 				}
 			}
+		},
+		"/buscar": {
+			"get": {
+				"summary": "Buscar Consultas por Nome",
+				"description": "Esta rota busca consultas médicas por nome.",
+				"tags": ["Consultas"],
+				"parameters": [
+					{
+						"name": "nome",
+						"in": "query",
+						"description": "Nome da consulta a ser buscada.",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Consultas encontradas com sucesso.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Consultas"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Campos inválidos ou nome muito curto.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										},
+										"Errors": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/unidades-de-saude": {
+			"get": {
+				"summary": "Listar Unidades de Saúde",
+				"description": "Esta rota lista unidades de saúde.",
+				"tags": ["Consultas"],
+				"responses": {
+					"200": {
+						"description": "Unidades de saúde listadas com sucesso.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Consultas"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/hospital-ou-clinica/{nome}": {
+			"get": {
+				"summary": "Buscar Hospital ou Clínica por Nome",
+				"description": "Esta rota busca um hospital ou clínica por nome.",
+				"tags": ["Consultas"],
+				"parameters": [
+					{
+						"name": "nome",
+						"in": "path",
+						"description": "Nome do hospital ou clínica a ser buscado.",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Hospital ou clínica encontrado com sucesso.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Consultas"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/especialidades/{nome}": {
+			"get": {
+				"summary": "Buscar Especialidades por Nome da Unidade de Saúde",
+				"description": "Esta rota busca especialidades médicas pelo nome da unidade de saúde.",
+				"tags": ["Consultas"],
+				"parameters": [
+					{
+						"name": "nome",
+						"in": "path",
+						"description": "Nome da unidade de saúde para buscar especialidades.",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Especialidades encontradas com sucesso.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Consultas"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Nenhuma especialidade encontrada para o nome fornecido.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"Message": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -1351,6 +1556,20 @@
 					"cidade",
 					"uf"
 				]
+			},
+			"Consultas": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "integer"
+					},
+					"nome": {
+						"type": "string"
+					},
+					"descricao": {
+						"type": "string"
+					}
+				}
 			}
 		},
 		"securitySchemes": {

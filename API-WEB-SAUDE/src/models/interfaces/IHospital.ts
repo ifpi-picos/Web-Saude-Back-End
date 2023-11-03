@@ -1,5 +1,6 @@
 import { Document, Schema } from 'mongoose';
 import Iespecialidade from './IEspecialidades';
+
 interface IHospital extends Document {
 	nome: string;
 	imagem: string;
