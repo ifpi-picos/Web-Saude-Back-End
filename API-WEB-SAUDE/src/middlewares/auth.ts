@@ -28,13 +28,12 @@ export function authMiddleware(
 		rotaAtual.startsWith('/hospital/') ||
 		rotaAtual.startsWith('/buscar/') ||
 		rotaAtual.startsWith('/hospital-ou-clinica/') ||
-		rotaAtual.startsWith('/especialidades//')
+		rotaAtual.startsWith('/especialidades/')
 	) {
 		next();
 	} else {
 		try {
 			const claims = AuthService.decodeToken(token as string);
-			console.log('Decoded Token:', claims);
 			req.body.userId = claims.sub;
 			next();
 		} catch (err: unknown) {

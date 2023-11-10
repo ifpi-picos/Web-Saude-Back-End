@@ -4,6 +4,7 @@ import HospitalRepository from '../repositorys/HospitalRepository';
 import validation from '../middlewares/validation';
 import EnderecoService from '../services/EnderecoService';
 import EspecialidadesService from '../services/EspecialidadesService';
+import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 const hospitalRouter = Router();
 
 // cadastrar hospital
@@ -70,24 +71,13 @@ hospitalRouter.post(
 );
 
 // alterar o hospital
+
 hospitalRouter.put(
 	'/admin/alterar-hospital/:id',
-
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
-			const camposAValidar = [
-				'cep',
-				'rua',
-				'numero',
-				'bairro',
-				'cidade',
-				'uf',
-				'nome',
-				'longitude',
-				'latitude',
-				'especialidades',
-			];
+			const camposAValidar = ['nome', 'longitude', 'latitude'];
 
 			const erros: string[] = [];
 			validation.finalizarValidacao(camposAValidar, req, erros);
@@ -102,23 +92,37 @@ hospitalRouter.put(
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				const hosítalAtualizado = await HospitalService.alterarHospital(
+				const enderecoId = await EnderecoService.cadastrarEndereco(req.body);
+				const hospitalAtualizadaData = { ...req.body, endereco: enderecoId };
+				const hospitalAtualizado = await HospitalService.alterarHospital(
 					id,
-					req.body,
+					hospitalAtualizadaData,
 				);
-				if (hosítalAtualizado === null) {
+
+				if (hospitalAtualizado === null) {
 					return res
 						.status(400)
-						.json({ Message: 'Esse Hospital já está Cadastrado!' });
+						.json({ Message: 'Essa Clínica já está Cadastrada!' });
 				}
-				await EnderecoService.alterarEndereco(
-					hosítalAtualizado.endereco.toString(),
-					req.body,
+
+				const especialidadesIds = req.body.especialidades;
+				const idDasEspecialidades =
+					await EspecialidadesRepository.listarIdsDasEspecialidadesPorHospital(
+						hospitalAtualizado._id,
+					);
+				await EspecialidadesService.removerHospitaisDasEspecialidades(
+					hospitalAtualizado._id,
+					idDasEspecialidades,
+				);
+
+				await EspecialidadesService.adicionarHospitaisAEspecialidades(
+					especialidadesIds,
+					hospitalAtualizado._id,
 				);
 
 				return res.status(201).json({
 					Message: 'Hospital Atualizado com Sucesso!',
-					data: hosítalAtualizado,
+					data: hospitalAtualizado,
 				});
 			}
 		} catch (error) {
@@ -136,8 +140,17 @@ hospitalRouter.delete(
 			const deletarHospital = await HospitalService.deletarHospital(id);
 			if (deletarHospital) {
 				EnderecoService.deletarEndereco(deletarHospital.endereco.toString());
+				const idDasEspecialidades =
+					await EspecialidadesRepository.listarIdsDasEspecialidadesPorHospital(
+						id,
+					);
+				await EspecialidadesService.removerclinicaDasEspecialidades(
+					id,
+					idDasEspecialidades,
+				);
 				return res.status(204).json('');
 			}
+
 			return res.status(404).json({ Message: 'Hospital não Encontrado' });
 		} catch (error) {
 			return res.status(500).json(error);
@@ -154,7 +167,6 @@ hospitalRouter.get('/hospitais', async (req: Request, res: Response) => {
 		}
 		return res.status(200).json(hospitais);
 	} catch (error) {
-		console.log(error);
 		return res.status(500).json(error);
 	}
 });

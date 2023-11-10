@@ -3,7 +3,7 @@ import IEspecailidadesService from './interfaces/IEspecialidadesService';
 import { Model } from 'mongoose';
 import Especialidades from '../models/Especialidades';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
-
+import IClinica from '../models/interfaces/IClinica';
 class EspecialidadesServices implements IEspecailidadesService {
 	private model: Model<IEspecialidade>;
 
@@ -87,6 +87,35 @@ class EspecialidadesServices implements IEspecailidadesService {
 			await this.model.deleteMany({});
 		} catch (error) {
 			throw new Error('Erro ao Deletar todas as Especialidade!' + error);
+		}
+	}
+
+	public async removerclinicaDasEspecialidades(
+		cliincalId: string,
+		especialidadesIds: string[],
+	): Promise<void> {
+		try {
+			await this.model.updateMany(
+				{ _id: { $in: especialidadesIds } },
+				{ $pull: { clinicas: cliincalId } },
+			);
+		} catch (error) {
+			throw new Error('Erro ao remover a clínica das especialidades: ' + error);
+		}
+	}
+	public async removerHospitaisDasEspecialidades(
+		hospitalId: string,
+		especialidadesIds: string[],
+	): Promise<void> {
+		try {
+			await this.model.updateMany(
+				{ _id: { $in: especialidadesIds } },
+				{ $pull: { hospitais: hospitalId } },
+			);
+		} catch (error) {
+			throw new Error(
+				'Erro ao remover o hospital das especialidades: ' + error,
+			);
 		}
 	}
 }

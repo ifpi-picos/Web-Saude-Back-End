@@ -22,7 +22,7 @@ class HospitailRepository implements IHospitalRepository {
 	}
 	public async pegarHospital(nome: string): Promise<IHospital | null> {
 		try {
-			return await this.model.findOne({ nome: nome });
+			return await this.model.findOne({ nome: nome }).populate('endereco');
 		} catch (error) {
 			throw new Error('Erro ao Filtrar o Hospital!' + error);
 		}

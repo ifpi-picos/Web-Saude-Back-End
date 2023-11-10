@@ -2,6 +2,8 @@ import { Model } from 'mongoose';
 import IHospitalService from './interfaces/IHospitalService';
 import IHospital from '../models/interfaces/IHospital';
 import Hospital from '../models/Hospital';
+import mongoose from 'mongoose';
+
 import HospitalRepository from '../repositorys/HospitalRepository';
 
 class HospitalService implements IHospitalService {
@@ -54,6 +56,17 @@ class HospitalService implements IHospitalService {
 			return await this.model.findByIdAndDelete(hospitalId);
 		} catch (error) {
 			throw new Error('Erro ao Deletar o Hospital!' + error);
+		}
+	}
+
+	public async obterHospitalPorId(id: string) {
+		try {
+			// Use o Mongoose para encontrar o hospital pelo ID
+			const hospital = await this.model.findOne({ _id: id });
+
+			return hospital;
+		} catch (error) {
+			throw new Error('Erro ao buscar hospital por ID: ' + error);
 		}
 	}
 }

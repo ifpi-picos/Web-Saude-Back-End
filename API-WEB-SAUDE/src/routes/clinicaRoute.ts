@@ -4,6 +4,7 @@ import ClinicaRepository from '../repositorys/ClinicaRepository';
 import validation from '../middlewares/validation';
 import EnderecoService from '../services/EnderecoService';
 import EspecialidadesService from '../services/EspecialidadesService';
+import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 const clinicaRouter = Router();
 
 // cadastrar clínica
@@ -75,7 +76,6 @@ clinicaRouter.put(
 		try {
 			const { id } = req.params;
 
-			// Copie os campos que deseja validar, incluindo campos exclusivos de atualização
 			const camposAValidar = [
 				'cep',
 				'rua',
@@ -87,7 +87,6 @@ clinicaRouter.put(
 				'horarioSemana',
 				'longitude',
 				'latitude',
-				'especialidades',
 			];
 
 			const erros: string[] = [];
@@ -104,10 +103,7 @@ clinicaRouter.put(
 			} else if (req.body.nome.length < 2) {
 				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
-				// Atualize o endereço da clínica (ou crie um novo se necessário)
 				const enderecoId = await EnderecoService.cadastrarEndereco(req.body);
-
-				// Atualize os dados da clínica
 				const clinicaAtualizadaData = { ...req.body, endereco: enderecoId };
 				const clinicaAtualizada = await ClinicaService.alterarClinica(
 					id,
@@ -120,8 +116,16 @@ clinicaRouter.put(
 						.json({ Message: 'Essa Clínica já está Cadastrada!' });
 				}
 
-				// Atualize as especialidades da clínica
 				const especialidadesIds = req.body.especialidades;
+				const idDasEspecialidades =
+					await EspecialidadesRepository.listarIdsDasEspecialidadesPorClinica(
+						clinicaAtualizada._id,
+					);
+				await EspecialidadesService.removerclinicaDasEspecialidades(
+					clinicaAtualizada._id,
+					idDasEspecialidades,
+				);
+
 				await EspecialidadesService.adicionarClinicaAEspecialidades(
 					especialidadesIds,
 					clinicaAtualizada._id,
@@ -150,6 +154,14 @@ clinicaRouter.delete(
 				await EnderecoService.deletarEndereco(
 					deletarCliinca.endereco.toString(),
 				);
+				const idDasEspecialidades =
+					await EspecialidadesRepository.listarIdsDasEspecialidadesPorClinica(
+						id,
+					);
+				await EspecialidadesService.removerclinicaDasEspecialidades(
+					id,
+					idDasEspecialidades,
+				);
 				return res.status(204).json('');
 			}
 			return res.status(404).json({ Message: 'Clínica não Encontrada' });
@@ -168,10 +180,10 @@ clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
 		}
 		return res.status(200).json(clinicas);
 	} catch (error) {
-		console.log(error);
 		return res.status(500).json(error);
 	}
 });
+
 // filtrar clinica
 clinicaRouter.get('/clinica/:nome', async (req: Request, res: Response) => {
 	try {

@@ -1,9 +1,10 @@
 import { Document, Schema } from 'mongoose';
-
+import IHospital from './IHospital';
+import IClinica from './IClinica';
 interface IEspecialidade extends Document {
 	nome: string;
-	clinicas: Schema.Types.ObjectId[];
-	hospitais: Schema.Types.ObjectId;
+	clinicas: IClinica[];
+	hospitais: IHospital[];
 }
 
 export default IEspecialidade;

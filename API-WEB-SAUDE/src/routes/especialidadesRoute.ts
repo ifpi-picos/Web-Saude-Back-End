@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 import validation from '../middlewares/validation';
+import Clinica from '../models/Clinica';
 
 const especialidadesRouter = Router();
 
@@ -100,7 +101,6 @@ especialidadesRouter.get(
 				await EspecialidadesRepository.pegarEspecialidades();
 			return res.status(201).json(especialidades);
 		} catch (error) {
-			console.log(error);
 			return res.status(500).json(error);
 		}
 	},

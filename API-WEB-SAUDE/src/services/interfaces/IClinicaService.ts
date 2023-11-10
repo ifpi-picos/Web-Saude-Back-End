@@ -1,4 +1,4 @@
-import IClinica from '@src/models/interfaces/IClinica';
+import IClinica from '../../models/interfaces/IClinica';
 interface IClinicaService {
 	novaClinica(clinicaData: IClinica): Promise<IClinica | null>;
 	alterarClinica(

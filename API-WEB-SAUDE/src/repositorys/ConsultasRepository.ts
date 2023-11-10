@@ -6,14 +6,18 @@ import Hospital from '../models/Hospital';
 import IConsultasRepository from './interfaces/IConsultasRepository';
 import HospitalRepository from './HospitalRepository';
 import ClinicaRepository from './ClinicaRepository';
+import IEspecialidade from '../models/interfaces/IEspecialidades';
+import Especialidades from '../models/Especialidades';
 
 class ConsultasRepoaitory implements IConsultasRepository {
 	private clinica: Model<IClinica>;
 	private hospital: Model<IHospital>;
+	private especialidades: Model<IEspecialidade>;
 
 	constructor() {
 		this.clinica = Clinica;
 		this.hospital = Hospital;
+		this.especialidades = Especialidades;
 	}
 
 	public async filtrar(nome: string): Promise<(IClinica | IHospital)[] | []> {
@@ -115,35 +119,23 @@ class ConsultasRepoaitory implements IConsultasRepository {
 			throw new Error('Erro ao pegar os dados!' + error);
 		}
 	}
-	public async pegarEspecialidadesPeloNomeDaUnidadeDeSaude(
+	public async pegarEspecialidadesDaUnidadeDeSaude(
 		nome: string,
-	): Promise<string[]> {
-		try {
-			const hospital = await this.hospital
-				.findOne({ nome: nome })
-				.populate('especialidades', 'nome');
-			const clinica = await this.clinica
-				.findOne({ nome: nome })
-				.populate('especialidades', 'nome');
+	): Promise<IEspecialidade[] | []> {
+		const especialidadesData = await this.especialidades.find().populate({
+			path: 'clinicas',
+			match: { nome: nome },
+		});
 
-			const especialidades = [];
+		const especialidadesDaClinica = especialidadesData.filter(
+			especialidade => especialidade.clinicas.length > 0,
+		);
 
-			if (hospital) {
-				for (const especialidade of hospital.especialidades) {
-					especialidades.push(especialidade.nome);
-				}
-			}
-
-			if (clinica) {
-				for (const especialidade of clinica.especialidades) {
-					especialidades.push(especialidade.nome);
-				}
-			}
-
-			return especialidades;
-		} catch (error) {
-			throw new Error('Erro ao listar especialidades!' + error);
+		if (especialidadesDaClinica.length > 0) {
+			return especialidadesDaClinica;
 		}
+
+		return [];
 	}
 }
 

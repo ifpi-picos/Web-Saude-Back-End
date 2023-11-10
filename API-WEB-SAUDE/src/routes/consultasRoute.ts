@@ -53,17 +53,8 @@ consultasRouter.get(
 		try {
 			const { nome } = req.params;
 			const especialidades =
-				await ConsultasRepository.pegarEspecialidadesPeloNomeDaUnidadeDeSaude(
-					nome,
-				);
-
-			if (especialidades.length === 0) {
-				return res.status(404).json({
-					message: 'Nenhuma especialidade encontrada para o nome fornecido.',
-				});
-			}
-
-			return res.status(200).json({ especialidades });
+				await ConsultasRepository.pegarEspecialidadesDaUnidadeDeSaude(nome);
+			return res.status(200).json(especialidades);
 		} catch (error) {
 			return res.json(error);
 		}

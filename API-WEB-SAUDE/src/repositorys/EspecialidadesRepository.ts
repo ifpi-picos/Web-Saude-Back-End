@@ -25,6 +25,39 @@ class EspecialidadesRepositorys implements IEspecialidadesRepositories {
 			throw new Error('Erro ao Filtrar a Especialidade!' + error);
 		}
 	}
+
+	public async listarIdsDasEspecialidadesPorClinica(
+		clinicaId: string,
+	): Promise<string[]> {
+		try {
+			const especialidades = await this.model.find(
+				{ clinicas: clinicaId },
+				'_id',
+			);
+			const especialidadesIds = especialidades.map(especialidade =>
+				especialidade._id.toString(),
+			);
+			return especialidadesIds;
+		} catch (error) {
+			throw new Error('Erro ao listar as especialidades da clínica: ' + error);
+		}
+	}
+	public async listarIdsDasEspecialidadesPorHospital(
+		hospitalId: string,
+	): Promise<string[]> {
+		try {
+			const especialidades = await this.model.find(
+				{ hospitais: hospitalId },
+				'_id',
+			);
+			const especialidadesIds = especialidades.map(especialidade =>
+				especialidade._id.toString(),
+			);
+			return especialidadesIds;
+		} catch (error) {
+			throw new Error('Erro ao listar as especialidades do hospital: ' + error);
+		}
+	}
 }
 
 export default new EspecialidadesRepositorys();
