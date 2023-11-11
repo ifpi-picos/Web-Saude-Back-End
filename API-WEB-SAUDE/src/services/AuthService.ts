@@ -56,7 +56,6 @@ export default class AuthService {
 			const token = this.generateToken(user._id);
 			return token;
 		} catch (error) {
-			console.log(error);
 			throw new Error('Erro ao autenticar o usuário');
 		}
 	}

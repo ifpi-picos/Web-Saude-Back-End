@@ -1,4 +1,4 @@
-import { Document, Schema } from 'mongoose';
+import { Document} from 'mongoose';
 import IHospital from './IHospital';
 import IClinica from './IClinica';
 interface IEspecialidade extends Document {

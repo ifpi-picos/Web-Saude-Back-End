@@ -59,6 +59,27 @@ consultasRouter.get(
 			return res.json(error);
 		}
 	},
+
+	consultasRouter.get(
+		'/unidades-de-saude-paginadas',
+		async (req: Request, res: Response) => {
+			try {
+				const { pagina } = req.query;
+				const paginaAtual = pagina ? parseInt(pagina as string, 10) : 1;
+
+				const resultadoPaginado =
+					await ConsultasRepository.pegarHospitaiseClinicasPorPagina(
+						paginaAtual,
+					);
+
+				return res.status(200).json(resultadoPaginado);
+			} catch (error) {
+				return res
+					.status(500)
+					.json({ error: 'Erro ao buscar unidades de saúde paginadas' });
+			}
+		},
+	),
 );
 
 export default consultasRouter;

@@ -9,6 +9,7 @@ interface IHospital extends Document {
 	latitude: number;
 	especialidades: Iespecialidade[];
 	endereco: Schema.Types.ObjectId;
+	usuario: Schema.Types.ObjectId;
 	instagram: string;
 	email: string;
 	whatsapp: string;

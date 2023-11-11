@@ -122,20 +122,60 @@ class ConsultasRepoaitory implements IConsultasRepository {
 	public async pegarEspecialidadesDaUnidadeDeSaude(
 		nome: string,
 	): Promise<IEspecialidade[] | []> {
-		const especialidadesData = await this.especialidades.find().populate({
-			path: 'clinicas',
-			match: { nome: nome },
-		});
+		const especialidadesDaCliincaData = await this.especialidades
+			.find()
+			.populate({
+				path: 'clinicas',
+				match: { nome: nome },
+			});
+		const especialidadesDoHospitalData = await this.especialidades
+			.find()
+			.populate({
+				path: 'hospitais',
+				match: { nome: nome },
+			});
 
-		const especialidadesDaClinica = especialidadesData.filter(
+		const especialidadesDaClinica = especialidadesDaCliincaData.filter(
+			especialidade => especialidade.clinicas.length > 0,
+		);
+		const especialidadesDoHospital = especialidadesDoHospitalData.filter(
 			especialidade => especialidade.clinicas.length > 0,
 		);
 
 		if (especialidadesDaClinica.length > 0) {
 			return especialidadesDaClinica;
 		}
-
+		if (especialidadesDoHospital.length > 0) {
+			return especialidadesDoHospital;
+		}
 		return [];
+	}
+	public async pegarHospitaiseClinicasPorPagina(
+		pagina: number,
+	): Promise<{
+		unidadesDeSaude: (IClinica | IHospital)[];
+		totalPaginas: number;
+	}> {
+		try {
+			const limitePorPagina = 4;
+
+			const hospitais = await HospitalRepository.pegarHospitais();
+			const clinicas = await ClinicaRepository.pegarClinicas();
+
+			const hospitaiseClinicas = [...hospitais, ...clinicas];
+
+			const totalUnidades = hospitaiseClinicas.length;
+			const totalPaginas = Math.ceil(totalUnidades / limitePorPagina);
+
+			const inicio = (pagina - 1) * limitePorPagina;
+			const fim = pagina * limitePorPagina;
+
+			const unidadesPorPagina = hospitaiseClinicas.slice(inicio, fim);
+
+			return { unidadesDeSaude: unidadesPorPagina, totalPaginas };
+		} catch (error) {
+			throw new Error('Erro ao listar!' + error);
+		}
 	}
 }
 

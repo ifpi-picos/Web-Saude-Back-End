@@ -2,7 +2,6 @@ import { Request, Response, Router } from 'express';
 import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 import validation from '../middlewares/validation';
-import Clinica from '../models/Clinica';
 
 const especialidadesRouter = Router();
 

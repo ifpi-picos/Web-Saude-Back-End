@@ -2,8 +2,6 @@ import { Model } from 'mongoose';
 import IHospitalService from './interfaces/IHospitalService';
 import IHospital from '../models/interfaces/IHospital';
 import Hospital from '../models/Hospital';
-import mongoose from 'mongoose';
-
 import HospitalRepository from '../repositorys/HospitalRepository';
 
 class HospitalService implements IHospitalService {

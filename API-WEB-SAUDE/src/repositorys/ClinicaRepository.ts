@@ -28,10 +28,9 @@ class ClinicaRepository implements IClinicaRepository {
 	}
 	public async pegarClinicaPorId(clinicaId: string) {
 		try {
-			// Consulta a clínica por ID no banco de dados
 			const clinica = await this.model.findById(clinicaId);
 
-			return clinica; // Retorna a clínica encontrada ou null se não encontrada
+			return clinica;
 		} catch (error) {
 			throw new Error('Erro ao pegar a clínica por ID: ' + error);
 		}

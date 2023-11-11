@@ -15,6 +15,7 @@ interface IClinica extends Document {
 	latitude: number;
 	especialidades: IEspecialidade[];
 	endereco: Schema.Types.ObjectId;
+	usuario: Schema.Types.ObjectId;
 	instagram: string;
 	email: string;
 	whatsapp: string;

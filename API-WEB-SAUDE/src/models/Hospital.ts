@@ -39,6 +39,10 @@ const HospitalSchema = new Schema<IHospital>({
 		type: Schema.Types.ObjectId,
 		ref: 'Endereco',
 	},
+	usuario: {
+		type: Schema.Types.ObjectId,
+		ref: 'Usuario',
+	},
 });
 
 export default model<IHospital>('Hospital', HospitalSchema);

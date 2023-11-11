@@ -13,6 +13,9 @@ const rotasPublicas = [
 	'/login/',
 	'/unidades-de-saude',
 	'/unidades-de-saude/',
+	'/unidades-de-saude-paginadas',
+	'/unidades-de-saude-paginadas/',
+	'/novo-usuario/',
 ];
 export function authMiddleware(
 	req: Request,

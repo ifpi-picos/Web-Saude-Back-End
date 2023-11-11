@@ -5,6 +5,7 @@ import validation from '../middlewares/validation';
 import EnderecoService from '../services/EnderecoService';
 import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
+import UsuarioService from '../services/UsuarioService';
 const clinicaRouter = Router();
 
 // cadastrar clínica
@@ -56,7 +57,10 @@ clinicaRouter.post(
 						especialidadesIds,
 						novaClinica._id,
 					);
-
+					await UsuarioService.adicionarClinicaAoUsuario(
+						novaClinica.usuario.toString(),
+						novaClinica._id,
+					);
 					return res.status(201).json({
 						Message: 'Clínica salva com Sucesso!',
 						data: novaClinica,
@@ -149,10 +153,10 @@ clinicaRouter.delete(
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
-			const deletarCliinca = await ClinicaService.deletarClinica(id);
-			if (deletarCliinca) {
+			const deletarClinica = await ClinicaService.deletarClinica(id);
+			if (deletarClinica) {
 				await EnderecoService.deletarEndereco(
-					deletarCliinca.endereco.toString(),
+					deletarClinica.endereco.toString(),
 				);
 				const idDasEspecialidades =
 					await EspecialidadesRepository.listarIdsDasEspecialidadesPorClinica(
@@ -161,6 +165,11 @@ clinicaRouter.delete(
 				await EspecialidadesService.removerclinicaDasEspecialidades(
 					id,
 					idDasEspecialidades,
+				);
+
+				await UsuarioService.removerclinicaDoUsuario(
+					deletarClinica.usuario.toString(),
+					id,
 				);
 				return res.status(204).json('');
 			}
@@ -175,9 +184,7 @@ clinicaRouter.delete(
 clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
 	try {
 		const clinicas = await ClinicaRepository.pegarClinicas();
-		if (clinicas.length === 0) {
-			return res.status(404).json('Nenhuma clínica foi encontrada!');
-		}
+
 		return res.status(200).json(clinicas);
 	} catch (error) {
 		return res.status(500).json(error);

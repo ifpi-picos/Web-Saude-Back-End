@@ -3,7 +3,6 @@ import IEspecailidadesService from './interfaces/IEspecialidadesService';
 import { Model } from 'mongoose';
 import Especialidades from '../models/Especialidades';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
-import IClinica from '../models/interfaces/IClinica';
 class EspecialidadesServices implements IEspecailidadesService {
 	private model: Model<IEspecialidade>;
 

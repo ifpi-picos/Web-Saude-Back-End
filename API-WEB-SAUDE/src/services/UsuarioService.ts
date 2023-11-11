@@ -113,6 +113,59 @@ class UsuarioService implements IUsuarioService {
 			throw new Error('Erro ao Deletar todos os Usuários!' + error);
 		}
 	}
+
+	public async adicionarClinicaAoUsuario(
+		usuario: string,
+		ClinicaId: string,
+	): Promise<void> {
+		try {
+			await this.model.updateOne(
+				{ _id: usuario },
+				{ $push: { clinicas: ClinicaId } },
+			);
+		} catch (error) {
+			throw new Error('Erro ao adicionar a nova clínica á seu Usuário!');
+		}
+	}
+	public async removerclinicaDoUsuario(
+		usuario: string,
+		clinicaId: string,
+	): Promise<void> {
+		try {
+			await this.model.updateOne(
+				{ _id: { $in: usuario } },
+				{ $pull: { clinicas: clinicaId } },
+			);
+		} catch (error) {
+			throw new Error('Erro ao remover a clínica do usuário!' + error);
+		}
+	}
+	public async adicionarHospitalAoUsuario(
+		usuario: string,
+		hosptialId: string,
+	): Promise<void> {
+		try {
+			await this.model.updateOne(
+				{ _id: usuario },
+				{ $push: { clinicas: hosptialId } },
+			);
+		} catch (error) {
+			throw new Error('Erro ao adicionar o novo Hospital a seu Usuário!');
+		}
+	}
+	public async removerHospitalDoUsuario(
+		usuario: string,
+		hosptialId: string,
+	): Promise<void> {
+		try {
+			await this.model.updateOne(
+				{ _id: { $in: usuario } },
+				{ $pull: { clinicas: hosptialId } },
+			);
+		} catch (error) {
+			throw new Error('Erro ao remover o hospital do Usuário" ' + error);
+		}
+	}
 }
 
 export default new UsuarioService();

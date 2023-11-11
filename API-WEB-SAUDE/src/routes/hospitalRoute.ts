@@ -5,6 +5,7 @@ import validation from '../middlewares/validation';
 import EnderecoService from '../services/EnderecoService';
 import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
+import UsuarioService from '../services/UsuarioService';
 const hospitalRouter = Router();
 
 // cadastrar hospital
@@ -57,6 +58,10 @@ hospitalRouter.post(
 						especialidadesIds,
 						novoHospital._id,
 					);
+					await UsuarioService.adicionarHospitalAoUsuario(
+						novoHospital.usuario.toString(),
+						novoHospital._id,
+					);
 
 					return res.status(201).json({
 						Message: 'Hospital salvo com Sucesso!',
@@ -71,7 +76,6 @@ hospitalRouter.post(
 );
 
 // alterar o hospital
-
 hospitalRouter.put(
 	'/admin/alterar-hospital/:id',
 	async (req: Request, res: Response) => {
@@ -144,10 +148,15 @@ hospitalRouter.delete(
 					await EspecialidadesRepository.listarIdsDasEspecialidadesPorHospital(
 						id,
 					);
-				await EspecialidadesService.removerclinicaDasEspecialidades(
+				await EspecialidadesService.removerHospitaisDasEspecialidades(
 					id,
 					idDasEspecialidades,
 				);
+				await UsuarioService.removerHospitalDoUsuario(
+					deletarHospital.usuario.toString(),
+					id,
+				);
+
 				return res.status(204).json('');
 			}
 
@@ -162,9 +171,7 @@ hospitalRouter.delete(
 hospitalRouter.get('/hospitais', async (req: Request, res: Response) => {
 	try {
 		const hospitais = await HospitalRepository.pegarHospitais();
-		if (hospitais.length === 0) {
-			return res.status(404).json('Nenhum hsopital foi encontrado!');
-		}
+
 		return res.status(200).json(hospitais);
 	} catch (error) {
 		return res.status(500).json(error);
