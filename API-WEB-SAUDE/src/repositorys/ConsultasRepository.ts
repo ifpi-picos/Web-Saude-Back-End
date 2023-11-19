@@ -20,25 +20,69 @@ class ConsultasRepoaitory implements IConsultasRepository {
 		this.especialidades = Especialidades;
 	}
 
-	public async filtrar(nome: string): Promise<(IClinica | IHospital)[] | []> {
+	public async buscar(nome: string): Promise<(IClinica | IHospital)[] | []> {
 		try {
-			const clinica = await this.clinica
-				.find({ nome: nome })
-				.populate('endereco')
-				.populate('especialidades');
+		  const nomeRegex = new RegExp(nome, 'i');
+	  
+		  const clinicas = await this.clinica
+			.find({ nome: { $regex: nomeRegex } })
+			.populate('endereco')
+			.populate('especialidades');
+	  
+		  const hospitais = await this.hospital
+			.find({ nome: { $regex: nomeRegex } })
+			.populate('endereco')
+			.populate('especialidades');
+	  
+		  const resultados = [...clinicas, ...hospitais];
+	  
+		  const resultadosComEspecialidade = resultados.filter(
+			entidade => entidade.especialidades.length > 0,
+		  );
+	  
+		  if (resultadosComEspecialidade.length > 0) {
+			return resultadosComEspecialidade;
+		  }
+		  const clinicasComEspecialidade = await this.clinica
+		  .find()
+		  .populate('endereco')
+		  .populate({
+			  path: 'especialidades',
+			  match: { nome: { $regex: nomeRegex} },
+		  });
 
-			const hospital = await this.hospital
-				.find({ nome: nome })
-				.populate('endereco')
-				.populate('especialidades');
+	     const hospitaisComEspecialidade = await this.hospital
+		  .find()
+		  .populate('endereco')
+		  .populate({
+			  path: 'especialidades',
+			  match: { nome: { $regex: nomeRegex}},
+		  });
 
-			if (clinica.length > 0) {
-				return clinica;
+			const resultadosClinica = clinicasComEspecialidade.filter(
+				clinica => clinica.especialidades.length > 0,
+			);
+
+			const resultadosHospitais = hospitaisComEspecialidade.filter(
+				hospital => hospital.especialidades.length > 0,
+			);
+
+			const clinicasEhospitais = [
+				...resultadosClinica,
+				...resultadosHospitais,
+			];
+
+			if (clinicasEhospitais.length > 0) {
+				return clinicasEhospitais;
 			}
-			if (hospital.length > 0) {
-				return hospital;
-			}
-
+		  return [];
+		} catch (error) {
+		  throw new Error('Erro ao filtrar!' + error);
+		}
+	  }
+	  public async filtrarUnidadesDeSaudePelaEspecialidade(nome: string): Promise<(IClinica | IHospital)[] | []> {
+		try {
+		
 			const clinicas = await this.clinica
 				.find()
 				.populate('endereco')
@@ -119,9 +163,13 @@ class ConsultasRepoaitory implements IConsultasRepository {
 			throw new Error('Erro ao pegar os dados!' + error);
 		}
 	}
+	
 	public async pegarEspecialidadesDaUnidadeDeSaude(
 		nome: string,
 	): Promise<IEspecialidade[] | []> {
+		const unidaeDeSaude  =  await this.pegarHospitalouClinica(nome)
+		if(unidaeDeSaude){
+
 		const especialidadesDaCliincaData = await this.especialidades
 			.find()
 			.populate({
@@ -139,7 +187,7 @@ class ConsultasRepoaitory implements IConsultasRepository {
 			especialidade => especialidade.clinicas.length > 0,
 		);
 		const especialidadesDoHospital = especialidadesDoHospitalData.filter(
-			especialidade => especialidade.clinicas.length > 0,
+			especialidade => especialidade.hospitais.length > 0,
 		);
 
 		if (especialidadesDaClinica.length > 0) {
@@ -148,6 +196,7 @@ class ConsultasRepoaitory implements IConsultasRepository {
 		if (especialidadesDoHospital.length > 0) {
 			return especialidadesDoHospital;
 		}
+	}
 		return [];
 	}
 	public async pegarHospitaiseClinicasPorPagina(

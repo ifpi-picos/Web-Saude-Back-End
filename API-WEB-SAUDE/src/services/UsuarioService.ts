@@ -38,14 +38,14 @@ class UsuarioService implements IUsuarioService {
 	public async autenticarUsuario(
 		email: string,
 		senha: string,
-	): Promise<string> {
+	): Promise<string | null> {
 		try {
 			const token = await AuthService.authenticateUser(email, senha);
 
 			if (token) {
 				return token;
 			} else {
-				throw new Error('Credenciais inválidas!');
+				return null;
 			}
 		} catch (error) {
 			throw new Error('Erro ao Autenticar o Usuário!' + error);
@@ -84,15 +84,15 @@ class UsuarioService implements IUsuarioService {
 	}
 	public async alterarSenhaUsuario(id: string, senha: string): Promise<void> {
 		try {
-			const user = await Usuario.findById(id);
-			if (!user) {
+			const usuario = await Usuario.findById(id);
+			if (!usuario) {
 				throw new Error('Usuário não Encontrado!');
 			}
 
 			const hashedPassword = await AuthService.hashPassword(senha);
-			user.senha = hashedPassword;
+			usuario.senha = hashedPassword;
 
-			await user.save();
+			await usuario.save();
 		} catch (error) {
 			throw new Error('Erro ao Alterar a Senha do Usuário!' + error);
 		}
@@ -106,14 +106,7 @@ class UsuarioService implements IUsuarioService {
 		}
 	}
 
-	public async deletarTodosUsuarios(): Promise<void> {
-		try {
-			await this.model.deleteMany({});
-		} catch (error) {
-			throw new Error('Erro ao Deletar todos os Usuários!' + error);
-		}
-	}
-
+	
 	public async adicionarClinicaAoUsuario(
 		usuario: string,
 		ClinicaId: string,
@@ -147,7 +140,7 @@ class UsuarioService implements IUsuarioService {
 		try {
 			await this.model.updateOne(
 				{ _id: usuario },
-				{ $push: { clinicas: hosptialId } },
+				{ $push: { hospitais: hosptialId } },
 			);
 		} catch (error) {
 			throw new Error('Erro ao adicionar o novo Hospital a seu Usuário!');
@@ -160,7 +153,7 @@ class UsuarioService implements IUsuarioService {
 		try {
 			await this.model.updateOne(
 				{ _id: { $in: usuario } },
-				{ $pull: { clinicas: hosptialId } },
+				{ $pull: { hospitais: hosptialId } },
 			);
 		} catch (error) {
 			throw new Error('Erro ao remover o hospital do Usuário" ' + error);

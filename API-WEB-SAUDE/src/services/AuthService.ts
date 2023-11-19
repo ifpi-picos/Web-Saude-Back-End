@@ -39,18 +39,19 @@ export default class AuthService {
 	public static async authenticateUser(
 		email: string,
 		senha: string,
-	): Promise<string> {
+	): Promise<string | null> {
 		try {
 			const user = await Usuario.findOne({ email });
 
 			if (!user) {
-				throw new Error('Usuário não encontrado!');
+				return null
 			}
 
 			const isPasswordValid = await this.comparePasswords(senha, user.senha);
 
 			if (!isPasswordValid) {
-				throw new Error('Senha incorreta!');
+				return null
+
 			}
 
 			const token = this.generateToken(user._id);

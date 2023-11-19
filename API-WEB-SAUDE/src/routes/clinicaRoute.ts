@@ -52,6 +52,7 @@ clinicaRouter.post(
 							.json({ Message: 'Essa Clínica já está Cadastrada!' });
 					}
 					const especialidadesIds = req.body.especialidades;
+					novaClinica.usuario = req.body.userId
 
 					await EspecialidadesService.adicionarClinicaAEspecialidades(
 						especialidadesIds,
@@ -61,7 +62,7 @@ clinicaRouter.post(
 						novaClinica.usuario.toString(),
 						novaClinica._id,
 					);
-					return res.status(201).json({
+ 					return res.status(201).json({
 						Message: 'Clínica salva com Sucesso!',
 						data: novaClinica,
 					});

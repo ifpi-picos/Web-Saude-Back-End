@@ -84,7 +84,7 @@ usuarioRouter.put(
 			return res.status(500).json(error);
 		}
 	},
-);
+); 
 
 // rota para deletar usuário
 usuarioRouter.delete(
@@ -103,17 +103,6 @@ usuarioRouter.delete(
 	},
 );
 
-// rota para deletar todos os usuários
-usuarioRouter.delete(
-	'/deletar-todos-usuarios',
-	async (req: Request, res: Response) => {
-		try {
-			await UsuarioService.deletarTodosUsuarios();
-		} catch (error) {
-			return res.status(500).json(error);
-		}
-	},
-);
 
 // rota para lista os usuários
 usuarioRouter.get('/usuarios', async (req: Request, res: Response) => {
@@ -154,11 +143,11 @@ usuarioRouter.post('/login', async (req: Request, res: Response) => {
 				req.body.email,
 				req.body.senha,
 			);
-			if (!token) {
+			if (token === null) {
 				return res.status(401).json({
 					error: 'Login não autorizado',
 					message:
-						'Credenciais inválidas. Por favor, verifique seu nome de usuário e senha.',
+						'Credenciais inválidas. Por favor, verifique seu email e senha.',
 				});
 			}
 			return res.status(200).json({ token });
@@ -168,4 +157,14 @@ usuarioRouter.post('/login', async (req: Request, res: Response) => {
 	}
 });
 
+usuarioRouter.get('/usuario/unidades-desaude/:id', async (req:Request ,res:Response)=>{
+try {
+	const { id } = req.params
+	 const unidadesDeSaude = await UsuarioRepository.pegarunidadesDeSudeDoUsuario(id)
+	 return res.status(200).json(unidadesDeSaude)
+} catch (error) {
+	return res.status(500).json(error);
+
+}
+})
 export default usuarioRouter;

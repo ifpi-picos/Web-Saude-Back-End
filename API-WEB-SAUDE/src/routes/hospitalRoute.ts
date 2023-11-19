@@ -53,6 +53,7 @@ hospitalRouter.post(
 							.json({ Message: 'Esse Hospital já está Cadastrada!' });
 					}
 					const especialidadesIds = req.body.especialidades;
+					novoHospital.usuario = req.body.userId
 
 					await EspecialidadesService.adicionarHospitaisAEspecialidades(
 						especialidadesIds,
@@ -106,12 +107,12 @@ hospitalRouter.put(
 				if (hospitalAtualizado === null) {
 					return res
 						.status(400)
-						.json({ Message: 'Essa Clínica já está Cadastrada!' });
+						.json({ Message: 'Esse Hospital já está Cadastrado!' });
 				}
 
 				const especialidadesIds = req.body.especialidades;
 				const idDasEspecialidades =
-					await EspecialidadesRepository.listarIdsDasEspecialidadesPorHospital(
+				await EspecialidadesRepository.listarIdsDasEspecialidadesPorHospital(
 						hospitalAtualizado._id,
 					);
 				await EspecialidadesService.removerHospitaisDasEspecialidades(

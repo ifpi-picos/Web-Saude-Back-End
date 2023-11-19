@@ -31,7 +31,9 @@ export function authMiddleware(
 		rotaAtual.startsWith('/hospital/') ||
 		rotaAtual.startsWith('/buscar/') ||
 		rotaAtual.startsWith('/hospital-ou-clinica/') ||
-		rotaAtual.startsWith('/especialidades/')
+		rotaAtual.startsWith('/especialidades/') ||
+		rotaAtual.startsWith('/especialidade/') 
+
 	) {
 		next();
 	} else {

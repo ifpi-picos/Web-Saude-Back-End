@@ -9,14 +9,26 @@ consultasRouter.get('/buscar/', async (req: Request, res: Response) => {
 		if (!nome) {
 			return res.status(400).json('O parâmetro "nome" é obrigatório na query.');
 		}
-		const filtro = await ConsultasRepository.filtrar(nome);
+		const filtro = await ConsultasRepository.buscar(nome);
 
 		return res.status(200).json(filtro);
 	} catch (error) {
 		return res.json(error);
 	}
-});
+}); 
+consultasRouter.get('/especialidade/', async (req: Request, res: Response) => {
+	try {
+		const nome = req.query.nome?.toString();
+		if (!nome) {
+			return res.status(400).json('O parâmetro "nome" é obrigatório na query.');
+		}
+		const filtro = await ConsultasRepository.filtrarUnidadesDeSaudePelaEspecialidade(nome);
 
+		return res.status(200).json(filtro);
+	} catch (error) {
+		return res.json(error);
+	}
+}); 
 consultasRouter.get(
 	'/unidades-de-saude',
 	async (req: Request, res: Response) => {
