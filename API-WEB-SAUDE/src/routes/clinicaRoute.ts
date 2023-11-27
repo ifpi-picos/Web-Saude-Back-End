@@ -6,6 +6,7 @@ import EnderecoService from '../services/EnderecoService';
 import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 import UsuarioService from '../services/UsuarioService';
+
 const clinicaRouter = Router();
 
 // cadastrar clínica
@@ -167,9 +168,9 @@ clinicaRouter.delete(
 					id,
 					idDasEspecialidades,
 				);
-
+            
 				await UsuarioService.removerclinicaDoUsuario(
-					deletarClinica.usuario.toString(),
+					req.body.userId,
 					id,
 				);
 				return res.status(204).json('');

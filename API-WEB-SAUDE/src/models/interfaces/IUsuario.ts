@@ -7,5 +7,6 @@ interface Iusuario extends Document {
 	senha: string;
 	clinicas: IClinica[];
 	hospitais: IHospital[];
+	tipo:string;
 }
 export default Iusuario;

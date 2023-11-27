@@ -1,9 +1,10 @@
-import { Model } from 'mongoose';
+import { Model ,Types } from 'mongoose';
 import IClinicaService from './interfaces/IClinicaService';
 import IClinica from '../models/interfaces/IClinica';
 import Clinica from '../models/Clinica';
 import ClinicaRepository from '../repositorys/ClinicaRepository';
-
+import EnderecoService from './EnderecoService';
+import Especialidades from '../models/Especialidades';
 class ClinicaService implements IClinicaService {
 	private model: Model<IClinica>;
 
@@ -56,5 +57,28 @@ class ClinicaService implements IClinicaService {
 			throw new Error('Erro ao Deletar a Clínica!' + error);
 		}
 	}
+	
+	public async deletarClinicasDoUsuario(ids: string[]): Promise<void> {
+		try {
+		  const objectIdArray = ids.map((id) => new Types.ObjectId(id));
+	  
+		  const clínicasParaDeletar = await this.model.find({ _id: { $in: objectIdArray } });
+	  
+		  const idsDasClinicas = clínicasParaDeletar.map((clinica) => clinica._id.toString());
+	  
+		  await Especialidades.updateMany(
+			{ clinicas: { $in: idsDasClinicas } },
+			{ $pullAll: { clinicas: idsDasClinicas } }
+		  );
+	  
+		  const idsDosEnderecos = clínicasParaDeletar.map((clinica) => clinica.endereco.toString());
+		  await EnderecoService.deletarEnderecosAssociadosAUnidadesDeSaude(idsDosEnderecos);
+	  
+		  await this.model.deleteMany({ _id: { $in: objectIdArray } });
+		} catch (error) {
+		  throw new Error('Erro ao Deletar as Clínicas por IDs!' + error);
+		}
+	  }
+	   
 }
 export default new ClinicaService();

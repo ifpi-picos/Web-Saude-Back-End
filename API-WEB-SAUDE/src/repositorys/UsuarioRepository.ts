@@ -19,16 +19,18 @@ class UsuarioRepository implements IUsuarioRepository {
 		}
 	}
 
-	public async pegarUsuario(id: string): Promise<void> {
+	public async pegarUsuario(id: string): Promise<IUsuario | null> {
 		try {
-			const usuario = await this.model.findById(id);
-			if (!usuario) {
-				throw new Error('Usuário já está cadastrado!');
-			}
+		  const usuario = await this.model.findById(id);
+		  if (!usuario) {
+			throw new Error('Usuário não encontrado!');
+		  }
+		  return usuario; 
 		} catch (error) {
-			throw new Error('Erro ao Buscar o Usuário!' + error);
+		  throw new Error('Erro ao buscar o usuário!' + error);
 		}
-	}
+	  }
+	  
 	public async pegarEmail(email: string): Promise<IUsuario | null> {
 		try {
 			return await this.model.findOne({ email: email });
@@ -36,8 +38,9 @@ class UsuarioRepository implements IUsuarioRepository {
 			throw new Error('Erro ao verificar o Usuário!' + error);
 		}
 	}
-	public async pegarunidadesDeSudeDoUsuario(usuarioId: string): Promise<(IClinica | IHospital)[] | []> {
+	public async pegarunidadesDeSaudeDoUsuario(usuarioId: string): Promise<(IClinica | IHospital)[] | []> {
 		try {
+
 			const usuario = await Usuario.findById(usuarioId).populate({
 				path: 'clinicas',
 				populate: {

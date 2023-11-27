@@ -6,6 +6,7 @@ interface IClinicaService {
 		clinicaData: IClinica,
 	): Promise<IClinica | null>;
 	deletarClinica(clinicaId: string): Promise<IClinica | null>;
+	deletarClinicasDoUsuario(ids: string[]): Promise<void>
 }
 
 export default IClinicaService;

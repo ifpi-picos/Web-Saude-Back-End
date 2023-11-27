@@ -90,13 +90,13 @@ class EspecialidadesServices implements IEspecailidadesService {
 	}
 
 	public async removerclinicaDasEspecialidades(
-		cliincalId: string,
+		cliincaId: string,
 		especialidadesIds: string[],
 	): Promise<void> {
 		try {
 			await this.model.updateMany(
 				{ _id: { $in: especialidadesIds } },
-				{ $pull: { clinicas: cliincalId } },
+				{ $pull: { clinicas: cliincaId } },
 			);
 		} catch (error) {
 			throw new Error('Erro ao remover a clínica das especialidades: ' + error);

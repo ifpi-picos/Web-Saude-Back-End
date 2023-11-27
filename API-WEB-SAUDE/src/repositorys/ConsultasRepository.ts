@@ -199,33 +199,35 @@ class ConsultasRepoaitory implements IConsultasRepository {
 	}
 		return [];
 	}
-	public async pegarHospitaiseClinicasPorPagina(
-		pagina: number,
-	): Promise<{
-		unidadesDeSaude: (IClinica | IHospital)[];
-		totalPaginas: number;
-	}> {
+	public async buscarPorPagina(pagina: number): Promise< (IClinica | IHospital)[]> {
 		try {
-			const limitePorPagina = 4;
-
-			const hospitais = await HospitalRepository.pegarHospitais();
-			const clinicas = await ClinicaRepository.pegarClinicas();
-
-			const hospitaiseClinicas = [...hospitais, ...clinicas];
-
-			const totalUnidades = hospitaiseClinicas.length;
-			const totalPaginas = Math.ceil(totalUnidades / limitePorPagina);
-
-			const inicio = (pagina - 1) * limitePorPagina;
-			const fim = pagina * limitePorPagina;
-
-			const unidadesPorPagina = hospitaiseClinicas.slice(inicio, fim);
-
-			return { unidadesDeSaude: unidadesPorPagina, totalPaginas };
+			const limitePorPagina = 1;
+			const skip = (pagina - 1) * limitePorPagina;
+	
+			const clinicas = await this.clinica
+				.find()
+				.populate('endereco')
+				.populate('especialidades')
+				.skip(skip)
+				.limit(limitePorPagina);
+	
+			const hospitais = await this.hospital
+				.find()
+				.populate('endereco')
+				.populate('especialidades')
+				.skip(skip)
+				.limit(limitePorPagina);
+	
+			const resultados = [...clinicas, ...hospitais];
+	
+	         
+			return  resultados 
+			
 		} catch (error) {
-			throw new Error('Erro ao listar!' + error);
+			throw new Error('Erro ao filtrar!' + error);
 		}
 	}
+	
 }
 
 export default new ConsultasRepoaitory();

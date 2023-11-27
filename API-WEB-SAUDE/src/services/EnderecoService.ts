@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model ,Types } from 'mongoose';
 import Endereco from '../models/Endereco';
 import IEndereco from '../models/interfaces/IEndereco';
 import IEnderecoService from './interfaces/IEnderecoService';
@@ -47,6 +47,18 @@ class EnderecoService implements IEnderecoService {
 			throw new Error('Erro ao deletar todos os Endereços!' + error);
 		}
 	}
+	
+	public async deletarEnderecosAssociadosAUnidadesDeSaude(ids: string[]): Promise<void> {
+		try {
+		  // Converte os IDs para o tipo ObjectId do Mongoose
+		  const objectIdArray = ids.map((id) => new Types.ObjectId(id));
+	
+		  // Deleta todas as clínicas cujos IDs estão na lista
+		  await this.model.deleteMany({ _id: { $in: objectIdArray } });
+		} catch (error) {
+		  throw new Error('Erro ao Deletar as Clínicas por IDs!' + error);
+		}
+	  }
 }
 
 export default new EnderecoService();

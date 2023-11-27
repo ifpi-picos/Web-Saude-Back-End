@@ -24,6 +24,9 @@ const usuarioModel = new Schema<IUsuario>({
 			ref: 'Hospital',
 		},
 	],
+	tipo:{
+		type:String,
+	}
 });
 
 export default model<IUsuario & Document>('Usuario', usuarioModel);

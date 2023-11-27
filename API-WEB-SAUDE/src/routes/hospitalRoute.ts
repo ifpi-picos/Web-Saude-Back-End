@@ -6,6 +6,7 @@ import EnderecoService from '../services/EnderecoService';
 import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 import UsuarioService from '../services/UsuarioService';
+
 const hospitalRouter = Router();
 
 // cadastrar hospital
@@ -154,7 +155,7 @@ hospitalRouter.delete(
 					idDasEspecialidades,
 				);
 				await UsuarioService.removerHospitalDoUsuario(
-					deletarHospital.usuario.toString(),
+					req.body.userId,
 					id,
 				);
 

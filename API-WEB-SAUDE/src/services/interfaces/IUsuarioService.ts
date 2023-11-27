@@ -5,7 +5,7 @@ interface IUsuarioService {
 		nome: string,
 		email: string,
 		senha: string,
-		senah: string,
+		tipo:string
 	): Promise<IUsuario | null>;
 	autenticarUsuario(email: string, senha: string): Promise<string | null>;
 	alterarUsuario(
@@ -13,8 +13,9 @@ interface IUsuarioService {
 		nome: string,
 		email: string,
 		senha: string,
+		tipo: string
 	): Promise<IUsuario | null>;
-	alterarSenhaUsuario(id: string, senha: string): Promise<void>;
+	alterarSenhaUsuario(nome: string, senha: string): Promise<void>;
 	deletarUsuario(id: string): Promise<IUsuario | null>;
 	adicionarClinicaAoUsuario(
 		usuario: string,

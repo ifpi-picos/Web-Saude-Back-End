@@ -1,8 +1,10 @@
-import { Model } from 'mongoose';
+import { Model ,Types } from 'mongoose';
 import IHospitalService from './interfaces/IHospitalService';
 import IHospital from '../models/interfaces/IHospital';
 import Hospital from '../models/Hospital';
 import HospitalRepository from '../repositorys/HospitalRepository';
+import Especialidades from '../models/Especialidades';
+import EnderecoService from './EnderecoService';
 
 class HospitalService implements IHospitalService {
 	private model: Model<IHospital>;
@@ -59,7 +61,6 @@ class HospitalService implements IHospitalService {
 
 	public async obterHospitalPorId(id: string) {
 		try {
-			// Use o Mongoose para encontrar o hospital pelo ID
 			const hospital = await this.model.findOne({ _id: id });
 
 			return hospital;
@@ -67,5 +68,26 @@ class HospitalService implements IHospitalService {
 			throw new Error('Erro ao buscar hospital por ID: ' + error);
 		}
 	}
+	public async deletarHospitaisDoUsuario(ids: string[]): Promise<void> {
+		try {
+		  const objectIdArray = ids.map((id) => new Types.ObjectId(id));
+	  
+		  const hospitaisParaDeletar = await this.model.find({ _id: { $in: objectIdArray } });
+	  
+		  const idsDosHospitais = hospitaisParaDeletar.map((hospital) => hospital._id.toString());
+	  
+		  await Especialidades.updateMany(
+			{ hospitais: { $in: idsDosHospitais } },
+			{ $pullAll: { hospitais: idsDosHospitais } }
+		  );
+	  
+		  const idsDosEnderecos = hospitaisParaDeletar.map((hospital) => hospital.endereco.toString());
+		  await EnderecoService.deletarEnderecosAssociadosAUnidadesDeSaude(idsDosEnderecos);
+	  
+		  await this.model.deleteMany({ _id: { $in: objectIdArray } });
+		} catch (error) {
+		  throw new Error('Erro ao Deletar os Hospitais por IDs!' + error);
+		}
+	  }
 }
 export default new HospitalService();
