@@ -3,61 +3,71 @@ import jwt from 'jsonwebtoken';
 import Usuario from '../models/Usuario';
 
 export interface JwtToken {
-	sub: string;
+    sub: string;
+    userType: string;
 }
+
 export default class AuthService {
-	public static async hashPassword(
-		password: string,
-		saltRounds = 10,
-	): Promise<string> {
-		return await bcrypt.hash(password, saltRounds);
-	}
+    public static async hashPassword(
+        password: string,
+        saltRounds = 10,
+    ): Promise<string> {
+        return await bcrypt.hash(password, saltRounds);
+    }
 
-	public static async comparePasswords(
-		password: string,
-		hashedPassword: string,
-	): Promise<boolean> {
-		return await bcrypt.compare(password, hashedPassword);
-	}
+    public static async comparePasswords(
+        password: string,
+        hashedPassword: string,
+    ): Promise<boolean> {
+        return await bcrypt.compare(password, hashedPassword);
+    }
 
-	public static generateToken(sub: string): string {
-		const key = process.env.JWT_SECRET || '';
+    public static generateToken(sub: string, userType: string): string {
+        const key = process.env.JWT_SECRET || '';
 
-		const signOptions: jwt.SignOptions = {
-			expiresIn: '1h',
-			algorithm: 'HS256',
-		};
-		return jwt.sign({ sub }, key, signOptions);
-	}
+        const signOptions: jwt.SignOptions = {
+            expiresIn: '1h',
+            algorithm: 'HS256',
+        };
 
-	public static decodeToken(token: string): JwtToken {
-		const key = process.env.JWT_SECRET || '';
+        return jwt.sign({ sub, userType }, key, signOptions);
+    }
 
-		return jwt.verify(token, key) as JwtToken;
-	}
+    public static decodeToken(token: string): JwtToken {
+        const key = process.env.JWT_SECRET || '';
 
-	public static async authenticateUser(
-		email: string,
-		senha: string,
-	): Promise<string | null> {
-		try {
-			const user = await Usuario.findOne({ email });
+        try {
+            const decodedToken = jwt.verify(token, key) as JwtToken;
+            return decodedToken;
+        } catch (error) {
+            throw new Error('Erro ao decodificar o token');
+        }
+    }
 
-			if (!user) {
-				return null
-			}
+    public static async authenticateUser(
+        email: string,
+        senha: string,
+    ): Promise<string | null> {
+        try {
+            const user = await Usuario.findOne({ email });
 
-			const isPasswordValid = await this.comparePasswords(senha, user.senha);
+            if (!user) {
+                return null;
+            }
 
-			if (!isPasswordValid) {
-				return null
+            const isPasswordValid = await this.comparePasswords(
+                senha,
+                user.senha,
+            );
 
-			}
+            if (!isPasswordValid) {
+                return null;
+            }
 
-			const token = this.generateToken(user._id);
-			return token;
-		} catch (error) {
-			throw new Error('Erro ao autenticar o usuário');
-		}
-	}
+            const token = this.generateToken(user._id, user.tipo || '');
+            return token;
+        } catch (error) {
+            throw new Error('Erro ao autenticar o usuário');
+        }
+    }
 }

@@ -30,7 +30,18 @@ class UsuarioRepository implements IUsuarioRepository {
 		  throw new Error('Erro ao buscar o usuário!' + error);
 		}
 	  }
-	  
+	  public async pegarUsuarioPeloNome(nome: string): Promise<IUsuario | []> {
+		try {
+		  const usuario = await this.model.findOne({nome:nome});
+		  if (!usuario) {
+			return []
+
+		  }
+		  return usuario; 
+		} catch (error) {
+		  throw new Error('Erro ao buscar o usuário!' + error);
+		}
+	  }
 	public async pegarEmail(email: string): Promise<IUsuario | null> {
 		try {
 			return await this.model.findOne({ email: email });

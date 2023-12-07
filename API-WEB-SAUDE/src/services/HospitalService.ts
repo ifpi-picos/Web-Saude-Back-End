@@ -2,10 +2,9 @@ import { Model ,Types } from 'mongoose';
 import IHospitalService from './interfaces/IHospitalService';
 import IHospital from '../models/interfaces/IHospital';
 import Hospital from '../models/Hospital';
-import HospitalRepository from '../repositorys/HospitalRepository';
 import Especialidades from '../models/Especialidades';
 import EnderecoService from './EnderecoService';
-
+import HospitalRepository from '../repositorys/HospitalRepository';
 class HospitalService implements IHospitalService {
 	private model: Model<IHospital>;
 
@@ -22,17 +21,17 @@ class HospitalService implements IHospitalService {
 			if (hospitalExistente) {
 				return null;
 			}
-			const novoHospital = this.model.create(hospitalData);
+			const novoHospital = await this.model.create(hospitalData);
 			return novoHospital;
 		} catch (error) {
 			throw new Error('Erro ao Salvar o Hospital!' + error);
 		}
 	}
-
 	public async alterarHospital(
 		hospitalId: string,
 		hospitalData: IHospital,
 	): Promise<IHospital | null> {
+
 		try {
 			const hospitalExistente = await HospitalRepository.pegarHospital(
 				hospitalData.nome,
@@ -45,7 +44,9 @@ class HospitalService implements IHospitalService {
 				hospitalData,
 				{ new: true },
 			);
-
+			if (atualizarHospital === null) {
+				throw new Error('Hospital não encontrado para atualização');
+			  }
 			return atualizarHospital;
 		} catch (error) {
 			throw new Error('Erro ao Atualizar o Hospital!' + error);

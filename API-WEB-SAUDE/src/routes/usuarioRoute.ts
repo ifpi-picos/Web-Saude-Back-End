@@ -21,8 +21,6 @@ usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 				Message: 'Campos inválidos',
 				Errors: errosFiltrados,
 			});
-		} else if (req.body.nome.length < 6) {
-			return res.json({ Message: 'Nome muito curto!' });
 		} else if (req.body.senha.length < 6) {
 			return res.json({ Message: 'Senha muito curta!' });
 		} else if (req.body.senha !== req.body.confirmarSenha){
@@ -40,6 +38,7 @@ usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 			if (novoUsuario === null) {
 				return res.status(400).json({ Message: 'Usuário já está cadastrado!' });
 			}
+
 			return res.status(201).json({
 				Message: 'Usuário salvo com Sucesso!',
 				data: novoUsuario,
@@ -65,9 +64,8 @@ usuarioRouter.put(
 					Message: 'Campos inválidos',
 					Errors: errosFiltrados,
 				});
-			} else if (req.body.nome.length < 6) {
-				return res.json({ Message: 'Nome muito curto!' });
-			} else if (req.body.senha.length < 6) {
+			} 
+			 else if (req.body.senha.length < 6) {
 				return res.json({ Message: 'Senha muito curta!' });
 			} else {
 				const novoUsuario = await UsuarioService.alterarUsuario(
@@ -109,8 +107,8 @@ usuarioRouter.delete(
 			await HospitalService.deletarHospitaisDoUsuario(hospitaisIds)
   
 			const deletarUsuario = await UsuarioService.deletarUsuario(id);
-  
 			if (deletarUsuario) {
+
 			  return res.status(204).json('');
 			}
 		  
@@ -204,12 +202,14 @@ try {
 
 }
 })
-usuarioRouter.get('/usuario/', async (req: Request, res: Response) => {
+usuarioRouter.get('/usuario/:nome', async (req: Request, res: Response) => {
 	try {
-	
-	  const usuario = await UsuarioRepository.pegarUsuario(req.body.userId);
+	  const { nome } = req.params
+	  const usuario = await UsuarioRepository.pegarUsuarioPeloNome(nome);
+	 
 	  return res.status(200).json(usuario);
 	} catch (error) {
+
 	  return res.status(500).json(error);
 	}
   });

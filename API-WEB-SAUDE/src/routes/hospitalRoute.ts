@@ -36,10 +36,9 @@ hospitalRouter.post(
 				return res.json({
 					Message: 'Campos inválidos',
 					Errors: errosFiltrados,
+					
 				});
-			} else if (req.body.nome.length < 2) {
-				return res.json({ Message: 'Nome muito curto!!' });
-			} else {
+			}  else {
 				const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
 
 				if (novoEndereco) {
@@ -47,12 +46,12 @@ hospitalRouter.post(
 					const novoHospital = await HospitalService.novoHospital(
 						novoHospitalData,
 					);
-
 					if (novoHospital === null) {
 						return res
 							.status(400)
 							.json({ Message: 'Esse Hospital já está Cadastrada!' });
 					}
+					
 					const especialidadesIds = req.body.especialidades;
 					novoHospital.usuario = req.body.userId
 
@@ -95,8 +94,6 @@ hospitalRouter.put(
 					Message: 'Campos inválidos',
 					Errors: errosFiltrados,
 				});
-			} else if (req.body.nome.length < 2) {
-				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
 				const enderecoId = await EnderecoService.cadastrarEndereco(req.body);
 				const hospitalAtualizadaData = { ...req.body, endereco: enderecoId };
@@ -104,13 +101,11 @@ hospitalRouter.put(
 					id,
 					hospitalAtualizadaData,
 				);
-
 				if (hospitalAtualizado === null) {
 					return res
 						.status(400)
 						.json({ Message: 'Esse Hospital já está Cadastrado!' });
 				}
-
 				const especialidadesIds = req.body.especialidades;
 				const idDasEspecialidades =
 				await EspecialidadesRepository.listarIdsDasEspecialidadesPorHospital(

@@ -6,5 +6,6 @@ interface IUsuarioRepository {
 	pegarUsuario(id: string): Promise<IUsuario | null>;
 	pegarEmail(email: string): Promise<IUsuario | null>;
 	pegarunidadesDeSaudeDoUsuario(usuarioId: string): Promise<(IClinica | IHospital)[] | []>
+	pegarUsuarioPeloNome(nome: string): Promise<IUsuario | []>
 }
 export default IUsuarioRepository;

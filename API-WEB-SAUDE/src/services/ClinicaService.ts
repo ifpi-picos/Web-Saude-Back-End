@@ -20,7 +20,7 @@ class ClinicaService implements IClinicaService {
 			if (clinicaExistente) {
 				return null;
 			}
-			const novaClinica = this.model.create(clinicaData);
+			const novaClinica = await this.model.create(clinicaData);
 			return novaClinica;
 		} catch (error) {
 			throw new Error('Erro ao Salvar a Clínica!' + error);
@@ -32,6 +32,7 @@ class ClinicaService implements IClinicaService {
 		clinicaData: IClinica,
 	): Promise<IClinica | null> {
 		try {
+
 			const clinicaExistente = await ClinicaRepository.pegarClinica(
 				clinicaData.nome,
 			);
@@ -42,8 +43,10 @@ class ClinicaService implements IClinicaService {
 				clinicaId,
 				clinicaData,
 				{ new: true },
-			);
-
+						);
+			if (atualizarClinica === null) {
+				throw new Error('Clínica não encontrada para atualização');
+  }
 			return atualizarClinica;
 		} catch (error) {
 			throw new Error('Erro ao Atualizar a Clínica!' + error);

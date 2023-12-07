@@ -38,8 +38,6 @@ clinicaRouter.post(
 					Message: 'Campos inválidos',
 					Errors: errosFiltrados,
 				});
-			} else if (req.body.nome.length < 2) {
-				return res.json({ Message: 'Nome muito curto!' });
 			} else {
 				const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
 
@@ -47,11 +45,12 @@ clinicaRouter.post(
 					const novaClinicaData = { ...req.body, endereco: novoEndereco._id };
 					const novaClinica = await ClinicaService.novaClinica(novaClinicaData);
 
-					if (novaClinica === null) {
-						return res
-							.status(400)
-							.json({ Message: 'Essa Clínica já está Cadastrada!' });
-					}
+                    if (novaClinica === null) {
+                        return res
+                            .status(400)
+                            .json({ Message: 'Essa Clínica já está Cadastrada!' });
+                    }
+
 					const especialidadesIds = req.body.especialidades;
 					novaClinica.usuario = req.body.userId
 
@@ -106,8 +105,6 @@ clinicaRouter.put(
 					Message: 'Campos inválidos',
 					Errors: errosFiltrados,
 				});
-			} else if (req.body.nome.length < 2) {
-				return res.json({ Message: 'Nome muito curto!!' });
 			} else {
 				const enderecoId = await EnderecoService.cadastrarEndereco(req.body);
 				const clinicaAtualizadaData = { ...req.body, endereco: enderecoId };
@@ -115,13 +112,12 @@ clinicaRouter.put(
 					id,
 					clinicaAtualizadaData,
 				);
-
+				
 				if (clinicaAtualizada === null) {
 					return res
 						.status(400)
 						.json({ Message: 'Essa Clínica já está Cadastrada!' });
 				}
-
 				const especialidadesIds = req.body.especialidades;
 				const idDasEspecialidades =
 					await EspecialidadesRepository.listarIdsDasEspecialidadesPorClinica(

@@ -28,23 +28,25 @@ export function authMiddleware(
   res: Response,
   next: NextFunction,
 ): void {
-  const token = req.headers?.['x-access-token'];
-  const rotaAtual = req.path;
+    const token = req.headers?.['x-access-token'];
+    const rotaAtual = req.path;
 
   if (
     rotasPrivadas.includes(rotaAtual) ||
     rotaAtual.startsWith('/admin/alterar-hospital/') ||
     rotaAtual.startsWith('/admin/deletar-hospital/') ||
-	rotaAtual.startsWith('/admin/alterar-clinica/') ||
-	rotaAtual.startsWith('/admin/deletar-clinica/') ||
-	rotaAtual.startsWith('/usuario/nova-senha/') ||
-	rotaAtual.startsWith('/alterar-especialidade/') ||
-	rotaAtual.startsWith('/deletar-especialidade/')
+    rotaAtual.startsWith('/admin/alterar-clinica/') ||
+    rotaAtual.startsWith('/admin/deletar-clinica/') ||
+    rotaAtual.startsWith('/usuario/nova-senha/') ||
+    rotaAtual.startsWith('/alterar-especialidade/') ||
+    rotaAtual.startsWith('/deletar-especialidade/')
 	
   ) {
     try {
       const claims = AuthService.decodeToken(token as string);
       req.body.userId = claims.sub;
+      req.body.userType = claims.userType;
+
       next();
     } catch (err: unknown) {
       if (err instanceof Error) {
