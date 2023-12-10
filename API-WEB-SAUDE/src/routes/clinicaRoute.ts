@@ -8,6 +8,7 @@ import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 import UsuarioService from '../services/UsuarioService';
 import calcularStatus from '../middlewares/calcularStatus';
 import * as cron from 'node-cron';
+import { startSession } from 'mongoose';
 
 const clinicaRouter = Router();
 
@@ -15,7 +16,10 @@ const clinicaRouter = Router();
 clinicaRouter.post(
 	'/admin/nova-clinica',
 	async (req: Request, res: Response) => {
+		const session = await startSession();
 		try {
+			await session.withTransaction(async () => {
+
 			const camposAValidar = [
 				'cep',
 				'rua',
@@ -64,13 +68,21 @@ clinicaRouter.post(
 						novaClinica.usuario.toString(),
 						novaClinica._id,
 					);
+
+					await session.commitTransaction();
+					session.endSession();
+
  					return res.status(201).json({
 						Message: 'Clínica salva com Sucesso!',
 						data: novaClinica,
 					});
 				}
 			}
+		});
+
 		} catch (error) {
+			await session.abortTransaction();
+			session.endSession();
 			if (error instanceof Error) return res.status(500).json(error.message);
 		}
 	},
@@ -80,7 +92,11 @@ clinicaRouter.post(
 clinicaRouter.put(
 	'/admin/alterar-clinica/:id',
 	async (req: Request, res: Response) => {
+		const session = await startSession();
+
 		try {
+			await session.withTransaction(async () => {
+
 			const { id } = req.params;
 
 			const camposAValidar = [
@@ -134,13 +150,19 @@ clinicaRouter.put(
 					especialidadesIds,
 					clinicaAtualizada._id,
 				);
+				await session.commitTransaction();
+				session.endSession();
 
 				return res.status(201).json({
 					Message: 'Clínica Atualizada com Sucesso!',
 					data: clinicaAtualizada,
 				});
 			}
+		});
+
 		} catch (error) {
+			await session.abortTransaction();
+			session.endSession();
 			return res.status(500).json(error);
 		}
 	},
@@ -151,7 +173,12 @@ clinicaRouter.delete(
 	'/admin/deletar-clinica/:id',
 
 	async (req: Request, res: Response) => {
+
+		const session = await startSession();
 		try {
+
+			await session.withTransaction(async () => {
+
 			const { id } = req.params;
 			const deletarClinica = await ClinicaService.deletarClinica(id);
 			if (deletarClinica) {
@@ -171,10 +198,18 @@ clinicaRouter.delete(
 					req.body.userId,
 					id,
 				);
+
+				await session.commitTransaction();
+				session.endSession();
+		
 				return res.status(204).json('');
 			}
+		});
+
 			return res.status(404).json({ Message: 'Clínica não Encontrada' });
 		} catch (error) {
+			await session.abortTransaction();
+			session.endSession();
 			return res.status(500).json(error);
 		}
 	},
@@ -183,6 +218,7 @@ clinicaRouter.delete(
 // listar clínicas
 clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
 	try {
+		
 		const clinicas = await ClinicaRepository.pegarClinicas();
 
 		return res.status(200).json(clinicas);
@@ -205,7 +241,10 @@ clinicaRouter.get('/clinica/:nome', async (req: Request, res: Response) => {
 	}
 });
 cron.schedule('*/1 * * * *', async () => {
+	const session = await startSession();
 	try {
+		await session.withTransaction(async () => {
+
 	  const clinicas = await ClinicaRepository.pegarClinicas();
 	  console.log('Atualizando status das clínicas...');
   
@@ -215,10 +254,16 @@ cron.schedule('*/1 * * * *', async () => {
 		clinica.status = calcularStatus(clinica.horarioSemana);
 		console.log("status", clinica.status);
 		await clinica.save();
+		
+        await session.commitTransaction();
+        session.endSession();
 	  }
-  
+	});
+
 	  console.log('Status das clínicas atualizado com sucesso.');
 	} catch (error) {
+		await session.abortTransaction();
+        session.endSession();
 	  console.error('Erro ao atualizar o status das clínicas:', error);
 	}
   });

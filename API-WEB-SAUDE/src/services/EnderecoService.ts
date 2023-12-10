@@ -50,10 +50,8 @@ class EnderecoService implements IEnderecoService {
 	
 	public async deletarEnderecosAssociadosAUnidadesDeSaude(ids: string[]): Promise<void> {
 		try {
-		  // Converte os IDs para o tipo ObjectId do Mongoose
 		  const objectIdArray = ids.map((id) => new Types.ObjectId(id));
 	
-		  // Deleta todas as clínicas cujos IDs estão na lista
 		  await this.model.deleteMany({ _id: { $in: objectIdArray } });
 		} catch (error) {
 		  throw new Error('Erro ao Deletar as Clínicas por IDs!' + error);

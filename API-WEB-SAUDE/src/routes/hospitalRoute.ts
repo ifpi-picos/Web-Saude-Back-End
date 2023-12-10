@@ -7,13 +7,19 @@ import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 import UsuarioService from '../services/UsuarioService';
 
+import { startSession } from 'mongoose';
+
 const hospitalRouter = Router();
 
 // cadastrar hospital
 hospitalRouter.post(
 	'/admin/novo-hospital',
 	async (req: Request, res: Response) => {
+		const session = await startSession();
+
 		try {
+			await session.withTransaction(async () => {
+
 			const camposAValidar = [
 				'cep',
 				'rua',
@@ -64,13 +70,20 @@ hospitalRouter.post(
 						novoHospital._id,
 					);
 
+					await session.commitTransaction();
+					session.endSession();
+
 					return res.status(201).json({
 						Message: 'Hospital salvo com Sucesso!',
 						data: novoHospital,
 					});
 				}
 			}
+		});
+
 		} catch (error) {
+			await session.abortTransaction();
+			session.endSession()
 			return res.status(500).json(error);
 		}
 	},
@@ -80,7 +93,12 @@ hospitalRouter.post(
 hospitalRouter.put(
 	'/admin/alterar-hospital/:id',
 	async (req: Request, res: Response) => {
+
+		const session = await startSession();
+
 		try {
+			await session.withTransaction(async () => {
+
 			const { id } = req.params;
 			const camposAValidar = ['nome', 'longitude', 'latitude'];
 
@@ -121,12 +139,19 @@ hospitalRouter.put(
 					hospitalAtualizado._id,
 				);
 
+					await session.commitTransaction();
+					session.endSession();
+
 				return res.status(201).json({
 					Message: 'Hospital Atualizado com Sucesso!',
 					data: hospitalAtualizado,
 				});
 			}
+		});
+
 		} catch (error) {
+			await session.abortTransaction();
+			session.endSession()
 			return res.status(500).json(error);
 		}
 	},
@@ -136,7 +161,11 @@ hospitalRouter.put(
 hospitalRouter.delete(
 	'/admin/deletar-hospital/:id',
 	async (req: Request, res: Response) => {
+		const session = await startSession();
+
 		try {
+			await session.withTransaction(async () => {
+
 			const { id } = req.params;
 			const deletarHospital = await HospitalService.deletarHospital(id);
 			if (deletarHospital) {
@@ -154,11 +183,17 @@ hospitalRouter.delete(
 					id,
 				);
 
+				await session.commitTransaction();
+				session.endSession();
+
 				return res.status(204).json('');
 			}
+		});
 
 			return res.status(404).json({ Message: 'Hospital não Encontrado' });
 		} catch (error) {
+			await session.abortTransaction();
+			session.endSession()
 			return res.status(500).json(error);
 		}
 	},
