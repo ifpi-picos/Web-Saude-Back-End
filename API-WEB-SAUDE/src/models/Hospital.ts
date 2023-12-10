@@ -43,6 +43,10 @@ const HospitalSchema = new Schema<IHospital>({
 		type: Schema.Types.ObjectId,
 		ref: 'Usuario',
 	},
+	aprovado: {
+		type: Boolean,
+		default: false,
+	  },
 });
 
 export default model<IHospital>('Hospital', HospitalSchema);

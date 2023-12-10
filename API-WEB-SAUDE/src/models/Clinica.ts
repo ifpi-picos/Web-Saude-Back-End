@@ -52,6 +52,13 @@ const ClinicaSchema = new Schema<IClinica>({
 		type: Schema.Types.ObjectId,
 		ref: 'Usuario',
 	},
+	aprovado: {
+		type: Boolean,
+		default: false,
+	  },
+	status:{
+		type:Boolean,
+	}
 });
 
 export default model<IClinica>('Clinica', ClinicaSchema);

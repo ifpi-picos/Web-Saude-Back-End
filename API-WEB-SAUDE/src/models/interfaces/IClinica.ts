@@ -20,6 +20,8 @@ interface IClinica extends Document {
 	email: string;
 	whatsapp: string;
 	descricao: string;
+	aprovado: boolean;
+	status:boolean;
 }
 
 export default IClinica;

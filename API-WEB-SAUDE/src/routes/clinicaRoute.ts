@@ -6,6 +6,8 @@ import EnderecoService from '../services/EnderecoService';
 import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 import UsuarioService from '../services/UsuarioService';
+import calcularStatus from '../middlewares/calcularStatus';
+import * as cron from 'node-cron';
 
 const clinicaRouter = Router();
 
@@ -202,5 +204,23 @@ clinicaRouter.get('/clinica/:nome', async (req: Request, res: Response) => {
 		return res.status(500).json(error);
 	}
 });
-
+cron.schedule('*/1 * * * *', async () => {
+	try {
+	  const clinicas = await ClinicaRepository.pegarClinicas();
+	  console.log('Atualizando status das clínicas...');
+  
+	  for (const clinica of clinicas) {
+		console.log(`Processando clínica ${clinica.nome}`);
+  
+		clinica.status = calcularStatus(clinica.horarioSemana);
+		console.log("status", clinica.status);
+		await clinica.save();
+	  }
+  
+	  console.log('Status das clínicas atualizado com sucesso.');
+	} catch (error) {
+	  console.error('Erro ao atualizar o status das clínicas:', error);
+	}
+  });
+  
 export default clinicaRouter;
