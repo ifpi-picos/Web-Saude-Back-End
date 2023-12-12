@@ -13,80 +13,86 @@ import { startSession } from 'mongoose';
 const clinicaRouter = Router();
 
 // cadastrar clínica
-clinicaRouter.post(
-	'/admin/nova-clinica',
-	async (req: Request, res: Response) => {
-		const session = await startSession();
-		try {
-			await session.withTransaction(async () => {
+clinicaRouter.post('/admin/nova-clinica', async (req: Request, res: Response) => {
+    const session = await startSession();
 
-			const camposAValidar = [
-				'cep',
-				'rua',
-				'numero',
-				'bairro',
-				'cidade',
-				'uf',
-				'nome',
-				'horarioSemana',
-				'longitude',
-				'latitude',
-				'especialidades',
-			];
+    try {
+        await session.withTransaction(async () => {
+            // ... (validação de campos)
 
-			const erros: string[] = [];
+            const camposAValidar = [
+                'cep',
+                'rua',
+                'numero',
+                'bairro',
+                'cidade',
+                'uf',
+                'nome',
+                'horarioSemana',
+                'longitude',
+                'latitude',
+                'especialidades',
+            ];
 
-			validation.finalizarValidacao(camposAValidar, req, erros);
-			const errosFiltrados = erros.filter(erro => erro !== '');
+            const erros: string[] = [];
 
-			if (errosFiltrados.length > 0) {
-				return res.json({
-					Message: 'Campos inválidos',
-					Errors: errosFiltrados,
-				});
-			} else {
-				const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
+            validation.finalizarValidacao(camposAValidar, req, erros);
+            const errosFiltrados = erros.filter(erro => erro !== '');
 
-				if (novoEndereco) {
-					const novaClinicaData = { ...req.body, endereco: novoEndereco._id };
-					const novaClinica = await ClinicaService.novaClinica(novaClinicaData);
+            if (errosFiltrados.length > 0) {
+                return res.json({
+                    Message: 'Campos inválidos',
+                    Errors: errosFiltrados,
+                });
+            }
 
-                    if (novaClinica === null) {
-                        return res
-                            .status(400)
-                            .json({ Message: 'Essa Clínica já está Cadastrada!' });
-                    }
+            const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
 
-					const especialidadesIds = req.body.especialidades;
-					novaClinica.usuario = req.body.userId
+            if (novoEndereco) {
+                const novaClinicaData = { ...req.body, endereco: novoEndereco._id };
 
-					await EspecialidadesService.adicionarClinicaAEspecialidades(
-						especialidadesIds,
-						novaClinica._id,
-					);
-					await UsuarioService.adicionarClinicaAoUsuario(
-						novaClinica.usuario.toString(),
-						novaClinica._id,
-					);
+                const horarioAbertura = new Date(`1970-01-01T${novaClinicaData.horarioSemana.open}`);
+                const horarioFechamento = new Date(`1970-01-01T${novaClinicaData.horarioSemana.close}`);
 
-					await session.commitTransaction();
-					session.endSession();
+                if (horarioAbertura >= horarioFechamento) {
+                    return res.status(400).json({
+                        Message: 'Horário de abertura deve ser menor que o horário de fechamento',
+                    });
+                }
 
- 					return res.status(201).json({
-						Message: 'Clínica salva com Sucesso!',
-						data: novaClinica,
-					});
-				}
-			}
-		});
+                const novaClinica = await ClinicaService.novaClinica(novaClinicaData);
 
-		} catch (error) {
-			await session.abortTransaction();
-			session.endSession();
-			if (error instanceof Error) return res.status(500).json(error.message);
-		}
-	},
-);
+                if (novaClinica === null) {
+                    return res.status(400).json({ Message: 'Essa Clínica já está Cadastrada!' });
+                }
+
+                const especialidadesIds = req.body.especialidades;
+                novaClinica.usuario = req.body.userId;
+
+                await EspecialidadesService.adicionarClinicaAEspecialidades(
+                    especialidadesIds,
+                    novaClinica._id,
+                );
+                await UsuarioService.adicionarClinicaAoUsuario(
+                    novaClinica.usuario.toString(),
+                    novaClinica._id,
+                );
+
+                await session.commitTransaction();
+                session.endSession();
+
+                return res.status(201).json({
+                    Message: 'Clínica salva com Sucesso!',
+                    data: novaClinica,
+                });
+            }
+        });
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        if (error instanceof Error) return res.status(500).json(error.message);
+    }
+});
 
 // alterar a clínica
 clinicaRouter.put(
@@ -126,6 +132,16 @@ clinicaRouter.put(
 			} else {
 				const enderecoId = await EnderecoService.cadastrarEndereco(req.body);
 				const clinicaAtualizadaData = { ...req.body, endereco: enderecoId };
+
+				const horarioAberturaAtualizado = new Date(`1970-01-01T${clinicaAtualizadaData.horarioSemana.open}`);
+				const horarioFechamentoAtualizado = new Date(`1970-01-01T${clinicaAtualizadaData.horarioSemana.close}`);
+			
+				if (horarioAberturaAtualizado >= horarioFechamentoAtualizado) {
+					return res.status(400).json({
+						Message: 'Horário de abertura deve ser menor que o horário de fechamento',
+					});
+				}
+			
 				const clinicaAtualizada = await ClinicaService.alterarClinica(
 					id,
 					clinicaAtualizadaData,
@@ -174,10 +190,8 @@ clinicaRouter.delete(
 
 	async (req: Request, res: Response) => {
 
-		const session = await startSession();
 		try {
 
-			await session.withTransaction(async () => {
 
 			const { id } = req.params;
 			const deletarClinica = await ClinicaService.deletarClinica(id);
@@ -198,18 +212,13 @@ clinicaRouter.delete(
 					req.body.userId,
 					id,
 				);
-
-				await session.commitTransaction();
-				session.endSession();
 		
 				return res.status(204).json('');
 			}
-		});
 
 			return res.status(404).json({ Message: 'Clínica não Encontrada' });
 		} catch (error) {
-			await session.abortTransaction();
-			session.endSession();
+			
 			return res.status(500).json(error);
 		}
 	},
@@ -240,32 +249,32 @@ clinicaRouter.get('/clinica/:nome', async (req: Request, res: Response) => {
 		return res.status(500).json(error);
 	}
 });
-cron.schedule('*/1 * * * *', async () => {
-	const session = await startSession();
+
+clinicaRouter.get('/verificar-status-clinicas', async (req: Request, res: Response) => {
 	try {
-		await session.withTransaction(async () => {
+	  const statuses: boolean[] = []; 
 
 	  const clinicas = await ClinicaRepository.pegarClinicas();
-	  console.log('Atualizando status das clínicas...');
-  
+	  console.log('Verificando status das clínicas...');
+	
 	  for (const clinica of clinicas) {
 		console.log(`Processando clínica ${clinica.nome}`);
+		const status = calcularStatus(clinica.horarioSemana);
+		console.log("status", status);
   
-		clinica.status = calcularStatus(clinica.horarioSemana);
-		console.log("status", clinica.status);
+		clinica.status = status;
 		await clinica.save();
-		
-        await session.commitTransaction();
-        session.endSession();
+  
+		statuses.push(status);
 	  }
-	});
-
-	  console.log('Status das clínicas atualizado com sucesso.');
+  
+	  return res.json({ message: 'Status das clínicas verificado com sucesso.', statuses });
 	} catch (error) {
-		await session.abortTransaction();
-        session.endSession();
-	  console.error('Erro ao atualizar o status das clínicas:', error);
+	  console.error('Erro ao verificar o status das clínicas:', error);
+	  return res.status(500).json({ error: 'Erro ao verificar o status das clínicas.' });
 	}
   });
   
+  
+ 
 export default clinicaRouter;

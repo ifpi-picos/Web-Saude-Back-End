@@ -47,6 +47,10 @@ const HospitalSchema = new Schema<IHospital>({
 		type: Boolean,
 		default: false,
 	  },
+	  status:{
+		type:Boolean,
+		default:true
+	},
 });
 
 export default model<IHospital>('Hospital', HospitalSchema);

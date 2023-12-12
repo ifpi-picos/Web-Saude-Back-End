@@ -11,7 +11,7 @@ class EnderecoService implements IEnderecoService {
 	}
 	public async cadastrarEndereco(
 		enderecoData: IEndereco,
-	): Promise<IEndereco | null> {
+	): Promise<IEndereco | null> { " "
 		try {
 			return await this.model.create(enderecoData);
 		} catch (error) {

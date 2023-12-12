@@ -26,33 +26,43 @@ class ClinicaService implements IClinicaService {
 			throw new Error('Erro ao Salvar a Clínica!' + error);
 		}
 	}
-
 	public async alterarClinica(
 		clinicaId: string,
 		clinicaData: IClinica,
 	): Promise<IClinica | null> {
 		try {
-
-			const clinicaExistente = await ClinicaRepository.pegarClinica(
-				clinicaData.nome,
-			);
-			if (clinicaExistente) {
-				return null;
+			const clinicaExistente = await this.model.findById(clinicaId);
+	
+			if (!clinicaExistente) {
+				throw new Error('Clínica não encontrada para atualização');
 			}
+	
+			if (clinicaData.nome !== clinicaExistente.nome) {
+				const clinicaComMesmoNome = await ClinicaRepository.pegarClinica(
+					clinicaData.nome,
+				);
+	
+				if (clinicaComMesmoNome) {
+					return null; 
+				}
+			}
+	
 			const atualizarClinica = await this.model.findByIdAndUpdate(
 				clinicaId,
 				clinicaData,
 				{ new: true },
-						);
+			);
+	
 			if (atualizarClinica === null) {
 				throw new Error('Clínica não encontrada para atualização');
-  }
+			}
+	
 			return atualizarClinica;
 		} catch (error) {
 			throw new Error('Erro ao Atualizar a Clínica!' + error);
 		}
 	}
-
+	
 	public async deletarClinica(clinicaId: string): Promise<IClinica | null> {
 		try {
 			return await this.model.findByIdAndDelete(clinicaId);

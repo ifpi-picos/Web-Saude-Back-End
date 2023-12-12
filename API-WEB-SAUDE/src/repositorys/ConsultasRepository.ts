@@ -152,6 +152,7 @@ class ConsultasRepoaitory implements IConsultasRepository {
 				.findOne({ nome: nome })
 				.populate('endereco')
 				.populate('especialidades');
+				
 			if (hospital) {
 				return hospital;
 			}
@@ -227,7 +228,16 @@ class ConsultasRepoaitory implements IConsultasRepository {
 			throw new Error('Erro ao filtrar!' + error);
 		}
 	}
+	public async contarTotalUnidadesDeSaude(): Promise<number> {
+		try {
+			const totalClinicas = await this.clinica.countDocuments();
+			const totalHospitais = await this.hospital.countDocuments();
 	
+			return totalClinicas + totalHospitais;
+		} catch (error) {
+			throw new Error('Erro ao contar total de unidades de saúde: ' + error);
+		}
+	}
 }
 
 export default new ConsultasRepoaitory();

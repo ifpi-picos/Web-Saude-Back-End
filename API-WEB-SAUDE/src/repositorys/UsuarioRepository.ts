@@ -80,6 +80,16 @@ class UsuarioRepository implements IUsuarioRepository {
 			throw error;
 		}
 	}
+	public async contarTotalDeUsuarios(): Promise<number> {
+		try {
+			const totalUsuarios = await this.model.countDocuments();
+	
+			return totalUsuarios;
+			
+		} catch (error) {
+			throw new Error('Erro ao contar total de unidades de saúde: ' + error);
+		}
+	}
 }
 
 export default new UsuarioRepository();

@@ -15,6 +15,8 @@ interface IHospital extends Document {
 	whatsapp: string;
 	descricao: string;
 	aprovado: boolean;
+	status:boolean;
+
 }
 
 export default IHospital;

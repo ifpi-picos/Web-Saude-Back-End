@@ -161,10 +161,8 @@ hospitalRouter.put(
 hospitalRouter.delete(
 	'/admin/deletar-hospital/:id',
 	async (req: Request, res: Response) => {
-		const session = await startSession();
 
 		try {
-			await session.withTransaction(async () => {
 
 			const { id } = req.params;
 			const deletarHospital = await HospitalService.deletarHospital(id);
@@ -183,17 +181,12 @@ hospitalRouter.delete(
 					id,
 				);
 
-				await session.commitTransaction();
-				session.endSession();
 
 				return res.status(204).json('');
 			}
-		});
 
 			return res.status(404).json({ Message: 'Hospital não Encontrado' });
 		} catch (error) {
-			await session.abortTransaction();
-			session.endSession()
 			return res.status(500).json(error);
 		}
 	},
@@ -215,7 +208,7 @@ hospitalRouter.get('/hospital/:nome', async (req: Request, res: Response) => {
 		const { nome } = req.params;
 		const hospital = await HospitalRepository.pegarHospital(nome);
 		if (!hospital) {
-			res.status(404).json('Hsopital não encontrado!');
+			return res.status(404).json('Hsopital não encontrado!');
 		}
 		return res.status(200).json(hospital);
 	} catch (error) {

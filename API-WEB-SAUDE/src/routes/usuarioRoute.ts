@@ -193,6 +193,7 @@ usuarioRouter.post('/login', async (req: Request, res: Response) => {
 	}
 });
 
+// Rota das unidade de saude do usuario 
 usuarioRouter.get('/usuario/unidades-de-saude/', async (req:Request ,res:Response)=>{
 try {
 	 const unidadesDeSaude = await UsuarioRepository.pegarunidadesDeSaudeDoUsuario(req.body.userId)
@@ -202,6 +203,8 @@ try {
 
 }
 })
+
+// Rota para pegar o  usuario pelo nome
 usuarioRouter.get('/usuario/:nome', async (req: Request, res: Response) => {
 	try {
 	  const { nome } = req.params
@@ -212,6 +215,16 @@ usuarioRouter.get('/usuario/:nome', async (req: Request, res: Response) => {
 
 	  return res.status(500).json(error);
 	}
-  });
-  
+  }); 
+   
+  // Rota pagar o total de usuárioa
+  usuarioRouter.get('/total-usuarios', async (req: Request, res: Response) => {
+    try {
+        const totalUsuarios = await UsuarioRepository.contarTotalDeUsuarios();
+        return res.status(200).json({ total: totalUsuarios });
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro ao obter o total de unidades de saúde.' });
+    }
+});
+
 export default usuarioRouter;

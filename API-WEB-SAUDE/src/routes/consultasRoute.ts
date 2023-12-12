@@ -89,4 +89,14 @@ consultasRouter.get('/buscarPorPagina/:pagina', async (req: Request, res: Respon
         res.status(500).json({ error: 'Erro ao processar a solicitação' });
     }
 });
+
+consultasRouter.get('/total-unidades-de-saude', async (req: Request, res: Response) => {
+    try {
+        const totalUnidadesDeSaude = await ConsultasRepository.contarTotalUnidadesDeSaude();
+        return res.status(200).json({ total: totalUnidadesDeSaude });
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro ao obter o total de unidades de saúde.' });
+    }
+});
+
 export default consultasRouter;

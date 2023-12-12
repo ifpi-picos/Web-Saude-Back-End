@@ -7,5 +7,6 @@ interface IUsuarioRepository {
 	pegarEmail(email: string): Promise<IUsuario | null>;
 	pegarunidadesDeSaudeDoUsuario(usuarioId: string): Promise<(IClinica | IHospital)[] | []>
 	pegarUsuarioPeloNome(nome: string): Promise<IUsuario | []>
+	contarTotalDeUsuarios(): Promise<number>
 }
 export default IUsuarioRepository;

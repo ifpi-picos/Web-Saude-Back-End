@@ -31,27 +31,38 @@ class HospitalService implements IHospitalService {
 		hospitalId: string,
 		hospitalData: IHospital,
 	): Promise<IHospital | null> {
-
 		try {
-			const hospitalExistente = await HospitalRepository.pegarHospital(
-				hospitalData.nome,
-			);
-			if (hospitalExistente) {
-				return null;
+			const hospitalExistente = await this.model.findById(hospitalId);
+	
+			if (!hospitalExistente) {
+				throw new Error('Hospital não encontrado para atualização');
+			}
+	
+			if (hospitalData.nome !== hospitalExistente.nome) {
+				const hospitalComMesmoNome = await HospitalRepository.pegarHospital(
+					hospitalData.nome,
+				);
+	
+				if (hospitalComMesmoNome) {
+					return null; 
+				}
 			}
 			const atualizarHospital = await this.model.findByIdAndUpdate(
 				hospitalId,
 				hospitalData,
 				{ new: true },
 			);
+	
 			if (atualizarHospital === null) {
 				throw new Error('Hospital não encontrado para atualização');
-			  }
+			}
+	
 			return atualizarHospital;
 		} catch (error) {
 			throw new Error('Erro ao Atualizar o Hospital!' + error);
 		}
 	}
+	
 	public async deletarHospital(hospitalId: string): Promise<IHospital | null> {
 		try {
 			return await this.model.findByIdAndDelete(hospitalId);
