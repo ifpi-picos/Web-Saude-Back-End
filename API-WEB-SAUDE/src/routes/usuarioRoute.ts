@@ -197,6 +197,7 @@ usuarioRouter.post('/login', async (req: Request, res: Response) => {
 usuarioRouter.get('/usuario/unidades-de-saude/', async (req:Request ,res:Response)=>{
 try {
 	 const unidadesDeSaude = await UsuarioRepository.pegarunidadesDeSaudeDoUsuario(req.body.userId)
+	 
 	 return res.status(200).json(unidadesDeSaude)
 } catch (error) {
 	return res.status(500).json(error);

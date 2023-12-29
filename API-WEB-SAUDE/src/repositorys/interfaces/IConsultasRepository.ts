@@ -11,6 +11,7 @@ interface IConsultasRepository {
 		nome: string,
 	): Promise<IEspecialidade[] | []>
 	contarTotalUnidadesDeSaude(): Promise<number>
-	
+	pegarUnidadesDeSaudePendentes(): Promise<(IClinica | IHospital)[] | []>;
+
 }
 export default IConsultasRepository;

@@ -6,8 +6,9 @@ import EnderecoService from '../services/EnderecoService';
 import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 import UsuarioService from '../services/UsuarioService';
-
 import { startSession } from 'mongoose';
+import Usuario from '../models/Usuario';
+import NotificacoesService from '../services/NotificacoesService';
 
 const hospitalRouter = Router();
 
@@ -70,6 +71,11 @@ hospitalRouter.post(
 						novoHospital._id,
 					);
 
+					const nomeUsuario = await Usuario.findById(req.body.userId)
+					const tipo = "pedido"
+					const mensagem = `${nomeUsuario?.nome} fez um pedido para adicionar um Hospital.`
+	
+					await NotificacoesService.novaNotificacao(tipo,mensagem)
 					await session.commitTransaction();
 					session.endSession();
 
@@ -138,6 +144,14 @@ hospitalRouter.put(
 					especialidadesIds,
 					hospitalAtualizado._id,
 				);
+					
+					const nomeUsuario = await Usuario.findById(req.body.userId)
+					const tipo = "alteração"
+					const mensagem = `${nomeUsuario?.nome} fez uma alteração no Hospital ${hospitalAtualizado.nome}.`
+
+					await NotificacoesService.novaNotificacao(tipo,mensagem)
+					await session.commitTransaction();
+					session.endSession();
 
 					await session.commitTransaction();
 					session.endSession();
@@ -180,7 +194,11 @@ hospitalRouter.delete(
 					req.body.userId,
 					id,
 				);
-
+				
+				const nomeUsuario = await Usuario.findById(req.body.userId)
+				const tipo = "Exclusão"
+				const mensagem = `${nomeUsuario?.nome} deletou o Hospital ${deletarHospital.nome}.`
+			    await NotificacoesService.novaNotificacao(tipo,mensagem)
 
 				return res.status(204).json('');
 			}
@@ -214,6 +232,18 @@ hospitalRouter.get('/hospital/:nome', async (req: Request, res: Response) => {
 	} catch (error) {
 		return res.status(500).json(error);
 	}
+});
+
+// aprovar hospital 
+hospitalRouter.put('/aprovar-hospital/:id', async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        await HospitalService.aprovarHospital(id);
+
+        return res.status(200).json({ Message: 'Hospital Aprovado com Sucesso!' });
+    } catch (error) {
+        return res.status(500).json(error);
+    }
 });
 
 export default hospitalRouter;

@@ -16,6 +16,8 @@ interface IHospital extends Document {
 	descricao: string;
 	aprovado: boolean;
 	status:boolean;
+	tipo:string
+	imagens?: string[];
 
 }
 

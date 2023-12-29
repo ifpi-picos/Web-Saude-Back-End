@@ -10,6 +10,9 @@ interface IClinicaService {
 	): Promise<IClinica | null>;
 	deletarClinica(clinicaId: string,session:ClientSession): Promise<IClinica | null>;
 	deletarClinicasDoUsuario(ids: string[]): Promise<void>
+	aprovarClinica(
+		clinicaId: string,
+	): Promise<IClinica | null>
 }
 
 export default IClinicaService;

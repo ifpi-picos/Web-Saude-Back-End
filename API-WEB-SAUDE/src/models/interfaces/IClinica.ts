@@ -22,6 +22,9 @@ interface IClinica extends Document {
 	descricao: string;
 	aprovado: boolean;
 	status:boolean;
+	tipo:string;
+	imagens?: string[];
+
 }
 
 export default IClinica;

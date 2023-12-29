@@ -51,6 +51,13 @@ const HospitalSchema = new Schema<IHospital>({
 		type:Boolean,
 		default:true
 	},
+	tipo:{
+		type:String,
+		default:"hospital"
+	},
+	imagens: [{
+		type: String,
+	  }]
 });
 
 export default model<IHospital>('Hospital', HospitalSchema);

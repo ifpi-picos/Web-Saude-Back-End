@@ -101,5 +101,30 @@ class HospitalService implements IHospitalService {
 		  throw new Error('Erro ao Deletar os Hospitais por IDs!' + error);
 		}
 	  }
+
+	  public async aprovarHospital(
+		hospitalId: string,
+	): Promise<IHospital | null> {
+		try {
+			const hospitalExistente = await this.model.findById(hospitalId);
+	
+			if (!hospitalExistente) {
+				throw new Error('Hospital não encontrado para atualização');
+			}
+	
+			hospitalExistente.aprovado = true;
+	
+			const atualizarHospital = await hospitalExistente.save();
+	
+			if (atualizarHospital === null) {
+				throw new Error('Hospital não encontrado para atualização');
+			}
+	
+			return atualizarHospital;
+		} catch (error) {
+			throw new Error('Erro ao Atualizar o Hospital!' + error);
+		}
+	}
+	
 }
 export default new HospitalService();

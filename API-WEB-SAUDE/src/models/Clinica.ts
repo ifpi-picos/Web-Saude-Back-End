@@ -58,7 +58,14 @@ const ClinicaSchema = new Schema<IClinica>({
 	  },
 	status:{
 		type:Boolean,
-	}
+	},
+	tipo:{
+		type:String,
+		default:"clinica"
+	},
+	imagens: [{
+		type: String,
+	  }]
 });
 
 export default model<IClinica>('Clinica', ClinicaSchema);

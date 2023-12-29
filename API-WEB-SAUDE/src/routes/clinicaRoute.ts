@@ -7,8 +7,9 @@ import EspecialidadesService from '../services/EspecialidadesService';
 import EspecialidadesRepository from '../repositorys/EspecialidadesRepository';
 import UsuarioService from '../services/UsuarioService';
 import calcularStatus from '../middlewares/calcularStatus';
-import * as cron from 'node-cron';
 import { startSession } from 'mongoose';
+import Usuario from '../models/Usuario';
+import NotificacoesService from '../services/NotificacoesService';
 
 const clinicaRouter = Router();
 
@@ -18,7 +19,6 @@ clinicaRouter.post('/admin/nova-clinica', async (req: Request, res: Response) =>
 
     try {
         await session.withTransaction(async () => {
-            // ... (validação de campos)
 
             const camposAValidar = [
                 'cep',
@@ -78,9 +78,14 @@ clinicaRouter.post('/admin/nova-clinica', async (req: Request, res: Response) =>
                     novaClinica._id,
                 );
 
-                await session.commitTransaction();
-                session.endSession();
+                const nomeUsuario = await Usuario.findById(req.body.userId)
+				const tipo = "pedido"
+				const mensagem = `${nomeUsuario?.nome} fez um pedido para adicionar uma Clínica.`
 
+			    await NotificacoesService.novaNotificacao(tipo,mensagem)
+
+				await session.commitTransaction();
+                session.endSession();
                 return res.status(201).json({
                     Message: 'Clínica salva com Sucesso!',
                     data: novaClinica,
@@ -166,6 +171,12 @@ clinicaRouter.put(
 					especialidadesIds,
 					clinicaAtualizada._id,
 				);
+
+				const nomeUsuario = await Usuario.findById(req.body.userId)
+				const tipo = "alteração"
+				const mensagem = `${nomeUsuario?.nome} fez uma alteração na Clínica ${clinicaAtualizada.nome}.`
+
+			    await NotificacoesService.novaNotificacao(tipo,mensagem)
 				await session.commitTransaction();
 				session.endSession();
 
@@ -191,8 +202,6 @@ clinicaRouter.delete(
 	async (req: Request, res: Response) => {
 
 		try {
-
-
 			const { id } = req.params;
 			const deletarClinica = await ClinicaService.deletarClinica(id);
 			if (deletarClinica) {
@@ -212,7 +221,12 @@ clinicaRouter.delete(
 					req.body.userId,
 					id,
 				);
-		
+
+				const nomeUsuario = await Usuario.findById(req.body.userId)
+				const tipo = "Exclusão"
+				const mensagem = `${nomeUsuario?.nome} deletou a Clínica ${deletarClinica.nome}.`
+			    await NotificacoesService.novaNotificacao(tipo,mensagem)
+				
 				return res.status(204).json('');
 			}
 
@@ -229,7 +243,6 @@ clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
 	try {
 		
 		const clinicas = await ClinicaRepository.pegarClinicas();
-
 		return res.status(200).json(clinicas);
 	} catch (error) {
 		return res.status(500).json(error);
@@ -274,7 +287,17 @@ clinicaRouter.get('/verificar-status-clinicas', async (req: Request, res: Respon
 	  return res.status(500).json({ error: 'Erro ao verificar o status das clínicas.' });
 	}
   });
-  
-  
- 
+
+  // aprovar clínica
+  clinicaRouter.put('/aprovar-clinica/:id',async(req:Request,res:Response)=>{
+	try {
+		const { id } = req.params
+         await ClinicaService.aprovarClinica(id);
+         
+		return res.status(200).json({Message:'Clínica Aprovada com Sucesso!'})
+	} catch (error) {
+		return res.status(500).json(error);
+
+	}
+  })
 export default clinicaRouter;

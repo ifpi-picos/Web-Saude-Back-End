@@ -1,3 +1,4 @@
+import NotificacoesRepository from '../repositorys/NotificacoesRepository';
 import ConsultasRepository from '../repositorys/ConsultasRepository';
 import { Request, Response, Router } from 'express';
 
@@ -44,7 +45,7 @@ consultasRouter.get(
 );
 
 consultasRouter.get(
-	'/hospital-ou-clinica/:nome',
+	'/unidade-de-saude/:nome',
 	async (req: Request, res: Response) => {
 		try {
 			const { nome } = req.params;
@@ -73,22 +74,6 @@ consultasRouter.get(
 	},
 
 );
-consultasRouter.get('/buscarPorPagina/:pagina', async (req: Request, res: Response) => {
-    try {
-        const pagina = parseInt(req.params.pagina, 10);
-
-        if (isNaN(pagina) || pagina < 1) {
-            return []
-        }
-
-        const resultado = await ConsultasRepository.buscarPorPagina(pagina);
-
-        res.json(resultado);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Erro ao processar a solicitação' });
-    }
-});
 
 consultasRouter.get('/total-unidades-de-saude', async (req: Request, res: Response) => {
     try {
@@ -99,4 +84,23 @@ consultasRouter.get('/total-unidades-de-saude', async (req: Request, res: Respon
     }
 });
 
+consultasRouter.get('/pedidos',async (req:Request,res:Response)=>{
+	try {
+		const pedidos = await ConsultasRepository.pegarUnidadesDeSaudePendentes()
+		res.status(200).json({Message:pedidos})
+	} catch (error) {
+		return res.json(error);
+
+	}
+})
+
+consultasRouter.get('/notificacoes',async(req:Request,res:Response)=>{
+	try {
+		const notificacoes = await NotificacoesRepository.pegarNotificacoes();
+		res.status(200).json({Message:notificacoes})
+
+	} catch (error) {
+		return res.json(error);
+	}
+})
 export default consultasRouter;

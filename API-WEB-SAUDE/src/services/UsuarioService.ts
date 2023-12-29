@@ -163,7 +163,7 @@ class UsuarioService implements IUsuarioService {
 			throw new Error('Erro ao remover o hospital do Usuário" ' + error);
 		}
 	}
-
+   
 }
 
 export default new UsuarioService();

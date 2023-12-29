@@ -5,6 +5,7 @@ import Clinica from '../models/Clinica';
 import ClinicaRepository from '../repositorys/ClinicaRepository';
 import EnderecoService from './EnderecoService';
 import Especialidades from '../models/Especialidades';
+
 class ClinicaService implements IClinicaService {
 	private model: Model<IClinica>;
 
@@ -92,6 +93,29 @@ class ClinicaService implements IClinicaService {
 		  throw new Error('Erro ao Deletar as Clínicas por IDs!' + error);
 		}
 	  }
-	   
+	  public async aprovarClinica(
+		clinicaId: string,
+	): Promise<IClinica | null> {
+		try {
+			const clinicaExistente = await this.model.findById(clinicaId);
+	
+			if (!clinicaExistente) {
+				throw new Error('Clínica não encontrada para atualização');
+			}
+	
+			clinicaExistente.aprovado = true;
+	
+			const atualizarClinica = await clinicaExistente.save();
+	
+			if (atualizarClinica === null) {
+				throw new Error('Clínica não encontrada para atualização');
+			}
+	
+			return atualizarClinica;
+		} catch (error) {
+			throw new Error('Erro ao Atualizar a Clínica!' + error);
+		}
+	}
+	
 }
 export default new ClinicaService();
