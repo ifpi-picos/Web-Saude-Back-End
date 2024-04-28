@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import router from './routes';
-import authMiddleware from './middlewares/Auth';
+import AuthMiddleware from './middlewares/AuthMiddleware';
 import { AppDataSource } from './database/db';
 
 export class App {
@@ -43,7 +43,7 @@ export class App {
 	}
 	
 	private rotas() {
-		this.express.all('*', authMiddleware);
+		this.express.all('*', AuthMiddleware);
 		this.express.use('/',router)
 	}
 	

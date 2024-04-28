@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { getRepository } from 'typeorm';
+import { AppDataSource } from '../database/db';
 import { Usuario } from '../models/Usuario';
 
 export interface JwtToken {
@@ -50,7 +50,7 @@ export default class AuthService {
         senha: string,
     ): Promise<string | null> {
         try {
-            const usuarioRepository = getRepository(Usuario);
+            const usuarioRepository = AppDataSource.getRepository(Usuario);
             const user = await usuarioRepository.findOne({ where: { email } });
 
             if (!user) {

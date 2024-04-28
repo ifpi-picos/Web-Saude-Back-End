@@ -17,7 +17,7 @@ const rotasPrivadas = [
   
 ];
 
-export default function authMiddleware(
+export default function AuthMiddleware(
   req: Request,
   res: Response,
   next: NextFunction,
