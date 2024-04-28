@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import Express from 'express';
 import cors from 'cors';
 import compression from 'compression';
@@ -10,6 +9,7 @@ import cookieParser from 'cookie-parser';
 import router from './routes';
 import { authMiddleware } from './middlewares/Auth';
 import { AppDataSource } from './database/db';
+
 export class App {
 	public express = Express.application;
 	private porta: number = 5000;
