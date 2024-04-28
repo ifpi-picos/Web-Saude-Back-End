@@ -1,32 +1,31 @@
-import { Document, Schema, model } from 'mongoose';
-import IEndereco from '../models/interfaces/IEndereco';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-const EnderecoSchema = new Schema<IEndereco>({
-	cep: {
-		type: String,
-		required: true,
-	},
-	rua: {
-		type: String,
-		required: true,
-	},
-	numero: {
-		type: Number,
-		required: true,
-	},
-	bairro: {
-		type: String,
+interface IEndereco {
+  id?: number;
+  rua: string;
+  numero: number;
+  cidade: string;
+  estado: string;
+  cep: string;
+}
 
-		required: true,
-	},
-	cidade: {
-		type: String,
-		required: true,
-	},
-	uf: {
-		type: String,
-		required: true,
-	},
-});
+@Entity('Endereco')
+export class Endereco implements IEndereco {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-export default model<IEndereco & Document>('Endereco', EnderecoSchema);
+  @Column()
+  rua: string;
+
+  @Column()
+  numero: number;
+
+  @Column()
+  cidade: string;
+
+  @Column()
+  estado: string;
+
+  @Column()
+  cep: string;
+}

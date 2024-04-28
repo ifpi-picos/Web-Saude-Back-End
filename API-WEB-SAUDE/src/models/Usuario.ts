@@ -1,32 +1,35 @@
-import { Schema, model, Document } from 'mongoose';
-import IUsuario from './interfaces/IUsuario';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { UnidadeDeSaude } from './UnidadeDeSaude';
 
-const usuarioModel = new Schema<IUsuario>({
-	nome: {
-		type: String,
-	},
-	email: {
-		type: String,
-	},
-	senha: {
-		type: String,
-		required: true,
-	},
-	clinicas: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'Clinica',
-		},
-	],
-	hospitais: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'Hospital',
-		},
-	],
-	tipo: {
-		type: String,
-	},
-});
+interface IUsuario {
+  id?: number; 
+  nome: string;
+  imagem: string;
+  email: string;
+  senha: string;
+  tipo: string;
+}
 
-export default model<IUsuario & Document>('Usuario', usuarioModel);
+@Entity('Usuario')
+export class Usuario implements IUsuario {
+  @PrimaryGeneratedColumn()
+  id: number; 
+
+  @Column()
+  nome: string;
+
+  @Column()
+  imagem: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  senha: string;
+
+  @Column()
+  tipo: string; 
+
+  @OneToMany(() => UnidadeDeSaude, unidadeSaude => unidadeSaude.usuario)
+  unidadesSaude: UnidadeDeSaude[];
+}

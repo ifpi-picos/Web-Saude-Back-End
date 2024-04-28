@@ -1,3 +1,6 @@
-import { App } from './app';
+import 'reflect-metadata'
+
+import App from "./app";
+
 
 new App();

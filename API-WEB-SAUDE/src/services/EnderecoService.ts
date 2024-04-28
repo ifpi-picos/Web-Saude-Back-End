@@ -1,65 +1,42 @@
-import { Model, Types } from 'mongoose';
-import Endereco from '../models/Endereco';
-import IEndereco from '../models/interfaces/IEndereco';
-import IEnderecoService from './interfaces/IEnderecoService';
+import { Endereco } from '../models/Endereco';
+import { AppDataSource } from '../database/db';
 
-class EnderecoService implements IEnderecoService {
-	private model: Model<IEndereco>;
+class EnderecoService {
+  private enderecoRepository = AppDataSource.getRepository(Endereco);
+  
+  async salvarEndereco(enderecoData: Partial<Endereco>): Promise<Endereco> {
+    try {
+    
+      const novoEndereco = this.enderecoRepository.create(enderecoData);
+      return await this.enderecoRepository.save(novoEndereco);
+    } catch (error) {
+      throw new Error('Houve um Erro Interno no Servidor');
+    }
+  }
 
-	constructor() {
-		this.model = Endereco;
-	}
-	public async cadastrarEndereco(
-		enderecoData: IEndereco,
-	): Promise<IEndereco | null> {
-		' ';
-		try {
-			return await this.model.create(enderecoData);
-		} catch (error) {
-			throw new Endereco('Erro ao salvar o Endereço!' + error);
-		}
-	}
+  async alterarEndereco(id: number, enderecoData: Partial<Endereco>): Promise<Endereco> {
+    try {
+      const enderecoExistente = await this.enderecoRepository.findOne({ where: { id } });
+  
+      const enderecoAtualizado = await this.enderecoRepository.save({
+        ...enderecoExistente,
+        ...enderecoData,
+      });
+      return enderecoAtualizado;
+    } catch (error) {
+      throw new Error('Houve um Erro Interno no Servidor');
+    }
+  }
 
-	public async alterarEndereco(
-		id: string,
-		enderecoData: IEndereco,
-	): Promise<IEndereco | null> {
-		try {
-			return await Endereco.findByIdAndUpdate(id, enderecoData, {
-				new: true,
-			});
-		} catch (error) {
-			throw new Endereco('Erro ao altrar o Endereço!' + error);
-		}
-	}
+  async deletarEndereco(id: number): Promise<boolean> {
+    try {
+      const resultado = await this.enderecoRepository.delete(id);
+      return resultado.affected === 1;
+    } catch (error) {
+      throw new Error('Houve um Erro Interno no Servidor');
+    }
+  }
 
-	public async deletarEndereco(id: string): Promise<void> {
-		try {
-			await Endereco.findByIdAndDelete(id);
-		} catch (error) {
-			throw new Error('Erro ao deletar o Endereço!' + error);
-		}
-	}
-
-	public async deletarTodosEnderecos(): Promise<void> {
-		try {
-			await Endereco.deleteMany({});
-		} catch (error) {
-			throw new Error('Erro ao deletar todos os Endereços!' + error);
-		}
-	}
-
-	public async deletarEnderecosAssociadosAUnidadesDeSaude(
-		ids: string[],
-	): Promise<void> {
-		try {
-			const objectIdArray = ids.map(id => new Types.ObjectId(id));
-
-			await this.model.deleteMany({ _id: { $in: objectIdArray } });
-		} catch (error) {
-			throw new Error('Erro ao Deletar as Clínicas por IDs!' + error);
-		}
-	}
 }
 
 export default new EnderecoService();

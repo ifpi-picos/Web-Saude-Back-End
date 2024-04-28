@@ -1,22 +1,19 @@
-import { Schema, model } from 'mongoose';
-import IEspecialidade from './interfaces/IEspecialidades';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { UnidadeDeSaude } from './UnidadeDeSaude';
 
-const EspecialidadesSchema = new Schema<IEspecialidade>({
-	nome: {
-		type: String,
-		required: true,
-	},
-	clinicas: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'Clinica',
-		},
-	],
-	hospitais: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'Hospital',
-		},
-	],
-});
-export default model<IEspecialidade>('Especialidade', EspecialidadesSchema);
+interface IEspecialidade {
+  id?: number;
+  nome: string;
+}
+
+@Entity('Especialidades')
+export class Especialidade implements IEspecialidade {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
+
+  @Column()
+  nome: string;
+
+  @ManyToMany(() => UnidadeDeSaude)
+  unidadesSaude: UnidadeDeSaude[];
+}
