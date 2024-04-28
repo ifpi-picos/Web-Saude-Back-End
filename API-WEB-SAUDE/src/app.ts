@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import router from './routes';
-import { authMiddleware } from './middlewares/Auth';
+import authMiddleware from './middlewares/Auth';
 import { AppDataSource } from './database/db';
 
 export class App {
