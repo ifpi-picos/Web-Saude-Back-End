@@ -12,7 +12,7 @@ class ClinicaRepository implements IClinicaRepository {
 	public async pegarClinicas(): Promise<IClinica[]> {
 		try {
 			return await this.model
-				.find({aprovado:true})
+				.find({ aprovado: true })
 				.populate('endereco')
 				.populate('especialidades');
 		} catch (error) {

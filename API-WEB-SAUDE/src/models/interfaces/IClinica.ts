@@ -21,10 +21,9 @@ interface IClinica extends Document {
 	whatsapp: string;
 	descricao: string;
 	aprovado: boolean;
-	status:boolean;
-	tipo:string;
+	status: boolean;
+	tipo: string;
 	imagens?: string[];
-
 }
 
 export default IClinica;

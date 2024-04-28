@@ -1,4 +1,4 @@
-import { Model ,Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import IHospitalService from './interfaces/IHospitalService';
 import IHospital from '../models/interfaces/IHospital';
 import Hospital from '../models/Hospital';
@@ -33,18 +33,18 @@ class HospitalService implements IHospitalService {
 	): Promise<IHospital | null> {
 		try {
 			const hospitalExistente = await this.model.findById(hospitalId);
-	
+
 			if (!hospitalExistente) {
 				throw new Error('Hospital não encontrado para atualização');
 			}
-	
+
 			if (hospitalData.nome !== hospitalExistente.nome) {
 				const hospitalComMesmoNome = await HospitalRepository.pegarHospital(
 					hospitalData.nome,
 				);
-	
+
 				if (hospitalComMesmoNome) {
-					return null; 
+					return null;
 				}
 			}
 			const atualizarHospital = await this.model.findByIdAndUpdate(
@@ -52,17 +52,17 @@ class HospitalService implements IHospitalService {
 				hospitalData,
 				{ new: true },
 			);
-	
+
 			if (atualizarHospital === null) {
 				throw new Error('Hospital não encontrado para atualização');
 			}
-	
+
 			return atualizarHospital;
 		} catch (error) {
 			throw new Error('Erro ao Atualizar o Hospital!' + error);
 		}
 	}
-	
+
 	public async deletarHospital(hospitalId: string): Promise<IHospital | null> {
 		try {
 			return await this.model.findByIdAndDelete(hospitalId);
@@ -82,49 +82,54 @@ class HospitalService implements IHospitalService {
 	}
 	public async deletarHospitaisDoUsuario(ids: string[]): Promise<void> {
 		try {
-		  const objectIdArray = ids.map((id) => new Types.ObjectId(id));
-	  
-		  const hospitaisParaDeletar = await this.model.find({ _id: { $in: objectIdArray } });
-	  
-		  const idsDosHospitais = hospitaisParaDeletar.map((hospital) => hospital._id.toString());
-	  
-		  await Especialidades.updateMany(
-			{ hospitais: { $in: idsDosHospitais } },
-			{ $pullAll: { hospitais: idsDosHospitais } }
-		  );
-	  
-		  const idsDosEnderecos = hospitaisParaDeletar.map((hospital) => hospital.endereco.toString());
-		  await EnderecoService.deletarEnderecosAssociadosAUnidadesDeSaude(idsDosEnderecos);
-	  
-		  await this.model.deleteMany({ _id: { $in: objectIdArray } });
-		} catch (error) {
-		  throw new Error('Erro ao Deletar os Hospitais por IDs!' + error);
-		}
-	  }
+			const objectIdArray = ids.map(id => new Types.ObjectId(id));
 
-	  public async aprovarHospital(
-		hospitalId: string,
-	): Promise<IHospital | null> {
+			const hospitaisParaDeletar = await this.model.find({
+				_id: { $in: objectIdArray },
+			});
+
+			const idsDosHospitais = hospitaisParaDeletar.map(hospital =>
+				hospital._id.toString(),
+			);
+
+			await Especialidades.updateMany(
+				{ hospitais: { $in: idsDosHospitais } },
+				{ $pullAll: { hospitais: idsDosHospitais } },
+			);
+
+			const idsDosEnderecos = hospitaisParaDeletar.map(hospital =>
+				hospital.endereco.toString(),
+			);
+			await EnderecoService.deletarEnderecosAssociadosAUnidadesDeSaude(
+				idsDosEnderecos,
+			);
+
+			await this.model.deleteMany({ _id: { $in: objectIdArray } });
+		} catch (error) {
+			throw new Error('Erro ao Deletar os Hospitais por IDs!' + error);
+		}
+	}
+
+	public async aprovarHospital(hospitalId: string): Promise<IHospital | null> {
 		try {
 			const hospitalExistente = await this.model.findById(hospitalId);
-	
+
 			if (!hospitalExistente) {
 				throw new Error('Hospital não encontrado para atualização');
 			}
-	
+
 			hospitalExistente.aprovado = true;
-	
+
 			const atualizarHospital = await hospitalExistente.save();
-	
+
 			if (atualizarHospital === null) {
 				throw new Error('Hospital não encontrado para atualização');
 			}
-	
+
 			return atualizarHospital;
 		} catch (error) {
 			throw new Error('Erro ao Atualizar o Hospital!' + error);
 		}
 	}
-	
 }
 export default new HospitalService();

@@ -14,90 +14,99 @@ import NotificacoesService from '../services/NotificacoesService';
 const clinicaRouter = Router();
 
 // cadastrar clínica
-clinicaRouter.post('/admin/nova-clinica', async (req: Request, res: Response) => {
-    const session = await startSession();
+clinicaRouter.post(
+	'/admin/nova-clinica',
+	async (req: Request, res: Response) => {
+		const session = await startSession();
 
-    try {
-        await session.withTransaction(async () => {
+		try {
+			await session.withTransaction(async () => {
+				const camposAValidar = [
+					'cep',
+					'rua',
+					'numero',
+					'bairro',
+					'cidade',
+					'uf',
+					'nome',
+					'horarioSemana',
+					'longitude',
+					'latitude',
+					'especialidades',
+				];
 
-            const camposAValidar = [
-                'cep',
-                'rua',
-                'numero',
-                'bairro',
-                'cidade',
-                'uf',
-                'nome',
-                'horarioSemana',
-                'longitude',
-                'latitude',
-                'especialidades',
-            ];
+				const erros: string[] = [];
 
-            const erros: string[] = [];
+				validation.finalizarValidacao(camposAValidar, req, erros);
+				const errosFiltrados = erros.filter(erro => erro !== '');
 
-            validation.finalizarValidacao(camposAValidar, req, erros);
-            const errosFiltrados = erros.filter(erro => erro !== '');
+				if (errosFiltrados.length > 0) {
+					return res.json({
+						Message: 'Campos inválidos',
+						Errors: errosFiltrados,
+					});
+				}
 
-            if (errosFiltrados.length > 0) {
-                return res.json({
-                    Message: 'Campos inválidos',
-                    Errors: errosFiltrados,
-                });
-            }
+				const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
 
-            const novoEndereco = await EnderecoService.cadastrarEndereco(req.body);
+				if (novoEndereco) {
+					const novaClinicaData = { ...req.body, endereco: novoEndereco._id };
 
-            if (novoEndereco) {
-                const novaClinicaData = { ...req.body, endereco: novoEndereco._id };
+					const horarioAbertura = new Date(
+						`1970-01-01T${novaClinicaData.horarioSemana.open}`,
+					);
+					const horarioFechamento = new Date(
+						`1970-01-01T${novaClinicaData.horarioSemana.close}`,
+					);
 
-                const horarioAbertura = new Date(`1970-01-01T${novaClinicaData.horarioSemana.open}`);
-                const horarioFechamento = new Date(`1970-01-01T${novaClinicaData.horarioSemana.close}`);
+					if (horarioAbertura >= horarioFechamento) {
+						return res.status(400).json({
+							Message:
+								'Horário de abertura deve ser menor que o horário de fechamento',
+						});
+					}
 
-                if (horarioAbertura >= horarioFechamento) {
-                    return res.status(400).json({
-                        Message: 'Horário de abertura deve ser menor que o horário de fechamento',
-                    });
-                }
+					const novaClinica = await ClinicaService.novaClinica(novaClinicaData);
 
-                const novaClinica = await ClinicaService.novaClinica(novaClinicaData);
+					if (novaClinica === null) {
+						return res
+							.status(400)
+							.json({ Message: 'Essa Clínica já está Cadastrada!' });
+					}
 
-                if (novaClinica === null) {
-                    return res.status(400).json({ Message: 'Essa Clínica já está Cadastrada!' });
-                }
+					const especialidadesIds = req.body.especialidades;
+					novaClinica.usuario = req.body.userId;
 
-                const especialidadesIds = req.body.especialidades;
-                novaClinica.usuario = req.body.userId;
+					await EspecialidadesService.adicionarClinicaAEspecialidades(
+						especialidadesIds,
+						novaClinica._id,
+					);
+					await UsuarioService.adicionarClinicaAoUsuario(
+						novaClinica.usuario.toString(),
+						novaClinica._id,
+					);
 
-                await EspecialidadesService.adicionarClinicaAEspecialidades(
-                    especialidadesIds,
-                    novaClinica._id,
-                );
-                await UsuarioService.adicionarClinicaAoUsuario(
-                    novaClinica.usuario.toString(),
-                    novaClinica._id,
-                );
+					const nomeUsuario = await Usuario.findById(req.body.userId);
+					const tipo = 'pedido';
+					const mensagem = `${nomeUsuario?.nome} fez um pedido para adicionar uma Clínica.`;
 
-                const nomeUsuario = await Usuario.findById(req.body.userId)
-				const tipo = "pedido"
-				const mensagem = `${nomeUsuario?.nome} fez um pedido para adicionar uma Clínica.`
+					await NotificacoesService.novaNotificacao(tipo, mensagem);
 
-			    await NotificacoesService.novaNotificacao(tipo,mensagem)
-
-				await session.commitTransaction();
-                session.endSession();
-                return res.status(201).json({
-                    Message: 'Clínica salva com Sucesso!',
-                    data: novaClinica,
-                });
-            }
-        });
-    } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
-        if (error instanceof Error) return res.status(500).json(error.message);
-    }
-});
+					await session.commitTransaction();
+					session.endSession();
+					return res.status(201).json({
+						Message: 'Clínica salva com Sucesso!',
+						data: novaClinica,
+					});
+				}
+			});
+		} catch (error) {
+			await session.abortTransaction();
+			session.endSession();
+			if (error instanceof Error) return res.status(500).json(error.message);
+		}
+	},
+);
 
 // alterar a clínica
 clinicaRouter.put(
@@ -107,86 +116,89 @@ clinicaRouter.put(
 
 		try {
 			await session.withTransaction(async () => {
+				const { id } = req.params;
 
-			const { id } = req.params;
+				const camposAValidar = [
+					'cep',
+					'rua',
+					'numero',
+					'bairro',
+					'cidade',
+					'uf',
+					'nome',
+					'horarioSemana',
+					'longitude',
+					'latitude',
+				];
 
-			const camposAValidar = [
-				'cep',
-				'rua',
-				'numero',
-				'bairro',
-				'cidade',
-				'uf',
-				'nome',
-				'horarioSemana',
-				'longitude',
-				'latitude',
-			];
+				const erros: string[] = [];
 
-			const erros: string[] = [];
+				validation.finalizarValidacao(camposAValidar, req, erros);
 
-			validation.finalizarValidacao(camposAValidar, req, erros);
+				const errosFiltrados = erros.filter(erro => erro !== '');
 
-			const errosFiltrados = erros.filter(erro => erro !== '');
-
-			if (errosFiltrados.length > 0) {
-				return res.json({
-					Message: 'Campos inválidos',
-					Errors: errosFiltrados,
-				});
-			} else {
-				const enderecoId = await EnderecoService.cadastrarEndereco(req.body);
-				const clinicaAtualizadaData = { ...req.body, endereco: enderecoId };
-
-				const horarioAberturaAtualizado = new Date(`1970-01-01T${clinicaAtualizadaData.horarioSemana.open}`);
-				const horarioFechamentoAtualizado = new Date(`1970-01-01T${clinicaAtualizadaData.horarioSemana.close}`);
-			
-				if (horarioAberturaAtualizado >= horarioFechamentoAtualizado) {
-					return res.status(400).json({
-						Message: 'Horário de abertura deve ser menor que o horário de fechamento',
+				if (errosFiltrados.length > 0) {
+					return res.json({
+						Message: 'Campos inválidos',
+						Errors: errosFiltrados,
 					});
-				}
-			
-				const clinicaAtualizada = await ClinicaService.alterarClinica(
-					id,
-					clinicaAtualizadaData,
-				);
-				
-				if (clinicaAtualizada === null) {
-					return res
-						.status(400)
-						.json({ Message: 'Essa Clínica já está Cadastrada!' });
-				}
-				const especialidadesIds = req.body.especialidades;
-				const idDasEspecialidades =
-					await EspecialidadesRepository.listarIdsDasEspecialidadesPorClinica(
+				} else {
+					const enderecoId = await EnderecoService.cadastrarEndereco(req.body);
+					const clinicaAtualizadaData = { ...req.body, endereco: enderecoId };
+
+					const horarioAberturaAtualizado = new Date(
+						`1970-01-01T${clinicaAtualizadaData.horarioSemana.open}`,
+					);
+					const horarioFechamentoAtualizado = new Date(
+						`1970-01-01T${clinicaAtualizadaData.horarioSemana.close}`,
+					);
+
+					if (horarioAberturaAtualizado >= horarioFechamentoAtualizado) {
+						return res.status(400).json({
+							Message:
+								'Horário de abertura deve ser menor que o horário de fechamento',
+						});
+					}
+
+					const clinicaAtualizada = await ClinicaService.alterarClinica(
+						id,
+						clinicaAtualizadaData,
+					);
+
+					if (clinicaAtualizada === null) {
+						return res
+							.status(400)
+							.json({ Message: 'Essa Clínica já está Cadastrada!' });
+					}
+					const especialidadesIds = req.body.especialidades;
+					const idDasEspecialidades =
+						await EspecialidadesRepository.listarIdsDasEspecialidadesPorClinica(
+							clinicaAtualizada._id,
+						);
+					await EspecialidadesService.removerclinicaDasEspecialidades(
+						clinicaAtualizada._id,
+						idDasEspecialidades,
+					);
+
+					await EspecialidadesService.adicionarClinicaAEspecialidades(
+						especialidadesIds,
 						clinicaAtualizada._id,
 					);
-				await EspecialidadesService.removerclinicaDasEspecialidades(
-					clinicaAtualizada._id,
-					idDasEspecialidades,
-				);
 
-				await EspecialidadesService.adicionarClinicaAEspecialidades(
-					especialidadesIds,
-					clinicaAtualizada._id,
-				);
+					const nomeUsuario = await Usuario.findById(req.body.userId);
+					const tipo = 'alteração';
+					const mensagem = `${nomeUsuario?.nome} fez uma alteração na Clínica ${clinicaAtualizada.nome}.`;
 
-				const nomeUsuario = await Usuario.findById(req.body.userId)
-				const tipo = "alteração"
-				const mensagem = `${nomeUsuario?.nome} fez uma alteração na Clínica ${clinicaAtualizada.nome}.`
+					await NotificacoesService.novaNotificacao(tipo, mensagem);
+					await session.commitTransaction();
+					session.endSession();
 
-			    await NotificacoesService.novaNotificacao(tipo,mensagem)
-				await session.commitTransaction();
-				session.endSession();
-
-				return res.status(201).json({
-					Message: 'Clínica Atualizada com Sucesso!',
-					data: clinicaAtualizada,
-				});
-			}
-		});
-
+					return res.status(201).json({
+						Message: 'Clínica Atualizada com Sucesso!',
+						data: clinicaAtualizada,
+					});
+				}
+			});
 		} catch (error) {
 			await session.abortTransaction();
 			session.endSession();
@@ -200,7 +212,6 @@ clinicaRouter.delete(
 	'/admin/deletar-clinica/:id',
 
 	async (req: Request, res: Response) => {
-
 		try {
 			const { id } = req.params;
 			const deletarClinica = await ClinicaService.deletarClinica(id);
@@ -216,23 +227,19 @@ clinicaRouter.delete(
 					id,
 					idDasEspecialidades,
 				);
-            
-				await UsuarioService.removerclinicaDoUsuario(
-					req.body.userId,
-					id,
-				);
 
-				const nomeUsuario = await Usuario.findById(req.body.userId)
-				const tipo = "Exclusão"
-				const mensagem = `${nomeUsuario?.nome} deletou a Clínica ${deletarClinica.nome}.`
-			    await NotificacoesService.novaNotificacao(tipo,mensagem)
-				
+				await UsuarioService.removerclinicaDoUsuario(req.body.userId, id);
+
+				const nomeUsuario = await Usuario.findById(req.body.userId);
+				const tipo = 'Exclusão';
+				const mensagem = `${nomeUsuario?.nome} deletou a Clínica ${deletarClinica.nome}.`;
+				await NotificacoesService.novaNotificacao(tipo, mensagem);
+
 				return res.status(204).json('');
 			}
 
 			return res.status(404).json({ Message: 'Clínica não Encontrada' });
 		} catch (error) {
-			
 			return res.status(500).json(error);
 		}
 	},
@@ -241,7 +248,6 @@ clinicaRouter.delete(
 // listar clínicas
 clinicaRouter.get('/clinicas', async (req: Request, res: Response) => {
 	try {
-		
 		const clinicas = await ClinicaRepository.pegarClinicas();
 		return res.status(200).json(clinicas);
 	} catch (error) {
@@ -263,41 +269,51 @@ clinicaRouter.get('/clinica/:nome', async (req: Request, res: Response) => {
 	}
 });
 
-clinicaRouter.get('/verificar-status-clinicas', async (req: Request, res: Response) => {
-	try {
-	  const statuses: boolean[] = []; 
+clinicaRouter.get(
+	'/verificar-status-clinicas',
+	async (req: Request, res: Response) => {
+		try {
+			const statuses: boolean[] = [];
 
-	  const clinicas = await ClinicaRepository.pegarClinicas();
-	  console.log('Verificando status das clínicas...');
-	
-	  for (const clinica of clinicas) {
-		console.log(`Processando clínica ${clinica.nome}`);
-		const status = calcularStatus(clinica.horarioSemana);
-		console.log("status", status);
-  
-		clinica.status = status;
-		await clinica.save();
-  
-		statuses.push(status);
-	  }
-  
-	  return res.json({ message: 'Status das clínicas verificado com sucesso.', statuses });
-	} catch (error) {
-	  console.error('Erro ao verificar o status das clínicas:', error);
-	  return res.status(500).json({ error: 'Erro ao verificar o status das clínicas.' });
-	}
-  });
+			const clinicas = await ClinicaRepository.pegarClinicas();
+			console.log('Verificando status das clínicas...');
 
-  // aprovar clínica
-  clinicaRouter.put('/aprovar-clinica/:id',async(req:Request,res:Response)=>{
-	try {
-		const { id } = req.params
-         await ClinicaService.aprovarClinica(id);
-         
-		return res.status(200).json({Message:'Clínica Aprovada com Sucesso!'})
-	} catch (error) {
-		return res.status(500).json(error);
+			for (const clinica of clinicas) {
+				console.log(`Processando clínica ${clinica.nome}`);
+				const status = calcularStatus(clinica.horarioSemana);
+				console.log('status', status);
 
-	}
-  })
+				clinica.status = status;
+				await clinica.save();
+
+				statuses.push(status);
+			}
+
+			return res.json({
+				message: 'Status das clínicas verificado com sucesso.',
+				statuses,
+			});
+		} catch (error) {
+			console.error('Erro ao verificar o status das clínicas:', error);
+			return res
+				.status(500)
+				.json({ error: 'Erro ao verificar o status das clínicas.' });
+		}
+	},
+);
+
+// aprovar clínica
+clinicaRouter.put(
+	'/aprovar-clinica/:id',
+	async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+			await ClinicaService.aprovarClinica(id);
+
+			return res.status(200).json({ Message: 'Clínica Aprovada com Sucesso!' });
+		} catch (error) {
+			return res.status(500).json(error);
+		}
+	},
+);
 export default clinicaRouter;

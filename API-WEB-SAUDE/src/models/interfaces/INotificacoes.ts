@@ -1,10 +1,10 @@
-import { Document } from "mongoose";
+import { Document } from 'mongoose';
 
-interface INotificacoes extends Document{
-     tipo:string;
-     mensagem:string;
-     dataCriacao: Date;
-     lida: boolean;
+interface INotificacoes extends Document {
+	tipo: string;
+	mensagem: string;
+	dataCriacao: Date;
+	lida: boolean;
 }
 
-export default INotificacoes
+export default INotificacoes;

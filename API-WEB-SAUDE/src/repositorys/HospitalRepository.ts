@@ -12,7 +12,7 @@ class HospitailRepository implements IHospitalRepository {
 	public async pegarHospitais(): Promise<IHospital[]> {
 		try {
 			return await this.model
-				.find({aprovado:true})
+				.find({ aprovado: true })
 				.populate('endereco')
 				.populate('especialidades');
 		} catch (error) {

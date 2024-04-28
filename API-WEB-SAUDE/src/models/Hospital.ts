@@ -46,18 +46,20 @@ const HospitalSchema = new Schema<IHospital>({
 	aprovado: {
 		type: Boolean,
 		default: false,
-	  },
-	  status:{
-		type:Boolean,
-		default:true
 	},
-	tipo:{
-		type:String,
-		default:"hospital"
+	status: {
+		type: Boolean,
+		default: true,
 	},
-	imagens: [{
+	tipo: {
 		type: String,
-	  }]
+		default: 'hospital',
+	},
+	imagens: [
+		{
+			type: String,
+		},
+	],
 });
 
 export default model<IHospital>('Hospital', HospitalSchema);

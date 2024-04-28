@@ -9,7 +9,7 @@ const usuarioRouter = Router();
 // rota para salvar usuário
 usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 	try {
-		const camposAValidar = ['nome', 'email', 'senha','confirmarSenha'];
+		const camposAValidar = ['nome', 'email', 'senha', 'confirmarSenha'];
 
 		const erros: string[] = [];
 
@@ -23,17 +23,14 @@ usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 			});
 		} else if (req.body.senha.length < 6) {
 			return res.json({ Message: 'Senha muito curta!' });
-		} else if (req.body.senha !== req.body.confirmarSenha){
+		} else if (req.body.senha !== req.body.confirmarSenha) {
 			return res.json({ Message: 'Senha não coincidem!' });
-
-		}
-
-		 else {
+		} else {
 			const novoUsuario = await UsuarioService.salvarUsuario(
 				req.body.nome,
 				req.body.email,
 				req.body.senha,
-				req.body.tipo
+				req.body.tipo,
 			);
 			if (novoUsuario === null) {
 				return res.status(400).json({ Message: 'Usuário já está cadastrado!' });
@@ -50,77 +47,71 @@ usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
 });
 
 // rota para alterar usuário
-usuarioRouter.put(
-	'/alterar-usuario/',
-	async (req: Request, res: Response) => {
-		try {
-			const camposAValidar = ['nome', 'email', 'senha'];
-			const erros: string[] = [];
+usuarioRouter.put('/alterar-usuario/', async (req: Request, res: Response) => {
+	try {
+		const camposAValidar = ['nome', 'email', 'senha'];
+		const erros: string[] = [];
 
-			validation.finalizarValidacao(camposAValidar, req, erros);
-			const errosFiltrados = erros.filter(erro => erro !== '');
-			if (errosFiltrados.length > 0) {
-				return res.json({
-					Message: 'Campos inválidos',
-					Errors: errosFiltrados,
-				});
-			} 
-			 else if (req.body.senha.length < 6) {
-				return res.json({ Message: 'Senha muito curta!' });
-			} else {
-				const novoUsuario = await UsuarioService.alterarUsuario(
-					req.body.userId,
-					req.body.nome,
-					req.body.email,
-					req.body.senha,
-					req.body.tipo,
-				);
-				if (novoUsuario === null) {
-					return res
-						.status(400)
-						.json({ Message: 'Usuário já está cadastrado!' });
-				}
-				return res.json({
-					Message: 'Usuário alterado com sucesso!',
-					data: novoUsuario,
-				});
+		validation.finalizarValidacao(camposAValidar, req, erros);
+		const errosFiltrados = erros.filter(erro => erro !== '');
+		if (errosFiltrados.length > 0) {
+			return res.json({
+				Message: 'Campos inválidos',
+				Errors: errosFiltrados,
+			});
+		} else if (req.body.senha.length < 6) {
+			return res.json({ Message: 'Senha muito curta!' });
+		} else {
+			const novoUsuario = await UsuarioService.alterarUsuario(
+				req.body.userId,
+				req.body.nome,
+				req.body.email,
+				req.body.senha,
+				req.body.tipo,
+			);
+			if (novoUsuario === null) {
+				return res.status(400).json({ Message: 'Usuário já está cadastrado!' });
 			}
-		} catch (error) {
-			return res.status(500).json(error);
+			return res.json({
+				Message: 'Usuário alterado com sucesso!',
+				data: novoUsuario,
+			});
 		}
-	},
-); 
+	} catch (error) {
+		return res.status(500).json(error);
+	}
+});
 
 // rota para deletar usuário
 usuarioRouter.delete(
 	'/deletar-usuario/:id',
 	async (req: Request, res: Response) => {
-	  try {
-		const { id } = req.params
-		const usuario = await UsuarioRepository.pegarUsuario(id);
-  
-		if (usuario) {
-			const clinicaIds = usuario.clinicas.map(clinica => String(clinica));
-			const hospitaisIds = usuario.hospitais.map(hospital => String(hospital));
+		try {
+			const { id } = req.params;
+			const usuario = await UsuarioRepository.pegarUsuario(id);
 
-			await ClinicaService.deletarClinicasDoUsuario(clinicaIds);
-			await HospitalService.deletarHospitaisDoUsuario(hospitaisIds)
-  
-			const deletarUsuario = await UsuarioService.deletarUsuario(id);
-			if (deletarUsuario) {
+			if (usuario) {
+				const clinicaIds = usuario.clinicas.map(clinica => String(clinica));
+				const hospitaisIds = usuario.hospitais.map(hospital =>
+					String(hospital),
+				);
 
-			  return res.status(204).json('');
+				await ClinicaService.deletarClinicasDoUsuario(clinicaIds);
+				await HospitalService.deletarHospitaisDoUsuario(hospitaisIds);
+
+				const deletarUsuario = await UsuarioService.deletarUsuario(id);
+				if (deletarUsuario) {
+					return res.status(204).json('');
+				}
 			}
-		  
+
+			return res.status(404).json({ Message: 'Usuário não Encontrado' });
+		} catch (error) {
+			return res.status(500).json(error);
 		}
-  
-		return res.status(404).json({ Message: 'Usuário não Encontrado' });
-	  } catch (error) {
-		return res.status(500).json(error);
-	  }
 	},
-  );
-  
+);
+
 // rota para lista os usuários
 usuarioRouter.get('/usuarios', async (req: Request, res: Response) => {
 	try {
@@ -135,34 +126,36 @@ usuarioRouter.get('/usuarios', async (req: Request, res: Response) => {
 });
 
 // rota para alterar senha do usuário
-usuarioRouter.put('/usuario/nova-senha/:nome', async (req: Request, res: Response) => {
-	try {
+usuarioRouter.put(
+	'/usuario/nova-senha/:nome',
+	async (req: Request, res: Response) => {
+		try {
+			const { nome } = req.params;
+			const camposAValidar = ['senha', 'confirmarSenha'];
 
-		const { nome } = req.params;
-		const camposAValidar = ['senha','confirmarSenha'];
+			const erros: string[] = [];
 
-		const erros: string[] = [];
+			validation.finalizarValidacao(camposAValidar, req, erros);
+			const errosFiltrados = erros.filter(erro => erro !== '');
 
-		validation.finalizarValidacao(camposAValidar, req, erros);
-		const errosFiltrados = erros.filter(erro => erro !== '');
-
-		if (errosFiltrados.length > 0) {
-			return res.json({
-				Message: 'Campos inválidos',
-				Errors: errosFiltrados,
-			});
+			if (errosFiltrados.length > 0) {
+				return res.json({
+					Message: 'Campos inválidos',
+					Errors: errosFiltrados,
+				});
+			} else if (req.body.senha !== req.body.confirmarSenha) {
+				return res.json({ Message: 'Senha não coincidem!' });
+			} else {
+				await UsuarioService.alterarSenhaUsuario(nome, req.body.senha);
+				return res
+					.status(201)
+					.json({ mensagem: 'Senha Atualizada com Sucesso!' });
+			}
+		} catch (error) {
+			return res.status(500).json(error);
 		}
-		else if (req.body.senha !== req.body.confirmarSenha){
-			return res.json({ Message: 'Senha não coincidem!' });
-		}
-		else{
-			await UsuarioService.alterarSenhaUsuario(nome, req.body.senha);
-			return res.status(201).json({ mensagem: 'Senha Atualizada com Sucesso!' });
-		}
-	} catch (error) {
-		return res.status(500).json(error);
-	}
-});
+	},
+);
 // Rota de autenticação
 usuarioRouter.post('/login', async (req: Request, res: Response) => {
 	try {
@@ -193,39 +186,43 @@ usuarioRouter.post('/login', async (req: Request, res: Response) => {
 	}
 });
 
-// Rota das unidade de saude do usuario 
-usuarioRouter.get('/usuario/unidades-de-saude/', async (req:Request ,res:Response)=>{
-try {
-	 const unidadesDeSaude = await UsuarioRepository.pegarunidadesDeSaudeDoUsuario(req.body.userId)
-	 
-	 return res.status(200).json(unidadesDeSaude)
-} catch (error) {
-	return res.status(500).json(error);
+// Rota das unidade de saude do usuario
+usuarioRouter.get(
+	'/usuario/unidades-de-saude/',
+	async (req: Request, res: Response) => {
+		try {
+			const unidadesDeSaude =
+				await UsuarioRepository.pegarunidadesDeSaudeDoUsuario(req.body.userId);
 
-}
-})
+			return res.status(200).json(unidadesDeSaude);
+		} catch (error) {
+			return res.status(500).json(error);
+		}
+	},
+);
 
 // Rota para pegar o  usuario pelo nome
 usuarioRouter.get('/usuario/:nome', async (req: Request, res: Response) => {
 	try {
-	  const { nome } = req.params
-	  const usuario = await UsuarioRepository.pegarUsuarioPeloNome(nome);
-	 
-	  return res.status(200).json(usuario);
-	} catch (error) {
+		const { nome } = req.params;
+		const usuario = await UsuarioRepository.pegarUsuarioPeloNome(nome);
 
-	  return res.status(500).json(error);
+		return res.status(200).json(usuario);
+	} catch (error) {
+		return res.status(500).json(error);
 	}
-  }); 
-   
-  // Rota pagar o total de usuárioa
-  usuarioRouter.get('/total-usuarios', async (req: Request, res: Response) => {
-    try {
-        const totalUsuarios = await UsuarioRepository.contarTotalDeUsuarios();
-        return res.status(200).json({ total: totalUsuarios });
-    } catch (error) {
-        return res.status(500).json({ error: 'Erro ao obter o total de unidades de saúde.' });
-    }
+});
+
+// Rota pagar o total de usuárioa
+usuarioRouter.get('/total-usuarios', async (req: Request, res: Response) => {
+	try {
+		const totalUsuarios = await UsuarioRepository.contarTotalDeUsuarios();
+		return res.status(200).json({ total: totalUsuarios });
+	} catch (error) {
+		return res
+			.status(500)
+			.json({ error: 'Erro ao obter o total de unidades de saúde.' });
+	}
 });
 
 export default usuarioRouter;

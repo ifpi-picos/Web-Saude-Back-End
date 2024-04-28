@@ -15,7 +15,7 @@ class UsuarioService implements IUsuarioService {
 		nome: string,
 		email: string,
 		senha: string,
-		tipo:string,
+		tipo: string,
 	): Promise<IUsuario | null> {
 		try {
 			const usuarioExistente = await UsuarioRepository.pegarEmail(email);
@@ -58,7 +58,7 @@ class UsuarioService implements IUsuarioService {
 		nome: string,
 		email: string,
 		senha: string,
-		tipo:string
+		tipo: string,
 	): Promise<IUsuario | null> {
 		try {
 			const usuarioExistente = await UsuarioRepository.pegarEmail(email);
@@ -88,7 +88,7 @@ class UsuarioService implements IUsuarioService {
 	}
 	public async alterarSenhaUsuario(nome: string, senha: string): Promise<void> {
 		try {
-			const usuario = await Usuario.findOne({nome:nome});
+			const usuario = await Usuario.findOne({ nome: nome });
 			if (!usuario) {
 				throw new Error('Usuário não Encontrado!');
 			}
@@ -110,7 +110,6 @@ class UsuarioService implements IUsuarioService {
 		}
 	}
 
-	
 	public async adicionarClinicaAoUsuario(
 		usuario: string,
 		ClinicaId: string,
@@ -163,7 +162,6 @@ class UsuarioService implements IUsuarioService {
 			throw new Error('Erro ao remover o hospital do Usuário" ' + error);
 		}
 	}
-   
 }
 
 export default new UsuarioService();

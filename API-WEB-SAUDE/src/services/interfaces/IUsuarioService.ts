@@ -5,7 +5,7 @@ interface IUsuarioService {
 		nome: string,
 		email: string,
 		senha: string,
-		tipo:string
+		tipo: string,
 	): Promise<IUsuario | null>;
 	autenticarUsuario(email: string, senha: string): Promise<string | null>;
 	alterarUsuario(
@@ -13,27 +13,18 @@ interface IUsuarioService {
 		nome: string,
 		email: string,
 		senha: string,
-		tipo: string
+		tipo: string,
 	): Promise<IUsuario | null>;
 	alterarSenhaUsuario(nome: string, senha: string): Promise<void>;
 	deletarUsuario(id: string): Promise<IUsuario | null>;
-	adicionarClinicaAoUsuario(
-		usuario: string,
-		ClinicaId: string,
-	): Promise<void>
-	removerclinicaDoUsuario(
-		usuario: string,
-		clinicaId: string,
-	): Promise<void>
+	adicionarClinicaAoUsuario(usuario: string, ClinicaId: string): Promise<void>;
+	removerclinicaDoUsuario(usuario: string, clinicaId: string): Promise<void>;
 	adicionarHospitalAoUsuario(
 		usuario: string,
 		hosptialId: string,
-	): Promise<void>
-	
-	removerHospitalDoUsuario(
-		usuario: string,
-		hosptialId: string,
-	): Promise<void>
+	): Promise<void>;
+
+	removerHospitalDoUsuario(usuario: string, hosptialId: string): Promise<void>;
 }
- 
+
 export default IUsuarioService;

@@ -21,27 +21,26 @@ class UsuarioRepository implements IUsuarioRepository {
 
 	public async pegarUsuario(id: string): Promise<IUsuario | null> {
 		try {
-		  const usuario = await this.model.findById(id);
-		  if (!usuario) {
-			throw new Error('Usuário não encontrado!');
-		  }
-		  return usuario; 
+			const usuario = await this.model.findById(id);
+			if (!usuario) {
+				throw new Error('Usuário não encontrado!');
+			}
+			return usuario;
 		} catch (error) {
-		  throw new Error('Erro ao buscar o usuário!' + error);
+			throw new Error('Erro ao buscar o usuário!' + error);
 		}
-	  }
-	  public async pegarUsuarioPeloNome(nome: string): Promise<IUsuario | []> {
+	}
+	public async pegarUsuarioPeloNome(nome: string): Promise<IUsuario | []> {
 		try {
-		  const usuario = await this.model.findOne({nome:nome});
-		  if (!usuario) {
-			return []
-
-		  }
-		  return usuario; 
+			const usuario = await this.model.findOne({ nome: nome });
+			if (!usuario) {
+				return [];
+			}
+			return usuario;
 		} catch (error) {
-		  throw new Error('Erro ao buscar o usuário!' + error);
+			throw new Error('Erro ao buscar o usuário!' + error);
 		}
-	  }
+	}
 	public async pegarEmail(email: string): Promise<IUsuario | null> {
 		try {
 			return await this.model.findOne({ email: email });
@@ -49,32 +48,39 @@ class UsuarioRepository implements IUsuarioRepository {
 			throw new Error('Erro ao verificar o Usuário!' + error);
 		}
 	}
-	public async pegarunidadesDeSaudeDoUsuario(usuarioId: string): Promise<(IClinica | IHospital)[] | []> {
+	public async pegarunidadesDeSaudeDoUsuario(
+		usuarioId: string,
+	): Promise<(IClinica | IHospital)[] | []> {
 		try {
-
-			const usuario = await Usuario.findById(usuarioId).populate({
-				path: 'clinicas',
-				populate: {
-				  path: 'endereco', 
-				}}).populate({
+			const usuario = await Usuario.findById(usuarioId)
+				.populate({
+					path: 'clinicas',
+					populate: {
+						path: 'endereco',
+					},
+				})
+				.populate({
 					path: 'hospitais',
 					populate: {
-					  path: 'endereco',
-					}})
-	
+						path: 'endereco',
+					},
+				});
+
 			if (!usuario) {
 				return [];
 			}
-	
+
 			const clinicasDoUsuario: IClinica[] = usuario.clinicas;
 			const hospitaisDoUsuario: IHospital[] = usuario.hospitais;
-			
-			const unidadesDeSaude: (IClinica | IHospital)[] = [...clinicasDoUsuario, ...hospitaisDoUsuario];
+
+			const unidadesDeSaude: (IClinica | IHospital)[] = [
+				...clinicasDoUsuario,
+				...hospitaisDoUsuario,
+			];
 			if (unidadesDeSaude.length > 0) {
-				
 				return unidadesDeSaude;
 			}
-	
+
 			return [];
 		} catch (error) {
 			throw error;
@@ -83,9 +89,8 @@ class UsuarioRepository implements IUsuarioRepository {
 	public async contarTotalDeUsuarios(): Promise<number> {
 		try {
 			const totalUsuarios = await this.model.countDocuments();
-	
+
 			return totalUsuarios;
-			
 		} catch (error) {
 			throw new Error('Erro ao contar total de unidades de saúde: ' + error);
 		}
