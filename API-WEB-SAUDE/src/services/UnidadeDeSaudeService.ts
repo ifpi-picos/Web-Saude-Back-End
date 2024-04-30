@@ -13,9 +13,7 @@ class UnidadeDeSaudeService {
         if (unidadeDeSaudeExistente) {
             return null;
         }
-        const unidadeSaudeId = 1; // ID da unidade de saúde
-   const especialidadesIds = [3]; // IDs das especialidades a serem removidas
-  await this.removerEspecialidades(unidadeSaudeId, especialidadesIds);
+      
         return await this.unidadeDeSaudeRepository.save(novaUnidadeDeSaude);
     } catch (error) {
         console.log(error)
@@ -23,22 +21,30 @@ class UnidadeDeSaudeService {
     }
 }
 
-async alterarUnidadeDeSaude(id: number, unidadeDeSaudeData: Partial<UnidadeDeSaude>): Promise<UnidadeDeSaude> {
+async alterarUnidadeDeSaude(id: number, unidadeDeSaudeData: Partial<UnidadeDeSaude>): Promise<UnidadeDeSaude | null> {
     try {
-        const unidadeDeSaudeExistente = await this.unidadeDeSaudeRepository.findOne({ where: { id } });
+        const unidadeDeSaudeExistente = await this.unidadeDeSaudeRepository.findOne({where:{id}});
+
+        if (unidadeDeSaudeData.nome && unidadeDeSaudeData.nome !== unidadeDeSaudeExistente?.nome) {
+            const outraUnidadeDeSaude = await this.unidadeDeSaudeRepository.findOne({ where: { nome: unidadeDeSaudeData.nome } });
+            if (outraUnidadeDeSaude) {
+                return null
+            }
+        }
+
         const unidadeDeSaudeAtualizada = await this.unidadeDeSaudeRepository.save({
             ...unidadeDeSaudeExistente,
             ...unidadeDeSaudeData,
         });
 
-
         return unidadeDeSaudeAtualizada;
     } catch (error) {
+        console.log(error);
         throw new Error('Houve um Erro Interno no Servidor');
     }
 }
 
-async deletarUnidadeDeSaude(id: number): Promise<Boolean> {
+async deletarUnidadeDeSaude(id: number): Promise<boolean> {
     try {
         const resultado = await this.unidadeDeSaudeRepository.delete(id);
         return resultado.affected === 1;
@@ -63,16 +69,20 @@ async aprovarUnidadeDeSaude(id: number): Promise<UnidadeDeSaude> {
 
 async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
     try {
-      const unidadesDeSaude = await this.unidadeDeSaudeRepository.find({ relations: ['endereco', 'especialidades'] });
+      const unidadesDeSaude = await this.unidadeDeSaudeRepository.find({ relations: ['endereco', 'especialidades','usuario'] });
       return unidadesDeSaude
         
     } catch (error) {
+        console.log(error)
       throw new Error('Houve um Erro Interno no Servidor');
     }
   }
-  async pegarrUnidadesDeSaudePeloID(id:number): Promise<UnidadeDeSaude | null> {
+  async pegarUnidadesDeSaudePeloID(id:number): Promise<UnidadeDeSaude | null> {
     try {
-      const unidadesDeSaude = await this.unidadeDeSaudeRepository.findOne({ relations: ['endereco', 'especialidades'], where:{id}});
+      const unidadesDeSaude = await this.unidadeDeSaudeRepository.findOne({ relations: ['endereco', 'especialidades', 'usuarios'], where:{id}});
+      if(!unidadesDeSaude){
+        return null
+      }
       return unidadesDeSaude
          
     } catch (error) {
@@ -80,24 +90,29 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
     }
   }
   async removerEspecialidades(unidadeSaudeId: number, especialidadesIds: number[]):Promise<UnidadeDeSaude> {
-    // 1. Obter a Unidade de Saúde com as especialidades carregadas
     const unidadeSaude = await this.unidadeDeSaudeRepository.findOneOrFail({
         where: { id: unidadeSaudeId },
         relations: ["especialidades"]
     });
 
-    // 2. Verificar se a unidade de saúde e suas especialidades foram carregadas corretamente
     if (!unidadeSaude || !unidadeSaude.especialidades) {
         throw new Error("Unidade de saúde ou especialidades não encontradas");
     }
-
-    // 3. Remover as Especialidades Associadas
     unidadeSaude.especialidades = unidadeSaude.especialidades.filter(especialidade => !especialidadesIds.includes(especialidade.id));
 
-    // 4. Salvar as Alterações
    return await this.unidadeDeSaudeRepository.save(unidadeSaude);
 }
+  async listarUnidadesDeSaudeAprovadas(): Promise<UnidadeDeSaude[]> {
+        try {
+            const unidadesDeSaudePendentes = await AppDataSource.getRepository(UnidadeDeSaude).find({
+                where: { aprovado: true }
+            });
 
+            return unidadesDeSaudePendentes;
+        } catch (error) {
+            throw new Error('Erro ao listar unidades de saúde aprovadas.');
+        }
+    }
 }
 
 export default new UnidadeDeSaudeService();

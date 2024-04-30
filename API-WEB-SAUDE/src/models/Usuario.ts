@@ -12,13 +12,13 @@ interface IUsuario {
 
 @Entity('Usuario')
 export class Usuario implements IUsuario {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number; 
 
   @Column()
   nome: string;
 
-  @Column()
+  @Column({nullable:true})
   imagem: string;
 
   @Column()
@@ -30,6 +30,7 @@ export class Usuario implements IUsuario {
   @Column()
   tipo: string; 
 
-  @OneToMany(() => UnidadeDeSaude, unidadeSaude => unidadeSaude.usuario)
+  @OneToMany(() => UnidadeDeSaude, unidadeSaude => unidadeSaude.usuario,{cascade:true})
   unidadesSaude: UnidadeDeSaude[];
+  
 }

@@ -50,6 +50,6 @@ export class App {
 	public getApp(): Express.Application {
         return this.express;
     }
-	 
+
 }
 export default App;

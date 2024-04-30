@@ -4,8 +4,8 @@ import AuthService from '../services/AuthService';
 const rotasPrivadas = [
   '/usuarios',
   '/usuarios/',
-  '/novo-usuario',
-  '/novo-usuario/',
+  '/nova-unidade-de-saude',
+  '/nova-unidade-de-saude/',
   '/alterar-usuario',
   '/alterar-usuario/',
   '/deletar-usuario/',
@@ -14,7 +14,7 @@ const rotasPrivadas = [
   '/usuario/unidades-de-saude/',
   '/usuario',
   '/usuario/',
-  
+   
 ];
 
 export default function AuthMiddleware(

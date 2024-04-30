@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToMany,JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToMany,JoinTable, ManyToOne } from 'typeorm';
 import { Usuario } from './Usuario';
 import { Endereco } from './Endereco';
 import { Especialidade } from './Especialidades';
@@ -21,6 +21,9 @@ interface IUnidadeDeSaude {
   aprovado: boolean;
   status: boolean;
   imagens: string[];
+  usuario:Usuario;
+  endereco:Endereco;
+
 }
 
 @Entity('UnidadesDeSaude')
@@ -70,18 +73,20 @@ export class UnidadeDeSaude implements IUnidadeDeSaude {
   @Column('text', { array: true })
   imagens: string[];
 
-  @OneToOne(() => Usuario)
+  
+  @ManyToOne(() => Usuario, usuario => usuario.unidadesSaude,{onDelete:'CASCADE'})
   @JoinColumn()
   usuario: Usuario;
-
-  @OneToOne(() => Endereco)
+  
+  @OneToOne(() => Endereco ,{cascade:true})
   @JoinColumn()
   endereco: Endereco;
+ 
 
-  @Column()
+  @Column({default:false})
   aprovado:boolean
   
-  @Column({ default: false })
+  @Column({ default: false})
   status:boolean
 
   @ManyToMany(() => Especialidade)

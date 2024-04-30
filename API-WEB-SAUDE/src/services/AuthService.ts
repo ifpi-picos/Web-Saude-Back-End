@@ -35,7 +35,7 @@ export default class AuthService {
     }
 
     public static decodeToken(token: string): JwtToken {
-        const key = process.env.JWT_SECRET || '';
+        const key = process.env.JWT_SECRET || ''; 
 
         try {
             const decodedToken = jwt.verify(token, key) as JwtToken;
