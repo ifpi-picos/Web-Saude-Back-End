@@ -4,17 +4,19 @@ import { Usuario } from "../models/Usuario"
 import { UnidadeDeSaude } from "../models/UnidadeDeSaude"
 import { Endereco } from "../models/Endereco"
 import { Especialidade } from "../models/Especialidades"
+import dotenv from 'dotenv';
 
+
+dotenv.config()
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: "aws-0-us-east-1.pooler.supabase.com",
+  host: process.env.HOST,
   port: 5432,
-  username: "postgres.sgqqwiuszrvlxcgkiuoc",
-  password: "eric5500spfc",
-  database: "postgres",
+  username: process.env.USER, 
+  password: process.env.PASSWORD, 
+  database: process.env.DATABASE,
   synchronize: true,
   logging: false,
- 
   subscribers: [],
   entities:[
       Especialidade,
@@ -24,3 +26,5 @@ export const AppDataSource = new DataSource({
   ]
 
 }) 
+
+console.log(process.env.USER)

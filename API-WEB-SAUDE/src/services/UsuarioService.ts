@@ -139,7 +139,6 @@ class UsuarioService{
     }
     public async aprovarUnidadeDeSaude(unidadeDeSaudeId: number): Promise<UnidadeDeSaude | null> {
         try {
-            // Busca a unidade de saúde com base no ID fornecido
             const unidadeDeSaude = await this.unidadeDeSaudeRepository.findOne({where:{id:unidadeDeSaudeId}});
 
             if (!unidadeDeSaude) {
@@ -158,7 +157,7 @@ class UsuarioService{
     public async listarUnidadesDeSaudePendentes(): Promise<UnidadeDeSaude[]> {
         try {
             const unidadesDeSaudePendentes = await AppDataSource.getRepository(UnidadeDeSaude).find({
-                where: { aprovado: false }
+                where: { aprovado: false },relations: ['endereco']
             });
 
             return unidadesDeSaudePendentes;

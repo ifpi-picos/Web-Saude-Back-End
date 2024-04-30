@@ -105,7 +105,7 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
   async listarUnidadesDeSaudeAprovadas(): Promise<UnidadeDeSaude[]> {
         try {
             const unidadesDeSaudePendentes = await AppDataSource.getRepository(UnidadeDeSaude).find({
-                where: { aprovado: true }
+                where: { aprovado: true },relations: ['endereco']
             });
 
             return unidadesDeSaudePendentes;
