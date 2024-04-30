@@ -157,7 +157,7 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude', async (req: Request, res: Respons
         res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
-UnidadeDeSaudeRouter.get('/unidades-saude/aprovadas', async (req: Request, res: Response) => {
+UnidadeDeSaudeRouter.get('/unidades-de-saude/aprovadas', async (req: Request, res: Response) => {
     try {
         const unidadesDeSaudeAprovadas = await UnidadeDeSaudeService.listarUnidadesDeSaudeAprovadas();
         

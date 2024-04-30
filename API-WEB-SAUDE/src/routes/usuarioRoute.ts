@@ -100,7 +100,7 @@ usuarioRouter.get('/usuario/unidades-de-saude', async (req: Request, res: Respon
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
-usuarioRouter.put('/unidades-saude/aprovar/:id', async (req: Request, res: Response) => {
+usuarioRouter.put('/unidades--de-saude/aprovar/:id', async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const unidadeDeSaudeAprovada = await UsuarioService.aprovarUnidadeDeSaude(parseInt(id, 10));
@@ -115,7 +115,7 @@ usuarioRouter.put('/unidades-saude/aprovar/:id', async (req: Request, res: Respo
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
-usuarioRouter.get('/unidades-saude/pendentes', async (req: Request, res: Response) => {
+usuarioRouter.get('/unidades-de-saude/pendentes', async (req: Request, res: Response) => {
     try {
         const unidadesDeSaudePendentes = await UsuarioService.listarUnidadesDeSaudePendentes();
 
