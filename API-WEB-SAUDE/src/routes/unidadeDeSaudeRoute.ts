@@ -132,7 +132,6 @@ UnidadeDeSaudeRouter.put('/alterar-unidade-de-saude/:id', async (req: Request, r
     res.status(404).json({Message: 'Unidade de Saúde inexistente'})
    }
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
@@ -143,7 +142,6 @@ UnidadeDeSaudeRouter.delete('/deletar-unidade-de-saude/:id',async(req:Request,re
         await UnidadeDeSaudeService.deletarUnidadeDeSaude(parseInt(id,10))
         res.status(204).json()
     } catch (error) {
-        console.log(error)
         res.status(500).json({ message: 'Erro interno no servidor.' });
 
     }
@@ -151,13 +149,12 @@ UnidadeDeSaudeRouter.delete('/deletar-unidade-de-saude/:id',async(req:Request,re
 UnidadeDeSaudeRouter.get('/unidades-de-saude', async (req: Request, res: Response) => {
     try {
         const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadesDeSaude();
-        res.json(unidadesDeSaude);
+        res.status(200).json(unidadesDeSaude);
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
-UnidadeDeSaudeRouter.get('/unidades-de-saude/aprovadas', async (req: Request, res: Response) => {
+UnidadeDeSaudeRouter.get('/aprovadas', async (req: Request, res: Response) => {
     try {
         const unidadesDeSaudeAprovadas = await UnidadeDeSaudeService.listarUnidadesDeSaudeAprovadas();
         
@@ -171,7 +168,7 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/:nome', async (req: Request, res: R
     try {
         const nome = req.params.nome;
         const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadeDeSaudepeloNome(nome);
-        res.json(unidadesDeSaude);
+        res.status(200).json(unidadesDeSaude);
     } catch (error) {
         res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
@@ -180,7 +177,7 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/pesquisa/:nome', async (req: Reques
     try {
         const nome = req.params.nome;
         const unidadesDeSaude = await UnidadeDeSaudeService.pesquisa(nome);
-        res.json(unidadesDeSaude);
+        res.status(200).json(unidadesDeSaude);
     } catch (error) {
         res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
@@ -190,7 +187,7 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/filtrar/:tipo', async (req: Request
     try {
         const tipo = req.params.tipo;
         const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadesDeSaudePorTipo(tipo);
-        res.json(unidadesDeSaude);
+        res.status(200).json(unidadesDeSaude);
     } catch (error) {
         res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }

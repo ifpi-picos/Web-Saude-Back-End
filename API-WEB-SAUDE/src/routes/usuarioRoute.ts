@@ -111,11 +111,10 @@ usuarioRouter.put('/unidades--de-saude/aprovar/:id', async (req: Request, res: R
 
         res.status(200).json(unidadeDeSaudeAprovada);
     } catch (error) {
-        console.error('Erro ao aprovar unidade de saúde:', error);
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
-usuarioRouter.get('/unidades-de-saude/pendentes', async (req: Request, res: Response) => {
+usuarioRouter.get('/pendentes', async (req: Request, res: Response) => {
     try {
         const unidadesDeSaudePendentes = await UsuarioService.listarUnidadesDeSaudePendentes();
 

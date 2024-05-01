@@ -162,7 +162,6 @@ class UsuarioService{
 
             return unidadesDeSaudePendentes;
         } catch (error) {
-            console.error('Erro ao listar unidades de saúde pendentes:', error);
             throw new Error('Erro ao listar unidades de saúde pendentes.');
         }
     }

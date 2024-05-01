@@ -104,11 +104,11 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
 }
   async listarUnidadesDeSaudeAprovadas(): Promise<UnidadeDeSaude[]> {
         try {
-            const unidadesDeSaudePendentes = await AppDataSource.getRepository(UnidadeDeSaude).find({
+            const unidadesDeSaudeAprovadas = await this.unidadeDeSaudeRepository.find({
                 where: { aprovado: true },relations: ['endereco']
             });
 
-            return unidadesDeSaudePendentes;
+            return unidadesDeSaudeAprovadas;
         } catch (error) {
             throw new Error('Erro ao listar unidades de saúde aprovadas.');
         }
