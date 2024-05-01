@@ -164,7 +164,7 @@ UnidadeDeSaudeRouter.get('/aprovadas', async (req: Request, res: Response) => {
     }
 });
 
-UnidadeDeSaudeRouter.get('/unidades-de-saude/:nome', async (req: Request, res: Response) => {
+UnidadeDeSaudeRouter.get('/unidade-de-saude/:nome', async (req: Request, res: Response) => {
     try {
         const nome = req.params.nome;
         const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadeDeSaudepeloNome(nome);
@@ -173,7 +173,7 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/:nome', async (req: Request, res: R
         res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
-UnidadeDeSaudeRouter.get('/unidade-de-saude/pesquisa/:nome', async (req: Request, res: Response) => {
+UnidadeDeSaudeRouter.get('/unidades-de-saude/pesquisa/:nome', async (req: Request, res: Response) => {
     try {
         const nome = req.params.nome;
         const unidadesDeSaude = await UnidadeDeSaudeService.pesquisa(nome);

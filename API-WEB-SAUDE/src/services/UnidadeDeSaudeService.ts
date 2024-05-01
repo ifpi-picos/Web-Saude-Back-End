@@ -117,8 +117,9 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
         try {
             const unidadesDeSaude = await this.unidadeDeSaudeRepository.findOne({
                 where: { nome: ILike(nome),aprovado:true },
-                relations: ['endereco']
+                relations: ['endereco','especialidades']
             });
+            
             return unidadesDeSaude;
         } catch (error) {
             throw new Error('Erro ao listar unidades de saúde pelo nome.');
