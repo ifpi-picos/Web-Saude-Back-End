@@ -27,4 +27,3 @@ export const AppDataSource = new DataSource({
 
 }) 
 
-console.log(process.env.USER)

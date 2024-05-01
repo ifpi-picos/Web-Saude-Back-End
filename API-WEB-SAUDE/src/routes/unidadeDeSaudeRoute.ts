@@ -166,4 +166,33 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/aprovadas', async (req: Request, re
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
+
+UnidadeDeSaudeRouter.get('/unidades-de-saude/:nome', async (req: Request, res: Response) => {
+    try {
+        const nome = req.params.nome;
+        const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadeDeSaudepeloNome(nome);
+        res.json(unidadesDeSaude);
+    } catch (error) {
+        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+    }
+});
+UnidadeDeSaudeRouter.get('/unidades-de-saude/pesquisa/:nome', async (req: Request, res: Response) => {
+    try {
+        const nome = req.params.nome;
+        const unidadesDeSaude = await UnidadeDeSaudeService.pesquisa(nome);
+        res.json(unidadesDeSaude);
+    } catch (error) {
+        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+    }
+});
+
+UnidadeDeSaudeRouter.get('/unidades-de-saude/filtrar/:tipo', async (req: Request, res: Response) => {
+    try {
+        const tipo = req.params.tipo;
+        const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadesDeSaudePorTipo(tipo);
+        res.json(unidadesDeSaude);
+    } catch (error) {
+        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+    }
+});
 export default UnidadeDeSaudeRouter;

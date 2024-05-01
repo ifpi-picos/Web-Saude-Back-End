@@ -1,6 +1,6 @@
 import { UnidadeDeSaude } from '../models/UnidadeDeSaude';
 import { AppDataSource } from '../database/db';
-
+import { ILike } from 'typeorm';
 
 class UnidadeDeSaudeService {
   private unidadeDeSaudeRepository = AppDataSource.getRepository(UnidadeDeSaude);
@@ -111,6 +111,41 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
             return unidadesDeSaudePendentes;
         } catch (error) {
             throw new Error('Erro ao listar unidades de saúde aprovadas.');
+        }
+    }
+    async listarUnidadeDeSaudepeloNome(nome: string): Promise<UnidadeDeSaude[]> {
+        try {
+            const unidadesDeSaude = await this.unidadeDeSaudeRepository.find({
+                where: { nome: ILike(nome),aprovado:true },
+                relations: ['endereco',]
+            });
+            return unidadesDeSaude;
+        } catch (error) {
+            throw new Error('Erro ao listar unidades de saúde pelo nome.');
+        }
+    }
+
+    async pesquisa(nome: string): Promise<UnidadeDeSaude[]> {
+        try {
+            const unidadesDeSaude = await this.unidadeDeSaudeRepository.find({
+                where: { nome: ILike(`%${nome}%`),aprovado:true },
+                relations: ['endereco',]
+            });
+            return unidadesDeSaude;
+        } catch (error) {
+            throw new Error('Erro ao pesquisar unidades de saúde pelo nome.');
+        }
+    }
+
+    async listarUnidadesDeSaudePorTipo(tipo: string): Promise<UnidadeDeSaude[]> {
+        try {
+            const unidadesDeSaude = await this.unidadeDeSaudeRepository.find({
+                where: { tipo:ILike(tipo) },
+                relations: ['endereco', 'especialidades']
+            });
+            return unidadesDeSaude;
+        } catch (error) {
+            throw new Error('Erro ao listar unidades de saúde por tipo.');
         }
     }
 }
