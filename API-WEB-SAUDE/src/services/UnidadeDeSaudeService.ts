@@ -113,11 +113,11 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
             throw new Error('Erro ao listar unidades de saúde aprovadas.');
         }
     }
-    async listarUnidadeDeSaudepeloNome(nome: string): Promise<UnidadeDeSaude[]> {
+    async listarUnidadeDeSaudepeloNome(nome: string): Promise<UnidadeDeSaude | null> {
         try {
-            const unidadesDeSaude = await this.unidadeDeSaudeRepository.find({
+            const unidadesDeSaude = await this.unidadeDeSaudeRepository.findOne({
                 where: { nome: ILike(nome),aprovado:true },
-                relations: ['endereco',]
+                relations: ['endereco']
             });
             return unidadesDeSaude;
         } catch (error) {
