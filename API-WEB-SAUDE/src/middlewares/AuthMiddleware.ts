@@ -4,8 +4,6 @@ import AuthService from '../services/AuthService';
 const rotasPrivadas = [
   '/usuarios',
   '/usuarios/',
-  '/nova-unidade-de-saude',
-  '/nova-unidade-de-saude/',
   '/alterar-usuario',
   '/alterar-usuario/',
   '/deletar-usuario/',
