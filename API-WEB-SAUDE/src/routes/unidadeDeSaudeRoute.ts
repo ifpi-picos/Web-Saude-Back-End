@@ -17,7 +17,6 @@ UnidadeDeSaudeRouter.post('/nova-unidade-de-saude', async (req: Request, res: Re
             'uf',
             'nome',
             'tipo',
-            'especialidades',
         ];
 
         const erros: string[] = [];
