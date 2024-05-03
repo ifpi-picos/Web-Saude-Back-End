@@ -4,14 +4,20 @@ import AuthService from '../services/AuthService';
 const rotasPrivadas = [
   '/usuarios',
   '/usuarios/',
+  '/nova-unidade-de-saude',
+  '/nova-unidade-de-saude/',
   '/alterar-usuario',
   '/alterar-usuario/',
+  '/deletar-usuario',
   '/deletar-usuario/',
-  '/deletar-usuario/',
+  '/unidades-de-saude',
+  '/unidades-de-saude/',
   '/usuario/unidades-de-saude',
   '/usuario/unidades-de-saude/',
   '/usuario',
   '/usuario/',
+  '/alterar-senha',
+  '/alterar-senha/'
    
 ];
 
@@ -25,10 +31,8 @@ export default function AuthMiddleware(
 
   if (
     rotasPrivadas.includes(rotaAtual) ||
-    rotaAtual.startsWith('/admin/alterar-hospital/') ||
-    rotaAtual.startsWith('/admin/deletar-hospital/') ||
-    rotaAtual.startsWith('/admin/alterar-clinica/') ||
-    rotaAtual.startsWith('/admin/deletar-clinica/') ||
+    rotaAtual.startsWith('/alterar-unidade-de-saude/') ||  
+    rotaAtual.startsWith('/deletar-unidade-de-saude/') ||
     rotaAtual.startsWith('/usuario/nova-senha/') ||
     rotaAtual.startsWith('/deletar-especialidade/')
 	

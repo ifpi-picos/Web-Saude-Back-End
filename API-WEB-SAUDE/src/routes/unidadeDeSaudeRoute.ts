@@ -18,7 +18,6 @@ UnidadeDeSaudeRouter.post('/nova-unidade-de-saude', async (req: Request, res: Re
             'nome',
             'tipo',
         ];
-
         const erros: string[] = [];
         validation.finalizarValidacao(camposAValidar, req, erros);
         const errosFiltrados = erros.filter(erro => erro !== '');
@@ -120,7 +119,7 @@ UnidadeDeSaudeRouter.put('/alterar-unidade-de-saude/:id', async (req: Request, r
 
                     }
 
-                return res.status(201).json({
+                return res.status(200).json({
                     Message: 'Unidade de Saúde alterada com sucesso!',
                     data: atualizarUnidadeDeSaude,
                 });

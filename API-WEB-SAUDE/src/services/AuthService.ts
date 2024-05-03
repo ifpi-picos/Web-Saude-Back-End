@@ -48,7 +48,7 @@ export default class AuthService {
     public static async authenticateUser(
         email: string,
         senha: string,
-    ): Promise<string | null> {
+    ): Promise<{ token: string; Id: string,tipo:string } | null> {
         try {
             const usuarioRepository = AppDataSource.getRepository(Usuario);
             const user = await usuarioRepository.findOne({ where: { email } });
@@ -67,7 +67,8 @@ export default class AuthService {
             }
 
             const token = this.generateToken(user.id.toString(), user.tipo || '');
-            return token;
+            return { token, Id: user.id.toString(),tipo:user.tipo };
+
         } catch (error) {
             throw new Error('Erro ao autenticar o usuário');
         }
