@@ -2,12 +2,13 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { UnidadeDeSaude } from './UnidadeDeSaude';
 
 interface IUsuario {
-  id?: number; 
+  id: number; 
   nome: string;
   imagem: string;
   email: string;
   senha: string;
   tipo: string;
+  status: boolean;
 }
 
 @Entity('Usuario')
@@ -29,6 +30,9 @@ export class Usuario implements IUsuario {
 
   @Column()
   tipo: string; 
+  
+  @Column({default:false})
+  status: boolean;
 
   @OneToMany(() => UnidadeDeSaude, unidadeSaude => unidadeSaude.usuario,{cascade:true})
   unidadesSaude: UnidadeDeSaude[];

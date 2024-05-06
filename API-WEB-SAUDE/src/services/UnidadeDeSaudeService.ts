@@ -73,7 +73,6 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
       return unidadesDeSaude
         
     } catch (error) {
-        console.log(error)
       throw new Error('Houve um Erro Interno no Servidor');
     }
   }

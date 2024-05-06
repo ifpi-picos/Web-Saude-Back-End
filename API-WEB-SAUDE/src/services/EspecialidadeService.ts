@@ -51,7 +51,6 @@ class EspecialidadeService {
     try {
       return await this.especialidadeRepository.find();
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

@@ -53,17 +53,27 @@ usuarioRouter.post('/usuarios/login', async (req: Request, res: Response) => {
             });
         }
         const { email, senha } = req.body;
-        const token = await UsuarioService.autenticarUsuario(email, senha);
+        const dados = await UsuarioService.autenticarUsuario(email, senha);
 
-        if (!token) {
+        if (!dados) {
             return res.status(401).json({ message: 'Credenciais inválidas.' });
         }
-
-        res.status(200).json({ token });
+         await UsuarioService.alterarStatusUsuario(parseInt(dados.Id,10),true)
+        res.status(200).json({ dados });
     } catch (error) {
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
+usuarioRouter.get('/total', async (req: Request, res: Response) => {
+    try {
+        const total = await UsuarioService.contarTotalUsuariosEUnidadesDeSaude();
+        res.status(200).json(total);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro interno no servidor.' });
+    }
+});
+
+
 
 usuarioRouter.put('/alterar-usuario', async (req: Request, res: Response) => {
     try {
@@ -186,6 +196,29 @@ usuarioRouter.get('/pendentes', async (req: Request, res: Response) => {
     try {
         const unidadesDeSaudePendentes = await UsuarioService.listarUnidadesDeSaudePendentes();
         res.status(200).json(unidadesDeSaudePendentes);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro interno no servidor.' });
+    }
+});
+
+usuarioRouter.put('/usuarios/desativar', async (req: Request, res: Response) => {
+    try {
+        const usuario = await UsuarioService.alterarStatusUsuario(req.body.userId, false);
+
+        if (!usuario) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        res.status(200).json(usuario);
+    } catch (error) {
+        res.status(500).json({ message: 'Erro interno no servidor.' });
+    }
+});
+
+usuarioRouter.get('/usuarios/ativos', async (req: Request, res: Response) => {
+    try {
+        const usuariosAtivos = await UsuarioService.listarUsuariosAtivos();
+        res.status(200).json(usuariosAtivos);
     } catch (error) {
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }

@@ -185,6 +185,43 @@ class UsuarioService {
             throw new Error('Erro ao listar unidades de saúde pendentes.' + error);
         }
     }
+
+    public async alterarStatusUsuario(id: number, novoStatus: boolean): Promise<Usuario | null> {
+        try {
+            const usuario = await this.usuarioRepository.findOne({ where: { id } });
+            if (!usuario) {
+                throw new Error('Usuário não encontrado');
+            }
+            
+            usuario.status = novoStatus;
+            
+            await this.usuarioRepository.save(usuario);
+            
+            return usuario;
+        } catch (error) {
+            throw new Error('Erro ao alterar o status do usuário: ' + error);
+        }
+    }
+
+    public async listarUsuariosAtivos(): Promise<Usuario[]> {
+        try {
+            const usuariosAtivos = await this.usuarioRepository.find({ where: { status: true } });
+            return usuariosAtivos;
+        } catch (error) {
+            throw new Error('Erro ao listar usuários ativos: ' + error);
+        }
+    }
+    public async contarTotalUsuariosEUnidadesDeSaude(): Promise<{ totalUsuarios: number, totalUnidadesDeSaude: number }> {
+        try {
+            const totalUsuarios = await this.usuarioRepository.count();
+            const totalUnidadesDeSaude = await this.unidadeDeSaudeRepository.count();
+            
+            return { totalUsuarios, totalUnidadesDeSaude };
+        } catch (error) {
+            throw new Error('Erro ao contar total de usuários e unidades de saúde: ' + error);
+        }
+    }
+    
 }
 
 export default new UsuarioService();

@@ -17,7 +17,14 @@ const rotasPrivadas = [
   '/usuario',
   '/usuario/',
   '/alterar-senha',
-  '/alterar-senha/'
+  '/alterar-senha/',
+  '/usuarios/desativar',
+  '/usuarios/desativar/',
+  '/usuarios/ativos',
+  '/usuarios/ativos/',
+  '/total',
+  '/total/',
+
    
 ];
 
