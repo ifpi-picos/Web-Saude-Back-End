@@ -35,10 +35,9 @@ class UsuarioService {
     public async autenticarUsuario(email: string, senha: string): Promise<{ token: string, Id: string, tipo: string } | null> {
         try {
             const result = await AuthService.authenticateUser(email, senha);
-    
+            console.log(result?.tipo)
             return result;
         } catch (error) {
-            console.log(error);
             throw new Error('Erro ao autenticar o usuário!' + error);
         }
     }
@@ -136,7 +135,6 @@ class UsuarioService {
             const usuarios = await this.usuarioRepository.find({ relations: ['unidadesSaude'] });
             return usuarios;
         } catch (error) {
-            console.log(error);
             throw new Error('Erro ao listar usuários: ' + error);
         }
     }

@@ -148,6 +148,8 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
             throw new Error('Erro ao listar unidades de saúde por tipo.');
         }
     }
+    
+    
 }
 
 export default new UnidadeDeSaudeService();

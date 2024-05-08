@@ -64,6 +64,7 @@ usuarioRouter.post('/usuarios/login', async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
+
 usuarioRouter.get('/total', async (req: Request, res: Response) => {
     try {
         const total = await UsuarioService.contarTotalUsuariosEUnidadesDeSaude();
@@ -72,8 +73,6 @@ usuarioRouter.get('/total', async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
-
-
 
 usuarioRouter.put('/alterar-usuario', async (req: Request, res: Response) => {
     try {
@@ -147,7 +146,6 @@ usuarioRouter.delete('/deletar-usuario', async (req: Request, res: Response) => 
         if (!usuarioDeletado) {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
-        console.log(req.body.userId)
         res.status(204).json({ message: 'Usuário deletado com sucesso.' });
     } catch (error) {
         res.status(500).json({ message: 'Erro interno no servidor.' });

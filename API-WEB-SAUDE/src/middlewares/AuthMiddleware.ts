@@ -25,7 +25,6 @@ const rotasPrivadas = [
   '/total',
   '/total/',
 
-   
 ];
 
 export default function AuthMiddleware(
@@ -41,7 +40,8 @@ export default function AuthMiddleware(
     rotaAtual.startsWith('/alterar-unidade-de-saude/') ||  
     rotaAtual.startsWith('/deletar-unidade-de-saude/') ||
     rotaAtual.startsWith('/usuario/nova-senha/') ||
-    rotaAtual.startsWith('/deletar-especialidade/')
+    rotaAtual.startsWith('/deletar-especialidade/') ||
+    rotaAtual.startsWith('/unidades-de-saude/aprovar/')
 	
   ) {
     try {

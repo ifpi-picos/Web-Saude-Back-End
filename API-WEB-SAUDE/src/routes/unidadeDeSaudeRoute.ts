@@ -137,7 +137,12 @@ UnidadeDeSaudeRouter.put('/alterar-unidade-de-saude/:id', async (req: Request, r
 UnidadeDeSaudeRouter.delete('/deletar-unidade-de-saude/:id',async(req:Request,res:Response)=>{
     try {
          const {id} = req.params
-        await UnidadeDeSaudeService.deletarUnidadeDeSaude(parseInt(id,10))
+       const unuidadeDeSaude = await UnidadeDeSaudeService.deletarUnidadeDeSaude(parseInt(id,10))
+
+       if(!unuidadeDeSaude){
+            return res.status(404).json({ message: 'Unidade de Saúde não encontrada.' });
+        
+       }
         res.status(204).json()
     } catch (error) {
         res.status(500).json({ message: 'Erro interno no servidor.' });
@@ -190,4 +195,6 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/filtrar/:tipo', async (req: Request
         res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
+
+
 export default UnidadeDeSaudeRouter;
