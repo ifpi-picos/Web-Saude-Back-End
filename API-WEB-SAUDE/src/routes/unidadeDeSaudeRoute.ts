@@ -12,9 +12,7 @@ UnidadeDeSaudeRouter.post('/nova-unidade-de-saude', async (req: Request, res: Re
             'cep',
             'rua',
             'numero',
-            'bairro',
             'cidade',
-            'uf',
             'nome',
             'tipo',
         ];

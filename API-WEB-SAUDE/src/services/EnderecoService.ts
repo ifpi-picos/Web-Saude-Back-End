@@ -10,6 +10,7 @@ class EnderecoService {
       const novoEndereco = this.enderecoRepository.create(enderecoData);
       return await this.enderecoRepository.save(novoEndereco);
     } catch (error) {
+      console.log(error)
       throw new Error('Houve um Erro Interno no Servidor');
     }
   }

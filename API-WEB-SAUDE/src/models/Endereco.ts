@@ -7,6 +7,7 @@ interface IEndereco {
   cidade: string;
   estado: string;
   cep: string;
+  
 }
 
 @Entity('Endereco')

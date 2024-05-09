@@ -40,37 +40,37 @@ export class UnidadeDeSaude implements IUnidadeDeSaude {
   @Column()
   tipo: string;
 
-  @Column()
+  @Column({default:'aberto'})
   horarioSemanaAbre: string;
 
-  @Column()
+  @Column({default:'aberto'})
   horarioSemanaFecha: string;
 
-  @Column()
+  @Column({default:'aberto'})
   horarioSabadoAbre: string;
 
-  @Column()
+  @Column({default:'aberto'})
   horarioSabadoFecha: string;
 
-  @Column()
+  @Column({default:null})
   email: string;
 
-  @Column()
+  @Column({default:null})
   whatsapp: string;
 
-  @Column()
+  @Column({default:null})
   instagram: string;
 
-  @Column()
+  @Column({default:null})
   descricao: string;
 
-  @Column({ type: 'double precision' })
+  @Column({ type: 'double precision',default:null })
   longitude: number;
 
-  @Column({ type: 'double precision' })
+  @Column({ type: 'double precision',default:null })
   latitude: number;
 
-  @Column('text', { array: true })
+  @Column('text', { array: true,default:null })
   imagens: string[];
 
   
