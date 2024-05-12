@@ -126,7 +126,8 @@ UnidadeDeSaudeRouter.put('/alterar-unidade-de-saude/:id', async (req: Request, r
     res.status(404).json({Message: 'Unidade de Saúde inexistente'})
    }
     } catch (error) {
-        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+        console.log(error)
+       return res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
 

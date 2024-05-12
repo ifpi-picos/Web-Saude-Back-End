@@ -78,13 +78,18 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
   }
   async pegarUnidadesDeSaudePeloID(id:number): Promise<UnidadeDeSaude | null> {
     try {
-      const unidadesDeSaude = await this.unidadeDeSaudeRepository.findOne({ relations: ['endereco', 'especialidades', 'usuarios'], where:{id}});
+      const unidadesDeSaude = await this.unidadeDeSaudeRepository.findOne({where:{id},relations: 
+        ['endereco', 'especialidades', 'usuario'
+
+      ]});
+
       if(!unidadesDeSaude){
         return null
       }
       return unidadesDeSaude
          
     } catch (error) {
+        console.log(error)
       throw new Error('Houve um Erro Interno no Servidor');
     }
   }
