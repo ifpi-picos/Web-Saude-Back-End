@@ -40,16 +40,16 @@ export class UnidadeDeSaude implements IUnidadeDeSaude {
   @Column()
   tipo: string;
 
-  @Column({default:'aberto'})
+  @Column({default:true})
   horarioSemanaAbre: string;
 
-  @Column({default:'aberto'})
+  @Column({default:true})
   horarioSemanaFecha: string;
 
-  @Column({default:'aberto'})
+  @Column({default:true})
   horarioSabadoAbre: string;
 
-  @Column({default:'aberto'})
+  @Column({default:true})
   horarioSabadoFecha: string;
 
   @Column({default:null})

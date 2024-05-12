@@ -175,7 +175,7 @@ class UsuarioService {
     public async listarUnidadesDeSaudePendentes(): Promise<UnidadeDeSaude[]> {
         try {
             const unidadesDeSaudePendentes = await AppDataSource.getRepository(UnidadeDeSaude).find({
-                where: { aprovado: false }, relations: ['endereco']
+                where: { aprovado: false }, relations: ['endereco','especialidades']
             });
 
             return unidadesDeSaudePendentes;

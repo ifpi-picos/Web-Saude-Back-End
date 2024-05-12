@@ -22,11 +22,11 @@ EspecialidadeRouter.post('/nova-especialidade', async (req: Request, res: Respon
         });
         
       } else if (req.body.nome.length < 2) {
-        return res.status(400).json({ Message: 'Nome muito curto!!' });
+        return res.status(422).json({ Message: 'Nome muito curto!!' });
       }
       const novaEspecialidade = await EspecialidadeService.salvarEspecialidade(especialidadeData);
       if(novaEspecialidade === null){
-        return res.status(400).json('Essa Especialidade já existe')
+        return res.status(409).json('Essa Especialidade já existe')
       }
       res.status(201).json(novaEspecialidade);
     } catch (error) {
@@ -51,7 +51,7 @@ EspecialidadeRouter.post('/nova-especialidade', async (req: Request, res: Respon
             Errors: errosFiltrados,
           });
         } else if (req.body.nome.length < 2) {
-          return res.status(400).json({ Message: 'Nome muito curto!!' });
+          return res.status(422).json({ Message: 'Nome muito curto!!' });
         }
     
         const especialidadeExistente = await EspecialidadeService.obterEspecialidadePorId(parseInt(id, 10));
@@ -61,7 +61,7 @@ EspecialidadeRouter.post('/nova-especialidade', async (req: Request, res: Respon
     
         const especialidadeComMesmoNome = await EspecialidadeService.obterEspecialidadePorNome(especialidadeData.nome);
         if (especialidadeComMesmoNome && especialidadeComMesmoNome.id !== parseInt(id, 10)) {
-          return res.status(400).json('Essa Especialidade com esse nome já existe');
+          return res.status(409).json('Essa Especialidade já existe');
         }
     
         const especialidadeAtualizada = await EspecialidadeService.alterarEspecialidade(parseInt(id, 10), especialidadeData);

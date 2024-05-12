@@ -43,7 +43,7 @@ UnidadeDeSaudeRouter.post('/nova-unidade-de-saude', async (req: Request, res: Re
             const novaUnidadeDeSaude = await UnidadeDeSaudeService.salvarUnidadeDeSaude(novaUnidadeDeSaudeData)
             
             if (novaUnidadeDeSaude === null) {
-                return res.status(400).json({ Message: 'Essa Unidade de Saúde já está cadastrada!' });
+                return res.status(409).json({ Message: 'Essa Unidade de Saúde já está cadastrada!' });
             }
            await UsuarioService.adicionarUnidadeDeSaudeAoUsuario(req.body.userId,novaUnidadeDeSaude.id)
             return res.status(201).json({
@@ -113,7 +113,7 @@ UnidadeDeSaudeRouter.put('/alterar-unidade-de-saude/:id', async (req: Request, r
             if (removerEspecialidades) {
                 const atualizarUnidadeDeSaude = await UnidadeDeSaudeService.alterarUnidadeDeSaude(unidadeDeSaudeID, novaUnidadeDeSaudeData)
                     if(atualizarUnidadeDeSaude === null){
-                        return res.status(400).json({ Message: 'Essa Unidade de Saúde já está cadastrada!' });
+                        return res.status(409).json({ Message: 'Essa Unidade de Saúde já está cadastrada!' });
 
                     }
 
@@ -169,6 +169,15 @@ UnidadeDeSaudeRouter.get('/unidade-de-saude/:nome', async (req: Request, res: Re
     try {
         const nome = req.params.nome;
         const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadeDeSaudepeloNome(nome);
+        res.status(200).json(unidadesDeSaude);
+    } catch (error) {
+        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+    }
+});
+UnidadeDeSaudeRouter.get('/unidade-de-saude/aprovadas/:nome', async (req: Request, res: Response) => {
+    try {
+        const nome = req.params.nome;
+        const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadeDeSaudepeloNomeAprovadas(nome);
         res.status(200).json(unidadesDeSaude);
     } catch (error) {
         res.status(500).json({ error: 'Houve um erro interno no servidor' });
