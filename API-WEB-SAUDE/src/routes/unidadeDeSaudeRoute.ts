@@ -62,14 +62,12 @@ UnidadeDeSaudeRouter.put('/alterar-unidade-de-saude/:id', async (req: Request, r
         const { id } = req.params;
         const camposAValidar = [
             'cep',
-            'rua', 
+            'rua',
             'numero',
-            'bairro',
             'cidade',
-            'uf',
             'nome',
             'tipo',
-            'especialidades',
+          
         ];
         const erros: string[] = [];
         validation.finalizarValidacao(camposAValidar, req, erros);
