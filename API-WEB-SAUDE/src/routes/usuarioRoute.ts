@@ -152,6 +152,20 @@ usuarioRouter.delete('/deletar-usuario', async (req: Request, res: Response) => 
     }
 });
 
+usuarioRouter.delete('/deletar-usuario/:id', async (req: Request, res: Response) => {
+    const {id} = req.params
+    try {
+        const usuarioDeletado = await UsuarioService.deletarUsuario(parseInt(id,10));
+
+        if (!usuarioDeletado) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+        res.status(204).json({ message: 'Usuário deletado com sucesso.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro interno no servidor.' });
+    }
+});
+
 usuarioRouter.get('/usuarios', async (req: Request, res: Response) => {
     try {
         const usuarios = await UsuarioService.listarUsuarios();
