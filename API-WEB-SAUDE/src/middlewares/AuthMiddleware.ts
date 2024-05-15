@@ -45,7 +45,8 @@ export default function AuthMiddleware(
     rotaAtual.startsWith('/deletar-especialidade/') ||
     rotaAtual.startsWith('/unidades-de-saude/aprovar/') ||
     rotaAtual.startsWith('/unidade-de-saude/') ||
-    rotaAtual.startsWith('/deletar-usuario/')
+    rotaAtual.startsWith('/deletar-usuario/') ||
+    rotaAtual.startsWith('/usuarios/pesquisar/')
 	
   ) {
     try {
