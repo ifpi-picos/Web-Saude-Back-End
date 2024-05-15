@@ -144,16 +144,21 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
 
     async pesquisa(nome: string): Promise<UnidadeDeSaude[]> {
         try {
-            const unidadesDeSaude = await this.unidadeDeSaudeRepository.find({
-                where: { nome: ILike(`%${nome}%`),aprovado:true },
-                relations: ['endereco',]
-            });
-            return unidadesDeSaude;
+            const unidadesDeSaude = await this.unidadeDeSaudeRepository.createQueryBuilder("unidadeDeSaude")
+                .leftJoinAndSelect("unidadeDeSaude.endereco", "endereco")
+                .leftJoinAndSelect("unidadeDeSaude.especialidades", "especialidades")
+                .where("unidadeDeSaude.aprovado = true")
+                .andWhere(qb => {
+                    return qb.where("unidadeDeSaude.nome ILike :termo", { termo: `%${nome}%` })
+                        .orWhere("especialidades.nome ILike :termo", { termo: `%${nome}%` });
+                })
+                .getMany();
+             
+            return unidadesDeSaude.filter(unidade => unidade.aprovado);
         } catch (error) {
             throw new Error('Erro ao pesquisar unidades de saúde pelo nome.');
         }
     }
-
     async listarUnidadesDeSaudePorTipo(tipo: string): Promise<UnidadeDeSaude[]> {
         try {
             const unidadesDeSaude = await this.unidadeDeSaudeRepository.find({

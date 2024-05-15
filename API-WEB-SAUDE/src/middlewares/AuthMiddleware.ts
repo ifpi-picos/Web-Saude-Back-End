@@ -24,6 +24,8 @@ const rotasPrivadas = [
   '/usuarios/ativos/',
   '/total',
   '/total/',
+  '/unidades-de-saude/pendentes',
+  '/unidades-de-saude/pendentes/'
 
 ];
 

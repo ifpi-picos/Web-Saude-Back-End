@@ -2,7 +2,7 @@ import AuthService from './AuthService';
 import { Usuario } from '../models/Usuario';
 import { AppDataSource } from '../database/db';
 import { UnidadeDeSaude } from '../models/UnidadeDeSaude';
-
+import { ILike } from 'typeorm';
 class UsuarioService {
     private usuarioRepository = AppDataSource.getRepository(Usuario);
     private unidadeDeSaudeRepository = AppDataSource.getRepository(UnidadeDeSaude);
@@ -207,6 +207,25 @@ class UsuarioService {
             return usuariosAtivos;
         } catch (error) {
             throw new Error('Erro ao listar usuários ativos: ' + error);
+        }
+    }
+
+    
+    public async pesquisarUsuarios(busca: string): Promise<Usuario[]> {
+        try {
+            const usuarios = await this.usuarioRepository.find({
+                where: [
+                    { nome: ILike(`%${busca}%`) },
+                    { email: ILike(`%${busca}%`) },
+                    { id: parseInt(busca, 10) || undefined },
+                    { tipo: busca },
+                    { status: busca === 'ativo' ? true : busca === 'inativo' ? false : undefined }
+                ]
+            });
+
+            return usuarios;
+        } catch (error) {
+            throw new Error('Erro ao pesquisar usuários.');
         }
     }
     public async contarTotalUsuariosEUnidadesDeSaude(): Promise<{ totalUsuarios: number, totalUnidadesDeSaude: number }> {

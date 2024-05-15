@@ -29,10 +29,9 @@ usuarioRouter.post('/novo-usuario', async (req: Request, res: Response) => {
             return res.status(409).json({ message: 'O usuário já existe.' });
         }
 
-        res.status(201).json(novoUsuario);
+       return res.status(201).json(novoUsuario);
     } catch (error) {
-        console.error('Erro ao salvar usuário:', error);
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+       return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
@@ -59,18 +58,9 @@ usuarioRouter.post('/usuarios/login', async (req: Request, res: Response) => {
             return res.status(401).json({ message: 'Credenciais inválidas.' });
         }
          await UsuarioService.alterarStatusUsuario(parseInt(dados.Id,10),true)
-        res.status(200).json({ dados });
+       return  res.status(200).json({ dados });
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
-    }
-});
-
-usuarioRouter.get('/total', async (req: Request, res: Response) => {
-    try {
-        const total = await UsuarioService.contarTotalUsuariosEUnidadesDeSaude();
-        res.status(200).json(total);
-    } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+         return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
@@ -99,9 +89,9 @@ usuarioRouter.put('/alterar-usuario', async (req: Request, res: Response) => {
             return res.status(409).json({ message: 'Usuário já existe.' });
         }
 
-        res.status(200).json(usuarioAtualizado);
+        return res.status(200).json(usuarioAtualizado);
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+        return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 usuarioRouter.put('/alterar-senha', async (req: Request, res: Response) => {
@@ -133,9 +123,9 @@ usuarioRouter.put('/alterar-senha', async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
 
-        res.status(200).json({ message: 'Senha alterada com sucesso.' });
+       return res.status(200).json({ message: 'Senha alterada com sucesso.' });
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+       return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
@@ -146,9 +136,9 @@ usuarioRouter.delete('/deletar-usuario', async (req: Request, res: Response) => 
         if (!usuarioDeletado) {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
-        res.status(204).json({ message: 'Usuário deletado com sucesso.' });
+      return  res.status(204).json({ message: 'Usuário deletado com sucesso.' });
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+       return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
@@ -160,18 +150,18 @@ usuarioRouter.delete('/deletar-usuario/:id', async (req: Request, res: Response)
         if (!usuarioDeletado) {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
-        res.status(204).json({ message: 'Usuário deletado com sucesso.' });
+       return res.status(204).json({ message: 'Usuário deletado com sucesso.' });
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+       return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
 usuarioRouter.get('/usuarios', async (req: Request, res: Response) => {
     try {
         const usuarios = await UsuarioService.listarUsuarios();
-        res.status(200).json(usuarios);
+        return res.status(200).json(usuarios);
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+        return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
@@ -183,9 +173,9 @@ usuarioRouter.get('/usuario/unidades-de-saude', async (req: Request, res: Respon
             return res.status(404).json({ message: 'Usuário não encontrado ou não possui unidades de saúde associadas.' });
         }
 
-        res.status(200).json(unidadesDeSaude);
+        return res.status(200).json(unidadesDeSaude);
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+       return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
@@ -198,21 +188,45 @@ usuarioRouter.put('/unidades-de-saude/aprovar/:id', async (req: Request, res: Re
             return res.status(404).json({ message: 'Unidade de saúde não encontrada.' });
         }
 
-        res.status(200).json(unidadeDeSaudeAprovada);
+         return res.status(200).json(unidadeDeSaudeAprovada);
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+         return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
-usuarioRouter.get('/pendentes', async (req: Request, res: Response) => {
+usuarioRouter.get('/unidades-de-saude/pendentes', async (req: Request, res: Response) => {
     try {
         const unidadesDeSaudePendentes = await UsuarioService.listarUnidadesDeSaudePendentes();
-        res.status(200).json(unidadesDeSaudePendentes);
+       return res.status(200).json(unidadesDeSaudePendentes);
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+        return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
+usuarioRouter.get('/usuarios/pesquisar/:busca', async (req: Request, res: Response) => {
+    try {
+        const { busca } = req.params;
+
+        if (!busca || typeof busca !== 'string') {
+            return res.status(400).json({ message: 'Parâmetro de busca inválido.' });
+        }
+
+        const usuariosEncontrados = await UsuarioService.pesquisarUsuarios(busca);
+
+        return res.status(200).json(usuariosEncontrados);
+    } catch (error) {
+        return res.status(500).json({ message: 'Erro interno no servidor.' });
+    }
+});
+
+usuarioRouter.get('/total', async (req: Request, res: Response) => {
+    try {
+        const total = await UsuarioService.contarTotalUsuariosEUnidadesDeSaude();
+        return res.status(200).json(total);
+    } catch (error) {
+        return res.status(500).json({ message: 'Erro interno no servidor.' });
+    }
+});
 usuarioRouter.put('/usuarios/desativar', async (req: Request, res: Response) => {
     try {
         const usuario = await UsuarioService.alterarStatusUsuario(req.body.userId, false);
@@ -221,18 +235,18 @@ usuarioRouter.put('/usuarios/desativar', async (req: Request, res: Response) => 
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
 
-        res.status(200).json(usuario);
+       return res.status(200).json(usuario);
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+       return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
 usuarioRouter.get('/usuarios/ativos', async (req: Request, res: Response) => {
     try {
         const usuariosAtivos = await UsuarioService.listarUsuariosAtivos();
-        res.status(200).json(usuariosAtivos);
+       return res.status(200).json(usuariosAtivos);
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+        return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 
