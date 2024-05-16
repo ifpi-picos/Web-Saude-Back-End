@@ -141,12 +141,14 @@ class UsuarioService {
 
     public async listarUnidadesDeSaudeDoUsuario(usuarioId: number): Promise<UnidadeDeSaude[]> {
         try {
-            const usuario = await this.usuarioRepository.findOne({ where: { id: usuarioId }, relations: ['unidadesSaude'] });
+            const usuario = await this.usuarioRepository.findOne({ where: { id: usuarioId }, relations: ['unidadesSaude', 'unidadesSaude.endereco'] });
     
             if (!usuario) {
                 throw new Error('Usuário não encontrado');
             }
-    
+             usuario.unidadesSaude.map((info)=>{
+                console.log(info.endereco.cep)
+             })
             return usuario.unidadesSaude || [];
         } catch (error) {
             console.log(error);

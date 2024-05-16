@@ -162,7 +162,7 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
     async listarUnidadesDeSaudePorTipo(tipo: string): Promise<UnidadeDeSaude[]> {
         try {
             const unidadesDeSaude = await this.unidadeDeSaudeRepository.find({
-                where: { tipo:ILike(tipo) },
+                where: { tipo:ILike(tipo),aprovado:true },
                 relations: ['endereco', 'especialidades']
             });
             return unidadesDeSaude;

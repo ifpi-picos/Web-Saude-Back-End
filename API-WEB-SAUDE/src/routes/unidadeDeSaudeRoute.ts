@@ -209,5 +209,4 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/filtrar/:tipo', async (req: Request
     }
 });
 
-
 export default UnidadeDeSaudeRouter;
