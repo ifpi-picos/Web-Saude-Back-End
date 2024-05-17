@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { UnidadeDeSaude } from './UnidadeDeSaude';
-
+import { Notificacoes } from './Notificacoes';
 interface IUsuario {
   id: number; 
   nome: string;
@@ -9,6 +9,8 @@ interface IUsuario {
   senha: string;
   tipo: string;
   status: boolean;
+  notificacoes: Notificacoes[];
+
 }
 
 @Entity('Usuario')
@@ -36,5 +38,6 @@ export class Usuario implements IUsuario {
 
   @OneToMany(() => UnidadeDeSaude, unidadeSaude => unidadeSaude.usuario,{cascade:true})
   unidadesSaude: UnidadeDeSaude[];
-  
+  @OneToMany(() => Notificacoes, notificacao => notificacao.usuario)
+  notificacoes: Notificacoes[];
 }

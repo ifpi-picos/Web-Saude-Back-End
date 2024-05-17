@@ -3,7 +3,7 @@ import UnidadeDeSaudeService from '../services/UnidadeDeSaudeService';
 import EnderecoService from '../services/EnderecoService';
 import UsuarioService from '../services/UsuarioService';
 import validation from '../middlewares/validation';
-
+import NotificacoesService from '../services/NotificacoesService';
 const UnidadeDeSaudeRouter = express.Router();
 
 UnidadeDeSaudeRouter.post('/nova-unidade-de-saude', async (req: Request, res: Response) => {
@@ -46,6 +46,14 @@ UnidadeDeSaudeRouter.post('/nova-unidade-de-saude', async (req: Request, res: Re
                 return res.status(409).json({ Message: 'Essa Unidade de Saúde já está cadastrada!' });
             }
            await UsuarioService.adicionarUnidadeDeSaudeAoUsuario(req.body.userId,novaUnidadeDeSaude.id)
+
+           const usuario = await UsuarioService.obterUsuarioPorId(req.body.userId)
+           NotificacoesService.criarNotificacao(
+            req.body.userId,
+            'Pendente',
+            `${usuario?.nome} solicitou a adição de uma nova unidade de saúde: ${novaUnidadeDeSaude.nome}`
+        );
+        
             return res.status(201).json({
                 Message: 'Unidade de Saúde salva com sucesso!',
                 data: novaUnidadeDeSaude,
@@ -114,7 +122,13 @@ UnidadeDeSaudeRouter.put('/alterar-unidade-de-saude/:id', async (req: Request, r
                         return res.status(409).json({ Message: 'Essa Unidade de Saúde já está cadastrada!' });
 
                     }
-
+                    const usuario = await UsuarioService.obterUsuarioPorId(req.body.userId)
+                    NotificacoesService.criarNotificacao(
+                        req.body.userId,
+                        'Alteração',
+                        `${usuario?.nome} fez uma alteração na unidade de saúde: ${atualizarUnidadeDeSaude.nome}`
+                    );
+                    
                 return res.status(200).json({
                     Message: 'Unidade de Saúde alterada com sucesso!',
                     data: atualizarUnidadeDeSaude,
@@ -133,12 +147,19 @@ UnidadeDeSaudeRouter.put('/alterar-unidade-de-saude/:id', async (req: Request, r
 UnidadeDeSaudeRouter.delete('/deletar-unidade-de-saude/:id',async(req:Request,res:Response)=>{
     try {
          const {id} = req.params
-       const unuidadeDeSaude = await UnidadeDeSaudeService.deletarUnidadeDeSaude(parseInt(id,10))
+       const unidadeDeSaude = await UnidadeDeSaudeService.deletarUnidadeDeSaude(parseInt(id,10))
 
-       if(!unuidadeDeSaude){
+       if(!unidadeDeSaude){
             return res.status(404).json({ message: 'Unidade de Saúde não encontrada.' });
         
        }
+       const nomeUnidadeDeSaude = await UnidadeDeSaudeService.pegarUnidadesDeSaudePeloID(parseInt(id,10))
+       const usuario = await UsuarioService.obterUsuarioPorId(req.body.userId)
+       NotificacoesService.criarNotificacao(
+           req.body.userId,
+           'Exclusão',
+           `${usuario?.nome} excluiu a unidade de saúde: ${nomeUnidadeDeSaude?.nome}`
+       );
         return res.status(204).json()
     } catch (error) {
        return res.status(500).json({ message: 'Erro interno no servidor.' });

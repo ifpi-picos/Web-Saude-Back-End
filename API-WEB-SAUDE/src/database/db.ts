@@ -4,6 +4,7 @@ import { Usuario } from "../models/Usuario"
 import { UnidadeDeSaude } from "../models/UnidadeDeSaude"
 import { Endereco } from "../models/Endereco"
 import { Especialidade } from "../models/Especialidades"
+import { Notificacoes } from "../models/Notificacoes"
 import dotenv from 'dotenv';
 
 
@@ -22,7 +23,8 @@ export const AppDataSource = new DataSource({
       Especialidade,
       UnidadeDeSaude,
       Usuario,
-      Endereco
+      Endereco,
+      Notificacoes,
   ]
 
 }) 

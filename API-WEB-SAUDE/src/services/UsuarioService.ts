@@ -6,6 +6,7 @@ import { ILike } from 'typeorm';
 class UsuarioService {
     private usuarioRepository = AppDataSource.getRepository(Usuario);
     private unidadeDeSaudeRepository = AppDataSource.getRepository(UnidadeDeSaude);
+    
 
     public async salvarUsuario(nome: string, email: string, senha: string, tipo: string): Promise<Usuario | null> {
         try {
@@ -132,7 +133,7 @@ class UsuarioService {
     
     public async listarUsuarios(): Promise<Usuario[]> {
         try {
-            const usuarios = await this.usuarioRepository.find({ relations: ['unidadesSaude'] });
+            const usuarios = await this.usuarioRepository.find({ relations: ['unidadesSaude','notificacoes'] });
             return usuarios;
         } catch (error) {
             throw new Error('Erro ao listar usuários: ' + error);
@@ -141,7 +142,8 @@ class UsuarioService {
 
     public async listarUnidadesDeSaudeDoUsuario(usuarioId: number): Promise<UnidadeDeSaude[]> {
         try {
-            const usuario = await this.usuarioRepository.findOne({ where: { id: usuarioId }, relations: ['unidadesSaude', 'unidadesSaude.endereco'] });
+            const usuario = await this.usuarioRepository.findOne({ where: { id: usuarioId }, relations:
+                 ['unidadesSaude', 'unidadesSaude.endereco'] });
     
             if (!usuario) {
                 throw new Error('Usuário não encontrado');
@@ -240,7 +242,19 @@ class UsuarioService {
             throw new Error('Erro ao contar total de usuários e unidades de saúde: ' + error);
         }
     }
-    
+    public async obterUsuarioPorId(id: number): Promise<Usuario | null> {
+        try {
+            const usuario = await this.usuarioRepository.findOne({ where: { id }, relations: ['unidadesSaude'] });
+
+            if (!usuario) {
+                return null;
+            }
+
+            return usuario;
+        } catch (error) {
+            throw new Error('Erro ao obter o usuário pelo ID: ' + error);
+        }
+    }
 }
 
 export default new UsuarioService();

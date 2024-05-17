@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column,} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Usuario } from './Usuario';
 
 interface INotificacoes{
     id:number;
@@ -6,6 +7,7 @@ interface INotificacoes{
     mensagem:string;
     dataCriacao: Date;
     lida: boolean;
+    usuario: Usuario;
 }
 
 @Entity('Notificacoes')
@@ -21,4 +23,6 @@ export class Notificacoes implements INotificacoes{
     dataCriacao: Date;
     @Column({default:false})
     lida: boolean;
+    @ManyToOne(() => Usuario, usuario => usuario.notificacoes, { onDelete: 'CASCADE' })
+    usuario: Usuario;
 }

@@ -25,7 +25,14 @@ const rotasPrivadas = [
   '/total',
   '/total/',
   '/unidades-de-saude/pendentes',
-  '/unidades-de-saude/pendentes/'
+  '/unidades-de-saude/pendentes/',
+  '/notificacoes',
+  '/notificacoes/',
+  '/notificacoes/total-nao-lidas',
+  '/notificacoes/total-nao-lidas/',
+  '/notificacoes/marcar-todas-lidas',
+  '/notificacoes/marcar-todas-lidas/'
+
 
 ];
 
@@ -46,7 +53,8 @@ export default function AuthMiddleware(
     rotaAtual.startsWith('/unidades-de-saude/aprovar/') ||
     rotaAtual.startsWith('/unidade-de-saude/') ||
     rotaAtual.startsWith('/deletar-usuario/') ||
-    rotaAtual.startsWith('/usuarios/pesquisar/')
+    rotaAtual.startsWith('/usuarios/pesquisar/') ||
+    rotaAtual.startsWith('/notificacoes/marcar-lida/')
 	
   ) {
     try {
