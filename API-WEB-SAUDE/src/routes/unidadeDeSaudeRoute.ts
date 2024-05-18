@@ -61,7 +61,7 @@ UnidadeDeSaudeRouter.post('/nova-unidade-de-saude', async (req: Request, res: Re
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+        return res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
 
@@ -137,7 +137,7 @@ UnidadeDeSaudeRouter.put('/alterar-unidade-de-saude/:id', async (req: Request, r
         }
     }
    else{
-    res.status(404).json({Message: 'Unidade de Saúde inexistente'})
+    return res.status(404).json({Message: 'Unidade de Saúde inexistente'})
    }
     } catch (error) {
        return res.status(500).json({ error: 'Houve um erro interno no servidor' });
@@ -178,45 +178,45 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/aprovadas', async (req: Request, re
     try {
         const unidadesDeSaudeAprovadas = await UnidadeDeSaudeService.listarUnidadesDeSaudeAprovadas();
         
-        res.status(200).json(unidadesDeSaudeAprovadas);
+        return res.status(200).json(unidadesDeSaudeAprovadas);
     } catch (error) {
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+        return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 });
 UnidadeDeSaudeRouter.get('/unidade-de-saude/:id', async (req: Request, res: Response) => {
     try {
         const {id} = req.params;
         const unidadesDeSaude = await UnidadeDeSaudeService.pegarUnidadesDeSaudePeloID(parseInt(id,10));
-        res.status(200).json(unidadesDeSaude);
+       return res.status(200).json(unidadesDeSaude);
     } catch (error) {
-        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+       return res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
-UnidadeDeSaudeRouter.get('/unidade-de-saude/:nome', async (req: Request, res: Response) => {
+UnidadeDeSaudeRouter.get('/unidade-de-saude/aprovadas/:nome', async (req: Request, res: Response) => {
     try {
         const {nome} = req.params;
         const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadeDeSaudepeloNome(nome);
-        res.status(200).json(unidadesDeSaude);
+        return res.status(200).json(unidadesDeSaude);
     } catch (error) {
-        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+        return res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
 UnidadeDeSaudeRouter.get('/unidade-de-saude/aprovadas/:nome', async (req: Request, res: Response) => {
     try {
         const {nome} = req.params;
         const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadeDeSaudepeloNomeAprovadas(nome);
-        res.status(200).json(unidadesDeSaude);
+        return res.status(200).json(unidadesDeSaude);
     } catch (error) {
-        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+        return res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
 UnidadeDeSaudeRouter.get('/unidades-de-saude/pesquisa/:nome', async (req: Request, res: Response) => {
     try {
         const {nome} = req.params;
         const unidadesDeSaude = await UnidadeDeSaudeService.pesquisa(nome);
-        res.status(200).json(unidadesDeSaude);
+        return res.status(200).json(unidadesDeSaude);
     } catch (error) {
-        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+        return res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
 
@@ -224,9 +224,9 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/filtrar/:tipo', async (req: Request
     try {
         const {tipo} = req.params;
         const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadesDeSaudePorTipo(tipo);
-        res.status(200).json(unidadesDeSaude);
+        return res.status(200).json(unidadesDeSaude);
     } catch (error) {
-        res.status(500).json({ error: 'Houve um erro interno no servidor' });
+       return res.status(500).json({ error: 'Houve um erro interno no servidor' });
     }
 });
 

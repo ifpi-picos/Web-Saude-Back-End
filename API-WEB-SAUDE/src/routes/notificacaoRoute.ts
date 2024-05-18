@@ -38,7 +38,7 @@ notificacoesRouter.get('/notificacoes/total-nao-lidas', async (req: Request, res
 notificacoesRouter.put('/notificacoes/marcar-todas-lidas', async (req: Request, res: Response) => {
     try {
         await NotificacoesService.marcarTodasComoLidas();
-        return res.status(204).send();
+        return res.status(204).json('');
     } catch (error) {
         return res.status(500).json({ error: error });
     }
