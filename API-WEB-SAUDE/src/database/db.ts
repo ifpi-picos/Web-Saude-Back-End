@@ -7,7 +7,6 @@ import { Especialidade } from "../models/Especialidades"
 import { Notificacoes } from "../models/Notificacoes"
 import dotenv from 'dotenv';
 
-
 dotenv.config()
 export const AppDataSource = new DataSource({
   type: "postgres",

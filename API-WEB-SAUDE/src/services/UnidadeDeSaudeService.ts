@@ -170,8 +170,20 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
             throw new Error('Erro ao listar unidades de saúde por tipo.');
         }
     }
-    
-    
+    async listarUnidadesDeSaudePorEspecialidade(nomeEspecialidade: string): Promise<UnidadeDeSaude[]> {
+        try {
+            const unidadesDeSaude = await this.unidadeDeSaudeRepository.createQueryBuilder("unidadeDeSaude")
+                .leftJoinAndSelect("unidadeDeSaude.especialidades", "especialidade")
+                .where("especialidade.nome ILike :nomeEspecialidade", { nomeEspecialidade: `%${nomeEspecialidade}%` })
+                .andWhere("unidadeDeSaude.aprovado = true")
+                .leftJoinAndSelect("unidadeDeSaude.endereco", "endereco")
+                .getMany();
+
+            return unidadesDeSaude;
+        } catch (error) {
+            throw new Error('Erro ao listar unidades de saúde pela especialidade.');
+        }
+    }
 }
 
 export default new UnidadeDeSaudeService();
