@@ -178,7 +178,11 @@ async listarUnidadesDeSaude(): Promise<UnidadeDeSaude[]> {
                 .andWhere("unidadeDeSaude.aprovado = true")
                 .leftJoinAndSelect("unidadeDeSaude.endereco", "endereco")
                 .getMany();
-
+                
+                if (unidadesDeSaude.length === 0) {
+                    return [];
+                }
+        
             return unidadesDeSaude;
         } catch (error) {
             throw new Error('Erro ao listar unidades de saúde pela especialidade.');

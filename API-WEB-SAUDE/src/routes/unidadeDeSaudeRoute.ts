@@ -234,10 +234,6 @@ UnidadeDeSaudeRouter.get('/unidades-de-saude/especialidade/nome/:nomeEspecialida
         const { nomeEspecialidade } = req.params;
         const unidadesDeSaude = await UnidadeDeSaudeService.listarUnidadesDeSaudePorEspecialidade(nomeEspecialidade);
 
-        if (unidadesDeSaude.length === 0) {
-            return res.status(404).json({ Message: 'Nenhuma unidade de saúde encontrada com essa especialidade.' });
-        }
-
         return res.status(200).json(unidadesDeSaude);
     } catch (error) {
         console.error(error);
